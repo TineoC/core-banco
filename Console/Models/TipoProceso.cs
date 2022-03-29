@@ -5,10 +5,17 @@ namespace Core_Console.Models
 {
     public partial class TipoProceso
     {
-        public int Id { get; set; }
-        public string Descripcion { get; set; } = null!;
-        public int? UsuarioCreadorId { get; set; }
-        public bool? Vigencia { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public TipoProceso()
+        {
+            ProcesoMedicos = new HashSet<ProcesoMedico>();
+        }
+
+        public int TipoProcesoId { get; set; }
+        public string? TipoProcesoDescripcion { get; set; }
+        public DateTime? TipoProcesoFechaCreacion { get; set; }
+        public int? TipoProcesoIdUsuarioCreador { get; set; }
+        public bool? TipoProcesoVigencia { get; set; }
+
+        public virtual ICollection<ProcesoMedico> ProcesoMedicos { get; set; }
     }
 }

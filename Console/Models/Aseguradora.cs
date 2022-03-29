@@ -5,10 +5,19 @@ namespace Core_Console.Models
 {
     public partial class Aseguradora
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; } = null!;
-        public int? UsuarioCreadorId { get; set; }
-        public bool? Vigencia { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public Aseguradora()
+        {
+            Autorizacions = new HashSet<Autorizacion>();
+            Personas = new HashSet<Persona>();
+        }
+
+        public int AseguraodraId { get; set; }
+        public string? AseguradoraDescripcion { get; set; }
+        public DateTime? AseguradoraFechaCreacion { get; set; }
+        public int? AseguradoraIdUsuarioCreador { get; set; }
+        public bool? AseguradoraVigencia { get; set; }
+
+        public virtual ICollection<Autorizacion> Autorizacions { get; set; }
+        public virtual ICollection<Persona> Personas { get; set; }
     }
 }
