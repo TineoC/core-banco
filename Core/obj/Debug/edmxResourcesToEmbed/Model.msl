@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="hospitalModelStoreContainer" CdmEntityContainer="hospitalEntities">
+    <EntitySetMapping Name="AperturaYCierreDeCaja">
+      <EntityTypeMapping TypeName="hospitalModel.AperturaYCierreDeCaja">
+        <MappingFragment StoreEntitySet="AperturaYCierreDeCaja">
+          <ScalarProperty Name="AperturaYCierreDeCaja_Id" ColumnName="AperturaYCierreDeCaja_Id" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_IdCaja" ColumnName="AperturaYCierreDeCaja_IdCaja" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_DosMIlPesos" ColumnName="AperturaYCierreDeCaja_DosMIlPesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_MIlPesos" ColumnName="AperturaYCierreDeCaja_MIlPesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_QuinientosPeso" ColumnName="AperturaYCierreDeCaja_QuinientosPeso" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_DoscientosPesos" ColumnName="AperturaYCierreDeCaja_DoscientosPesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_CienPesos" ColumnName="AperturaYCierreDeCaja_CienPesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_CincuentaPesos" ColumnName="AperturaYCierreDeCaja_CincuentaPesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_25Pesos" ColumnName="AperturaYCierreDeCaja_25Pesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_10Pesos" ColumnName="AperturaYCierreDeCaja_10Pesos" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_5Peso" ColumnName="AperturaYCierreDeCaja_5Peso" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_1Peso" ColumnName="AperturaYCierreDeCaja_1Peso" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_TotalEfectivo" ColumnName="AperturaYCierreDeCaja_TotalEfectivo" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_TotalCredito" ColumnName="AperturaYCierreDeCaja_TotalCredito" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_TotalTarjeta" ColumnName="AperturaYCierreDeCaja_TotalTarjeta" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_Transferencia" ColumnName="AperturaYCierreDeCaja_Transferencia" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_Deposito" ColumnName="AperturaYCierreDeCaja_Deposito" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_TotalCheques" ColumnName="AperturaYCierreDeCaja_TotalCheques" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_TotalGeneral" ColumnName="AperturaYCierreDeCaja_TotalGeneral" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_AperturaOCierre" ColumnName="AperturaYCierreDeCaja_AperturaOCierre" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_Fecha" ColumnName="AperturaYCierreDeCaja_Fecha" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_IdUsuarioCreador" ColumnName="AperturaYCierreDeCaja_IdUsuarioCreador" />
+          <ScalarProperty Name="AperturaYCierreDeCaja_Vigencia" ColumnName="AperturaYCierreDeCaja_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Aseguradora">
+      <EntityTypeMapping TypeName="hospitalModel.Aseguradora">
+        <MappingFragment StoreEntitySet="Aseguradora">
+          <ScalarProperty Name="Aseguraodra_Id" ColumnName="Aseguraodra_Id" />
+          <ScalarProperty Name="Aseguradora_Descripcion" ColumnName="Aseguradora_Descripcion" />
+          <ScalarProperty Name="Aseguradora_FechaCreacion" ColumnName="Aseguradora_FechaCreacion" />
+          <ScalarProperty Name="Aseguradora_IdUsuarioCreador" ColumnName="Aseguradora_IdUsuarioCreador" />
+          <ScalarProperty Name="Aseguradora_Vigencia" ColumnName="Aseguradora_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Autorizacion">
+      <EntityTypeMapping TypeName="hospitalModel.Autorizacion">
+        <MappingFragment StoreEntitySet="Autorizacion">
+          <ScalarProperty Name="Autorizacion_Id" ColumnName="Autorizacion_Id" />
+          <ScalarProperty Name="Autorizacion_IdAseguradora" ColumnName="Autorizacion_IdAseguradora" />
+          <ScalarProperty Name="Autorizacion_IdProcedimiento" ColumnName="Autorizacion_IdProcedimiento" />
+          <ScalarProperty Name="Autorizacion_FechaCreacion" ColumnName="Autorizacion_FechaCreacion" />
+          <ScalarProperty Name="Autorizacion_IdUsuarioCreador" ColumnName="Autorizacion_IdUsuarioCreador" />
+          <ScalarProperty Name="Autorizacion_Vigencia" ColumnName="Autorizacion_Vigencia" />
+          <ScalarProperty Name="Autorizacion_Precio" ColumnName="Autorizacion_Precio" />
+          <ScalarProperty Name="Autorizacion_Cobertura" ColumnName="Autorizacion_Cobertura" />
+          <ScalarProperty Name="Autorizacion_Diferencia" ColumnName="Autorizacion_Diferencia" />
+          <ScalarProperty Name="Autorizacion_NoAutorizacion" ColumnName="Autorizacion_NoAutorizacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Caja">
+      <EntityTypeMapping TypeName="hospitalModel.Caja">
+        <MappingFragment StoreEntitySet="Caja">
+          <ScalarProperty Name="Caja_Id" ColumnName="Caja_Id" />
+          <ScalarProperty Name="Caja_Descripcion" ColumnName="Caja_Descripcion" />
+          <ScalarProperty Name="Caja_FechaCreacion" ColumnName="Caja_FechaCreacion" />
+          <ScalarProperty Name="Caja_IdUsuarioCreador" ColumnName="Caja_IdUsuarioCreador" />
+          <ScalarProperty Name="Caja_Vigencia" ColumnName="Caja_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Caja_Usuario">
+      <EntityTypeMapping TypeName="hospitalModel.Caja_Usuario">
+        <MappingFragment StoreEntitySet="Caja_Usuario">
+          <ScalarProperty Name="Caja_Usuario_IdUsuario" ColumnName="Caja_Usuario_IdUsuario" />
+          <ScalarProperty Name="Caja_Usuario_IdCaja" ColumnName="Caja_Usuario_IdCaja" />
+          <ScalarProperty Name="Caja_Usuario_IdUsuario_FechaCreacion" ColumnName="Caja_Usuario_IdUsuario_FechaCreacion" />
+          <ScalarProperty Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" ColumnName="Caja_Usuario_IdUsuario_IdUsuarioCreador" />
+          <ScalarProperty Name="Caja_Usuario_IdUsuario_Vigencia" ColumnName="Caja_Usuario_IdUsuario_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cuenta_Factura">
+      <EntityTypeMapping TypeName="hospitalModel.Cuenta_Factura">
+        <MappingFragment StoreEntitySet="Cuenta_Factura">
+          <ScalarProperty Name="Cuenta_Factura_IdFactura" ColumnName="Cuenta_Factura_IdFactura" />
+          <ScalarProperty Name="Cuenta_Factura_IdCuenta" ColumnName="Cuenta_Factura_IdCuenta" />
+          <ScalarProperty Name="Cuenta_Factura_Monto" ColumnName="Cuenta_Factura_Monto" />
+          <ScalarProperty Name="Cuenta_Factura_FechaCreacion" ColumnName="Cuenta_Factura_FechaCreacion" />
+          <ScalarProperty Name="Cuenta_Factura_dUsuarioCreador" ColumnName="Cuenta_Factura_dUsuarioCreador" />
+          <ScalarProperty Name="Cuenta_Factura_Vigencia" ColumnName="Cuenta_Factura_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cuentas">
+      <EntityTypeMapping TypeName="hospitalModel.Cuentas">
+        <MappingFragment StoreEntitySet="Cuentas">
+          <ScalarProperty Name="Cuenta_Id" ColumnName="Cuenta_Id" />
+          <ScalarProperty Name="Cuenta_IdPersona" ColumnName="Cuenta_IdPersona" />
+          <ScalarProperty Name="Cuenta_Balance" ColumnName="Cuenta_Balance" />
+          <ScalarProperty Name="Cuenta_FechaCreacion" ColumnName="Cuenta_FechaCreacion" />
+          <ScalarProperty Name="Cuenta_IdUsuarioCreador" ColumnName="Cuenta_IdUsuarioCreador" />
+          <ScalarProperty Name="Cuenta_Vigencia" ColumnName="Cuenta_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Egreso">
+      <EntityTypeMapping TypeName="hospitalModel.Egreso">
+        <MappingFragment StoreEntitySet="Egreso">
+          <ScalarProperty Name="Egreso_Id" ColumnName="Egreso_Id" />
+          <ScalarProperty Name="Egreso_PagadoA" ColumnName="Egreso_PagadoA" />
+          <ScalarProperty Name="Egreso_Cedula" ColumnName="Egreso_Cedula" />
+          <ScalarProperty Name="Egreso_Monto" ColumnName="Egreso_Monto" />
+          <ScalarProperty Name="Egreso_Concepto" ColumnName="Egreso_Concepto" />
+          <ScalarProperty Name="Egreso_Preparado" ColumnName="Egreso_Preparado" />
+          <ScalarProperty Name="Egresp_Aprobado" ColumnName="Egresp_Aprobado" />
+          <ScalarProperty Name="Egreso_Recibido" ColumnName="Egreso_Recibido" />
+          <ScalarProperty Name="Egreso_FechaCreacion" ColumnName="Egreso_FechaCreacion" />
+          <ScalarProperty Name="Egreso_IdUsuarioCreador" ColumnName="Egreso_IdUsuarioCreador" />
+          <ScalarProperty Name="Egreso_Vigencia" ColumnName="Egreso_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FacturaDetalle">
+      <EntityTypeMapping TypeName="hospitalModel.FacturaDetalle">
+        <MappingFragment StoreEntitySet="FacturaDetalle">
+          <ScalarProperty Name="FacturaDetalle_Id" ColumnName="FacturaDetalle_Id" />
+          <ScalarProperty Name="FacturaDetalle_IdFactura" ColumnName="FacturaDetalle_IdFactura" />
+          <ScalarProperty Name="FacturaDetalle_PlanDeTratamiento" ColumnName="FacturaDetalle_PlanDeTratamiento" />
+          <ScalarProperty Name="FacturaDetalle_MontoBruto" ColumnName="FacturaDetalle_MontoBruto" />
+          <ScalarProperty Name="FacturaDetalle_MontoCobertura" ColumnName="FacturaDetalle_MontoCobertura" />
+          <ScalarProperty Name="FacturaDetalle_MontoItbis" ColumnName="FacturaDetalle_MontoItbis" />
+          <ScalarProperty Name="FacturaDetalle_MontoDescuento" ColumnName="FacturaDetalle_MontoDescuento" />
+          <ScalarProperty Name="FacturaDetalle_MontoTotal" ColumnName="FacturaDetalle_MontoTotal" />
+          <ScalarProperty Name="FacturaDetalle_FechaCreacion" ColumnName="FacturaDetalle_FechaCreacion" />
+          <ScalarProperty Name="FacturaDetalle_IdUsuarioCreador" ColumnName="FacturaDetalle_IdUsuarioCreador" />
+          <ScalarProperty Name="FacturaDetalle_Vigencia" ColumnName="FacturaDetalle_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FacturaEncabezado">
+      <EntityTypeMapping TypeName="hospitalModel.FacturaEncabezado">
+        <MappingFragment StoreEntitySet="FacturaEncabezado">
+          <ScalarProperty Name="FacturaEncabezado_Id" ColumnName="FacturaEncabezado_Id" />
+          <ScalarProperty Name="FacturaEncabezado_IdNCF" ColumnName="FacturaEncabezado_IdNCF" />
+          <ScalarProperty Name="FacturaEncabezado_NCF" ColumnName="FacturaEncabezado_NCF" />
+          <ScalarProperty Name="FacturaEncabezado_IdCliente" ColumnName="FacturaEncabezado_IdCliente" />
+          <ScalarProperty Name="FacturaEncabezado_IdCajero" ColumnName="FacturaEncabezado_IdCajero" />
+          <ScalarProperty Name="FacturaEncabezado_TotalBruto" ColumnName="FacturaEncabezado_TotalBruto" />
+          <ScalarProperty Name="FacturaEncabezado_TotalCobertura" ColumnName="FacturaEncabezado_TotalCobertura" />
+          <ScalarProperty Name="FacturaEncabezado_TotalItbis" ColumnName="FacturaEncabezado_TotalItbis" />
+          <ScalarProperty Name="FacturaEncabezado_TotalDescuento" ColumnName="FacturaEncabezado_TotalDescuento" />
+          <ScalarProperty Name="FacturaEncabezado_TotalGeneral" ColumnName="FacturaEncabezado_TotalGeneral" />
+          <ScalarProperty Name="FacturaEncabezado_FechaCreacion" ColumnName="FacturaEncabezado_FechaCreacion" />
+          <ScalarProperty Name="FacturaEncabezado_IdUsuarioCreador" ColumnName="FacturaEncabezado_IdUsuarioCreador" />
+          <ScalarProperty Name="FacturaEncabezado_Vigencia" ColumnName="FacturaEncabezado_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NCF">
+      <EntityTypeMapping TypeName="hospitalModel.NCF">
+        <MappingFragment StoreEntitySet="NCF">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="IdTipoNCF" ColumnName="IdTipoNCF" />
+          <ScalarProperty Name="UltimaSecuenciaNIF" ColumnName="UltimaSecuenciaNIF" />
+          <ScalarProperty Name="Prefijo" ColumnName="Prefijo" />
+          <ScalarProperty Name="SecuenciaActual" ColumnName="SecuenciaActual" />
+          <ScalarProperty Name="Limite" ColumnName="Limite" />
+          <ScalarProperty Name="FechaVencimiento" ColumnName="FechaVencimiento" />
+          <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+          <ScalarProperty Name="FechaCreado" ColumnName="FechaCreado" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="IdSucursal" ColumnName="IdSucursal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Pago">
+      <EntityTypeMapping TypeName="hospitalModel.Pago">
+        <MappingFragment StoreEntitySet="Pago">
+          <ScalarProperty Name="Pago_Id" ColumnName="Pago_Id" />
+          <ScalarProperty Name="Pago_IdPersona" ColumnName="Pago_IdPersona" />
+          <ScalarProperty Name="Pago_IdCuenta" ColumnName="Pago_IdCuenta" />
+          <ScalarProperty Name="Pago_Referencia" ColumnName="Pago_Referencia" />
+          <ScalarProperty Name="Pago_Monto" ColumnName="Pago_Monto" />
+          <ScalarProperty Name="Pago_TipoPago" ColumnName="Pago_TipoPago" />
+          <ScalarProperty Name="Pago_FechaCreacion" ColumnName="Pago_FechaCreacion" />
+          <ScalarProperty Name="Pago_IdUsuarioCreador" ColumnName="Pago_IdUsuarioCreador" />
+          <ScalarProperty Name="Pago_Vigencia" ColumnName="Pago_Vigencia" />
+          <ScalarProperty Name="Pago_IdCaja" ColumnName="Pago_IdCaja" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Perfil">
+      <EntityTypeMapping TypeName="hospitalModel.Perfil">
+        <MappingFragment StoreEntitySet="Perfil">
+          <ScalarProperty Name="Perfil_Id" ColumnName="Perfil_Id" />
+          <ScalarProperty Name="Perfil_Descripcion" ColumnName="Perfil_Descripcion" />
+          <ScalarProperty Name="Perfil_FechaCreacion" ColumnName="Perfil_FechaCreacion" />
+          <ScalarProperty Name="Perfil_IdUsuarioCreador" ColumnName="Perfil_IdUsuarioCreador" />
+          <ScalarProperty Name="Perfil_Vigencia" ColumnName="Perfil_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Persona">
+      <EntityTypeMapping TypeName="hospitalModel.Persona">
+        <MappingFragment StoreEntitySet="Persona">
+          <ScalarProperty Name="Persona_TipoDocumento" ColumnName="Persona_TipoDocumento" />
+          <ScalarProperty Name="Persona_Documento" ColumnName="Persona_Documento" />
+          <ScalarProperty Name="Persona_Nombre" ColumnName="Persona_Nombre" />
+          <ScalarProperty Name="Persona_Apellido" ColumnName="Persona_Apellido" />
+          <ScalarProperty Name="Persona_TipoPersona" ColumnName="Persona_TipoPersona" />
+          <ScalarProperty Name="Persona_CorreoElectronico" ColumnName="Persona_CorreoElectronico" />
+          <ScalarProperty Name="Persona_Telefono" ColumnName="Persona_Telefono" />
+          <ScalarProperty Name="Persona_Direccion" ColumnName="Persona_Direccion" />
+          <ScalarProperty Name="Persona_IdAseguradora" ColumnName="Persona_IdAseguradora" />
+          <ScalarProperty Name="Persona_FechaCreacion" ColumnName="Persona_FechaCreacion" />
+          <ScalarProperty Name="Persona_IdUsuarioCreador" ColumnName="Persona_IdUsuarioCreador" />
+          <ScalarProperty Name="Persona_Vigencia" ColumnName="Persona_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlanDeTratamiento">
+      <EntityTypeMapping TypeName="hospitalModel.PlanDeTratamiento">
+        <MappingFragment StoreEntitySet="PlanDeTratamiento">
+          <ScalarProperty Name="PlanDeTratamiento_Id" ColumnName="PlanDeTratamiento_Id" />
+          <ScalarProperty Name="PlanDeTratamiento_IdProcedimiento" ColumnName="PlanDeTratamiento_IdProcedimiento" />
+          <ScalarProperty Name="PlanDeTratamiento_NoAutorizacion" ColumnName="PlanDeTratamiento_NoAutorizacion" />
+          <ScalarProperty Name="PlanDeTratamiento_IdPaciente" ColumnName="PlanDeTratamiento_IdPaciente" />
+          <ScalarProperty Name="PlanDeTratamiento_IdMedico" ColumnName="PlanDeTratamiento_IdMedico" />
+          <ScalarProperty Name="PlanDeTratamiento_Causa" ColumnName="PlanDeTratamiento_Causa" />
+          <ScalarProperty Name="PlanDeTratamiento_Resultado" ColumnName="PlanDeTratamiento_Resultado" />
+          <ScalarProperty Name="PlanDeTratamiento_Imagen" ColumnName="PlanDeTratamiento_Imagen" />
+          <ScalarProperty Name="PlanDeTratamiento_FechaCreacion" ColumnName="PlanDeTratamiento_FechaCreacion" />
+          <ScalarProperty Name="PlanDeTratamiento_IdUsuarioCreador" ColumnName="PlanDeTratamiento_IdUsuarioCreador" />
+          <ScalarProperty Name="PlanDeTratamiento_Vigencia" ColumnName="PlanDeTratamiento_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProcesoMedico">
+      <EntityTypeMapping TypeName="hospitalModel.ProcesoMedico">
+        <MappingFragment StoreEntitySet="ProcesoMedico">
+          <ScalarProperty Name="ProcesoMedico_Id" ColumnName="ProcesoMedico_Id" />
+          <ScalarProperty Name="ProcesoMedico_Descripcion" ColumnName="ProcesoMedico_Descripcion" />
+          <ScalarProperty Name="ProcesoMedico_Precio" ColumnName="ProcesoMedico_Precio" />
+          <ScalarProperty Name="ProcesoMedico_FechaCreacion" ColumnName="ProcesoMedico_FechaCreacion" />
+          <ScalarProperty Name="ProcesoMedico_IdUsuarioCreador" ColumnName="ProcesoMedico_IdUsuarioCreador" />
+          <ScalarProperty Name="ProcesoMedico_Vigencia" ColumnName="ProcesoMedico_Vigencia" />
+          <ScalarProperty Name="ProcesoMedico_IdTipoProceso" ColumnName="ProcesoMedico_IdTipoProceso" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReciboIngreso">
+      <EntityTypeMapping TypeName="hospitalModel.ReciboIngreso">
+        <MappingFragment StoreEntitySet="ReciboIngreso">
+          <ScalarProperty Name="ReciboIngreso_Id" ColumnName="ReciboIngreso_Id" />
+          <ScalarProperty Name="ReciboIngreso_IdPaciente" ColumnName="ReciboIngreso_IdPaciente" />
+          <ScalarProperty Name="ReciboIngreso_IdCajero" ColumnName="ReciboIngreso_IdCajero" />
+          <ScalarProperty Name="ReciboIngreso_Monto" ColumnName="ReciboIngreso_Monto" />
+          <ScalarProperty Name="ReciboIngreso_IdCuentaDetalle" ColumnName="ReciboIngreso_IdCuentaDetalle" />
+          <ScalarProperty Name="ReciboIngreso_FechaCreacion" ColumnName="ReciboIngreso_FechaCreacion" />
+          <ScalarProperty Name="ReciboIngreso_IdUsuarioCreador" ColumnName="ReciboIngreso_IdUsuarioCreador" />
+          <ScalarProperty Name="ReciboIngreso_Vigencia" ColumnName="ReciboIngreso_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoDocumento">
+      <EntityTypeMapping TypeName="hospitalModel.TipoDocumento">
+        <MappingFragment StoreEntitySet="TipoDocumento">
+          <ScalarProperty Name="TipoDocumento_Id" ColumnName="TipoDocumento_Id" />
+          <ScalarProperty Name="TipoDocumento_Descripcion" ColumnName="TipoDocumento_Descripcion" />
+          <ScalarProperty Name="TipoDocumento_FechaCreacion" ColumnName="TipoDocumento_FechaCreacion" />
+          <ScalarProperty Name="TipoDocumento_IdUsuarioCreador" ColumnName="TipoDocumento_IdUsuarioCreador" />
+          <ScalarProperty Name="TipoDocumento_Vigencia" ColumnName="TipoDocumento_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoNCF">
+      <EntityTypeMapping TypeName="hospitalModel.TipoNCF">
+        <MappingFragment StoreEntitySet="TipoNCF">
+          <ScalarProperty Name="TipoNCF_Id" ColumnName="TipoNCF_Id" />
+          <ScalarProperty Name="TipoNCF_Descripcion" ColumnName="TipoNCF_Descripcion" />
+          <ScalarProperty Name="TipoNCF_IdUsuario" ColumnName="TipoNCF_IdUsuario" />
+          <ScalarProperty Name="TipoNCF_FechaCreado" ColumnName="TipoNCF_FechaCreado" />
+          <ScalarProperty Name="TipoNCF_Estado" ColumnName="TipoNCF_Estado" />
+          <ScalarProperty Name="TipoNCF_IdSucursal" ColumnName="TipoNCF_IdSucursal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoPago">
+      <EntityTypeMapping TypeName="hospitalModel.TipoPago">
+        <MappingFragment StoreEntitySet="TipoPago">
+          <ScalarProperty Name="TipoPago_Id" ColumnName="TipoPago_Id" />
+          <ScalarProperty Name="TipoPago_Descripcion" ColumnName="TipoPago_Descripcion" />
+          <ScalarProperty Name="TipoPago_FechaCreacion" ColumnName="TipoPago_FechaCreacion" />
+          <ScalarProperty Name="TipoPago_IdUsuarioCreador" ColumnName="TipoPago_IdUsuarioCreador" />
+          <ScalarProperty Name="TipoPago_Vigencia" ColumnName="TipoPago_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoPersona">
+      <EntityTypeMapping TypeName="hospitalModel.TipoPersona">
+        <MappingFragment StoreEntitySet="TipoPersona">
+          <ScalarProperty Name="TipoPersona_Id" ColumnName="TipoPersona_Id" />
+          <ScalarProperty Name="TipoPersona_Descripcion" ColumnName="TipoPersona_Descripcion" />
+          <ScalarProperty Name="TipoPersona_FechaCreacion" ColumnName="TipoPersona_FechaCreacion" />
+          <ScalarProperty Name="TipoPersona_IdUsuarioCreador" ColumnName="TipoPersona_IdUsuarioCreador" />
+          <ScalarProperty Name="TipoPersona_Vigencia" ColumnName="TipoPersona_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TipoProceso">
+      <EntityTypeMapping TypeName="hospitalModel.TipoProceso">
+        <MappingFragment StoreEntitySet="TipoProceso">
+          <ScalarProperty Name="TipoProceso_Id" ColumnName="TipoProceso_Id" />
+          <ScalarProperty Name="TipoProceso_Descripcion" ColumnName="TipoProceso_Descripcion" />
+          <ScalarProperty Name="TipoProceso_FechaCreacion" ColumnName="TipoProceso_FechaCreacion" />
+          <ScalarProperty Name="TipoProceso_IdUsuarioCreador" ColumnName="TipoProceso_IdUsuarioCreador" />
+          <ScalarProperty Name="TipoProceso_Vigencia" ColumnName="TipoProceso_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuarios">
+      <EntityTypeMapping TypeName="hospitalModel.Usuarios">
+        <MappingFragment StoreEntitySet="Usuarios">
+          <ScalarProperty Name="Usuario_Id" ColumnName="Usuario_Id" />
+          <ScalarProperty Name="Usuario_Nickname" ColumnName="Usuario_Nickname" />
+          <ScalarProperty Name="Usuario_Contraseña" ColumnName="Usuario_Contraseña" />
+          <ScalarProperty Name="Usuario_IdPerfil" ColumnName="Usuario_IdPerfil" />
+          <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+          <ScalarProperty Name="Usuario_FechaCreacion" ColumnName="Usuario_FechaCreacion" />
+          <ScalarProperty Name="Usuario_IdUsuarioCreador" ColumnName="Usuario_IdUsuarioCreador" />
+          <ScalarProperty Name="Usuario_Vigencia" ColumnName="Usuario_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PagosPorPersona_View">
+      <EntityTypeMapping TypeName="hospitalModel.PagosPorPersona_View">
+        <MappingFragment StoreEntitySet="PagosPorPersona_View">
+          <ScalarProperty Name="Pago_Id" ColumnName="Pago_Id" />
+          <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+          <ScalarProperty Name="Cuenta" ColumnName="Cuenta" />
+          <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+          <ScalarProperty Name="Monto" ColumnName="Monto" />
+          <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+          <ScalarProperty Name="Caja" ColumnName="Caja" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="database_firewall_rules">
+      <EntityTypeMapping TypeName="hospitalModel.database_firewall_rules">
+        <MappingFragment StoreEntitySet="database_firewall_rules">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="start_ip_address" ColumnName="start_ip_address" />
+          <ScalarProperty Name="end_ip_address" ColumnName="end_ip_address" />
+          <ScalarProperty Name="create_date" ColumnName="create_date" />
+          <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ipv6_database_firewall_rules">
+      <EntityTypeMapping TypeName="hospitalModel.ipv6_database_firewall_rules">
+        <MappingFragment StoreEntitySet="ipv6_database_firewall_rules">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="start_ipv6_address" ColumnName="start_ipv6_address" />
+          <ScalarProperty Name="end_ipv6_address" ColumnName="end_ipv6_address" />
+          <ScalarProperty Name="create_date" ColumnName="create_date" />
+          <ScalarProperty Name="modify_date" ColumnName="modify_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="IncrementarNCF" FunctionName="hospitalModel.Store.IncrementarNCF" />
+    <FunctionImportMapping FunctionImportName="PP_GrabarDetalle" FunctionName="hospitalModel.Store.PP_GrabarDetalle" />
+    <FunctionImportMapping FunctionImportName="PP_GrabarVenta" FunctionName="hospitalModel.Store.PP_GrabarVenta" />
+    <FunctionImportMapping FunctionImportName="PP_ReciboIngreso" FunctionName="hospitalModel.Store.PP_ReciboIngreso" />
+    <FunctionImportMapping FunctionImportName="PPAperturaOCierreDeCaja" FunctionName="hospitalModel.Store.PPAperturaOCierreDeCaja" />
+    <FunctionImportMapping FunctionImportName="PPEgreso" FunctionName="hospitalModel.Store.PPEgreso" />
+    <FunctionImportMapping FunctionImportName="PPpagos" FunctionName="hospitalModel.Store.PPpagos" />
+    <EntitySetMapping Name="Log">
+      <EntityTypeMapping TypeName="hospitalModel.Log">
+        <MappingFragment StoreEntitySet="Log">
+          <ScalarProperty Name="Exception" ColumnName="Exception" />
+          <ScalarProperty Name="Callsite" ColumnName="Callsite" />
+          <ScalarProperty Name="Logger" ColumnName="Logger" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Logged" ColumnName="Logged" />
+          <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

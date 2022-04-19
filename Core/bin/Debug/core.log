@@ -1,0 +1,6 @@
+2022-04-19 09:08:58,766 [1] INFO Core.Program - Intento de inicio de sesión username: christopher  password: 1234
+2022-04-19 09:09:00,697 [1] INFO Core.Program - Se ha iniciado sesión correctamente!
+2022-04-19 09:09:45,089 [1] INFO Core.Program - Intento de inicio de sesión username: christopher  password: 1234
+2022-04-19 10:10:28,762 [1] INFO Core.Program - Intento de inicio de sesión username: christopher  password: 1234
+2022-04-19 10:10:30,638 [1] INFO Core.Program - Se ha iniciado sesión correctamente!
+2022-04-19 10:11:12,750 [1] INFO Core.Program - Intento de inicio de sesión username: 11234  password: 555
