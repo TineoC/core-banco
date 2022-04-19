@@ -186,7 +186,7 @@ namespace Core
 
                     case "Exit":
                         Console.WriteLine("Hasta luego...");
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(1000);
                         break;
 
                     case "Manejar personas":
