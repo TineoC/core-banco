@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,6 +59,8 @@ namespace Core
         static void Login()
         {
             hospitalEntities hospital = new hospitalEntities();
+
+            // Evitar claves simples
 
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -129,12 +132,58 @@ namespace Core
                 {
                     opciones = new string[4]
                     {
-                    "Manejar personas",
-                    "Manejar pacientes",
-                    "Manejar facturas",
+                    "Manejar Personas",
+                    "Manejar Pacientes",
+                    "Manejar Facturas",
                     "Exit"
                     };
                 }
+
+                for (int i = 0; i < opciones.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {opciones[i]}");
+                }
+
+                int index = 0;
+
+                do
+                {
+                    Console.Write("Opción: ");
+                    index = Int32.Parse(Console.ReadLine());
+                } while (!(index > 0 && index <= opciones.Length));
+
+                string opcionElegida = opciones[index - 1];
+
+                Logger.Info($"Opción elegida: {opcionElegida}");
+
+                return opcionElegida;
+            }
+            catch (Exception error)
+            {
+                Logger.Error(error, " Ha ocurrido un error inesperado");
+                throw;
+            }
+        }
+
+        static string CRUDMenu()
+        {
+            var Logger = NLog.LogManager.GetCurrentClassLogger();
+
+            Console.WriteLine(".-      Acciones       -.");
+
+            string[] opciones;
+
+            try
+            {
+                opciones = new string[6]
+                    {
+                    "Crear",
+                    "Mostrar",
+                    "Mostrar Todos",
+                    "Actualizar",
+                    "Eliminar",
+                    "Exit"
+                    };
 
                 for (int i = 0; i < opciones.Length; i++)
                 {
@@ -173,6 +222,8 @@ namespace Core
 
                 opcion = Menu();
 
+                string accion;
+
                 Console.Clear();
 
                 switch (opcion)
@@ -189,13 +240,45 @@ namespace Core
                         System.Threading.Thread.Sleep(1000);
                         break;
 
-                    case "Manejar personas":
+                    case "Manejar Personas":
+                        accion = CRUDMenu();
+
+                        switch(accion)
+                        {
+                            case "Crear":
+                                PersonasController.Crear();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Mostrar":
+                                PersonasController.Mostrar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Mostrar Todos":
+                                PersonasController.MostrarTodos();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Actualizar":
+                                PersonasController.Actualizar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Eliminar":
+                                PersonasController.Eliminar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Exit":
+                                break;
+                        }
                         break;
 
-                    case "Manejar pacientes":
+                    case "Manejar Pacientes":
                         break;
 
-                    case "Manejar facturas":
+                    case "Manejar Facturas":
                         break;
 
                     default:
