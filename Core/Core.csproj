@@ -9,12 +9,13 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Core</RootNamespace>
     <AssemblyName>Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -207,6 +208,28 @@
     <Compile Include="database_firewall_rules.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="DTO\AperturaYCierreDeCaja.cs" />
+    <Compile Include="DTO\AseguradoraEntities.cs" />
+    <Compile Include="DTO\AutorizacionEntities.cs" />
+    <Compile Include="DTO\CajaEntities.cs" />
+    <Compile Include="DTO\CajaUsuarioEntities.cs" />
+    <Compile Include="DTO\CuentaEntities.cs" />
+    <Compile Include="DTO\CuentaFacturaEntities.cs" />
+    <Compile Include="DTO\EgresoEntities.cs" />
+    <Compile Include="DTO\FacturaDetalleEntities.cs" />
+    <Compile Include="DTO\FacturaEncabezadoEntities.cs" />
+    <Compile Include="DTO\PagoEntities.cs" />
+    <Compile Include="DTO\PerfilEntities.cs" />
+    <Compile Include="DTO\PersonaEntities.cs" />
+    <Compile Include="DTO\PlanTratamientoVigenciaEntities.cs" />
+    <Compile Include="DTO\ProcesoMedicoEntities.cs" />
+    <Compile Include="DTO\ReciboIngresoEntities.cs" />
+    <Compile Include="DTO\TipoDocumentoEntities.cs" />
+    <Compile Include="DTO\TipoPagoEntities.cs" />
+    <Compile Include="DTO\TipoPersonaEntities.cs" />
+    <Compile Include="DTO\TipoProcesoEntities.cs" />
+    <Compile Include="DTO\UsuarioEntities.cs" />
+    <Compile Include="DTO\Values.cs" />
     <Compile Include="Egreso.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
