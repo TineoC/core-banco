@@ -11,10 +11,10 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.AuthenticatorTokenProvider`1.CanGenerateTwoFactorTokenAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
-            Checks if a two-factor authentication token can be generated for the specified <paramref name="user"/>.
+            Checks if a two factor authentication token can be generated for the specified <paramref name="user"/>.
             </summary>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> to retrieve the <paramref name="user"/> from.</param>
-            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two-factor authentication token.</param>
+            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two factor authentication token.</param>
             <returns>True if the user has an authenticator key set, otherwise false.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.AuthenticatorTokenProvider`1.GenerateAsync(System.String,Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
@@ -27,14 +27,14 @@
             <returns>string.Empty.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.AuthenticatorTokenProvider`1.ValidateAsync(System.String,System.String,Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
-             <summary>
+            <summary>
             
-             </summary>
-             <param name="purpose"></param>
-             <param name="token"></param>
-             <param name="manager"></param>
-             <param name="user"></param>
-             <returns></returns>
+            </summary>
+            <param name="purpose"></param>
+            <param name="token"></param>
+            <param name="manager"></param>
+            <param name="user"></param>
+            <returns></returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.ClaimsIdentityOptions">
             <summary>
@@ -56,11 +56,6 @@
             Gets or sets the ClaimType used for the user identifier claim. Defaults to <see cref="F:System.Security.Claims.ClaimTypes.NameIdentifier"/>.
             </summary>
         </member>
-        <member name="P:Microsoft.AspNetCore.Identity.ClaimsIdentityOptions.EmailClaimType">
-            <summary>
-            Gets or sets the ClaimType used for the user email claim. Defaults to <see cref="F:System.Security.Claims.ClaimTypes.Email"/>.
-            </summary>
-        </member>
         <member name="P:Microsoft.AspNetCore.Identity.ClaimsIdentityOptions.SecurityStampClaimType">
             <summary>
             Gets or sets the ClaimType used for the security stamp claim. Defaults to "AspNet.Identity.SecurityStamp".
@@ -68,7 +63,7 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.DefaultPersonalDataProtector">
             <summary>
-            Default implementation of <see cref="T:Microsoft.AspNetCore.Identity.IPersonalDataProtector"/> that uses <see cref="T:Microsoft.AspNetCore.Identity.ILookupProtectorKeyRing"/>
+            Default implementation of <see cref="T:Microsoft.AspNetCore.Identity.IPersonalDataProtector"/> that uses <see cref="T:Microsoft.AspNetCore.Identity.ILookupProtectorKeyRing"/> 
             and <see cref="T:Microsoft.AspNetCore.Identity.ILookupProtector"/> to protect data with a payload format of {keyId}:{protectedData}
             </summary>
         </member>
@@ -115,19 +110,19 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.EmailTokenProvider`1.CanGenerateTwoFactorTokenAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
-            Checks if a two-factor authentication token can be generated for the specified <paramref name="user"/>.
+            Checks if a two factor authentication token can be generated for the specified <paramref name="user"/>.
             </summary>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> to retrieve the <paramref name="user"/> from.</param>
-            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two-factor authentication token.</param>
+            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two factor authentication token.</param>
             <returns>True if the user has an email address set, otherwise false.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.EmailTokenProvider`1.GetUserModifierAsync(System.String,Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
             Returns the a value for the user used as entropy in the generated token.
             </summary>
-            <param name="purpose">The purpose of the two-factor authentication token.</param>
+            <param name="purpose">The purpose of the two factor authentication token.</param>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> to retrieve the <paramref name="user"/> from.</param>
-            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two-factor authentication token.</param>
+            <param name="user">The <typeparamref name="TUser"/> to check for the possibility of generating a two factor authentication token.</param>
             <returns>A string suitable for use as entropy in token generation.</returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.IdentityBuilder">
@@ -176,14 +171,14 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddUserValidator``1">
             <summary>
-            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserValidator`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserValidator`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <typeparam name="TValidator">The user validator type.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddClaimsPrincipalFactory``1">
             <summary>
-            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserClaimsPrincipalFactory`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <typeparam name="TFactory">The type of the claims principal factory.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
@@ -197,14 +192,14 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddPasswordValidator``1">
             <summary>
-            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IPasswordValidator`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IPasswordValidator`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <typeparam name="TValidator">The validator type used to validate passwords.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddUserStore``1">
             <summary>
-            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserStore`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IUserStore`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <typeparam name="TStore">The user store type.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
@@ -219,7 +214,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddTokenProvider(System.String,System.Type)">
             <summary>
-            Adds a token provider for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds a token provider for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <param name="providerName">The name of the provider to add.</param>
             <param name="provider">The type of the <see cref="T:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1"/> to add.</param>
@@ -227,7 +222,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddUserManager``1">
             <summary>
-            Adds a <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
+            Adds a <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
             </summary>
             <typeparam name="TUserManager">The type of the user manager to add.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
@@ -241,7 +236,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddRoleValidator``1">
             <summary>
-            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IRoleValidator`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
+            Adds an <see cref="T:Microsoft.AspNetCore.Identity.IRoleValidator`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
             </summary>
             <typeparam name="TRole">The role validator type.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
@@ -256,23 +251,16 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddRoleStore``1">
             <summary>
-            Adds a <see cref="T:Microsoft.AspNetCore.Identity.IRoleStore`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
+            Adds a <see cref="T:Microsoft.AspNetCore.Identity.IRoleStore`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
             </summary>
             <typeparam name="TStore">The role store.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddRoleManager``1">
             <summary>
-            Adds a <see cref="T:Microsoft.AspNetCore.Identity.RoleManager`1"/> for the <see cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
+            Adds a <see cref="T:Microsoft.AspNetCore.Identity.RoleManager`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.RoleType"/>.
             </summary>
             <typeparam name="TRoleManager">The type of the role manager to add.</typeparam>
-            <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
-        </member>
-        <member name="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddUserConfirmation``1">
-            <summary>
-            Adds a <see cref="T:Microsoft.AspNetCore.Identity.IUserConfirmation`1"/> for the <seealso cref="P:Microsoft.AspNetCore.Identity.IdentityBuilder.UserType"/>.
-            </summary>
-            <typeparam name="TUserConfirmation">The type of the user confirmation to add.</typeparam>
             <returns>The current <see cref="T:Microsoft.AspNetCore.Identity.IdentityBuilder"/> instance.</returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.IdentityError">
@@ -520,10 +508,10 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors">
             <summary>
-            An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/> instances containing errors
+            An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>s containing an errors
             that occurred during the identity operation.
             </summary>
-            <value>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/> instances.</value>
+            <value>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Microsoft.AspNetCore.Identity.IdentityError"/>s.</value>
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.IdentityResult.Success">
             <summary>
@@ -544,7 +532,7 @@
             </summary>
             <returns>A string representation of the current <see cref="T:Microsoft.AspNetCore.Identity.IdentityResult"/> object.</returns>
             <remarks>
-            If the operation was successful the ToString() will return "Succeeded" otherwise it returned
+            If the operation was successful the ToString() will return "Succeeded" otherwise it returned 
             "Failed : " followed by a comma delimited list of error codes from its <see cref="P:Microsoft.AspNetCore.Identity.IdentityResult.Errors"/> collection, if any.
             </remarks>
         </member>
@@ -1052,7 +1040,7 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.IUserLockoutStore`1">
             <summary>
-            Provides an abstraction for a storing information which can be used to implement account lockout,
+            Provides an abstraction for a storing information which can be used to implement account lockout, 
             including access failures and lockout status
             </summary>
             <typeparam name="TUser">The type that represents a user.</typeparam>
@@ -1394,7 +1382,7 @@
             </summary>
             <param name="user">The user to delete.</param>
             <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-            <returns>The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the <see cref="T:Microsoft.AspNetCore.Identity.IdentityResult"/> of the delete operation.</returns>
+            <returns>The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the <see cref="T:Microsoft.AspNetCore.Identity.IdentityResult"/> of the update operation.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IUserStore`1.FindByIdAsync(System.String,System.Threading.CancellationToken)">
             <summary>
@@ -1473,36 +1461,36 @@
             <param name="user">The user whose two factor authentication enabled status should be set.</param>
             <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified 
             <paramref name="user"/> has two factor authentication enabled or not.
             </returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1">
             <summary>
-            Provides an abstraction for two-factor token generators.
+            Provides an abstraction for two factor token generators.
             </summary>
             <typeparam name="TUser">The type encapsulating a user.</typeparam>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1.GenerateAsync(System.String,Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
-             <summary>
-             Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
-             </summary>
-             <param name="purpose">The purpose the token will be used for.</param>
-             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
-             <param name="user">The user a token should be generated for.</param>
-             <returns>
-             The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the token for the specified
-             <paramref name="user"/> and <paramref name="purpose"/>.
-             </returns>
-             <remarks>
-             The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
-             insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email"
-             and validated it with the same purpose a token with the purpose of TOTP would not pass the check even if it was
-             for the same user.
+            <summary>
+            Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
+            </summary>
+            <param name="purpose">The purpose the token will be used for.</param>
+            <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
+            <param name="user">The user a token should be generated for.</param>
+            <returns>
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the token for the specified 
+            <paramref name="user"/> and <paramref name="purpose"/>.
+            </returns>
+            <remarks>
+            The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
+            insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email" 
+            and validated it with the same purpose a token with the purpose of TOTP would not pass the check even if it was
+            for the same user.
             
-             Implementations of <see cref="T:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1"/> should validate that purpose is not null or empty to
-             help with token separation.
-             </remarks>
+            Implementations of <see cref="T:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1"/> should validate that purpose is not null or empty to
+            help with token separation.
+            </remarks>
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1.ValidateAsync(System.String,System.String,Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
@@ -1521,7 +1509,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.IUserTwoFactorTokenProvider`1.CanGenerateTwoFactorTokenAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
-            Returns a flag indicating whether the token provider can generate a token suitable for two-factor authentication token for
+            Returns a flag indicating whether the token provider can generate a token suitable for two factor authentication token for
             the specified <paramref name="user"/>.
             </summary>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
@@ -1529,7 +1517,7 @@
             <returns>
             The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the a flag indicating if a two
             factor token could be generated by this provider for the specified <paramref name="user"/>.
-            The task will return true if a two-factor authentication token could be generated, otherwise false.
+            The task will return true if a two factor authentication token could be generated, otherwise false.
             </returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.IUserValidator`1">
@@ -1556,7 +1544,7 @@
             Gets or sets a flag indicating whether a new user can be locked out. Defaults to true.
             </summary>
             <value>
-            True if a newly created user can be locked out, otherwise false.
+            True if a newly created user can be locked out, otherwise false.  
             </value>
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.LockoutOptions.MaxFailedAccessAttempts">
@@ -1641,7 +1629,7 @@
             </value>
             <remarks>
             This value is only used when the compatibility mode is set to 'V3'.
-            The value must be a positive integer.
+            The value must be a positive integer. 
             </remarks>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.PasswordOptions">
@@ -1773,7 +1761,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.PhoneNumberTokenProvider`1.CanGenerateTwoFactorTokenAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
-            Returns a flag indicating whether the token provider can generate a token suitable for two-factor authentication token for
+            Returns a flag indicating whether the token provider can generate a token suitable for two factor authentication token for
             the specified <paramref name="user"/>.
             </summary>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
@@ -1781,7 +1769,7 @@
             <returns>
             The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the a flag indicating if a two
             factor token could be generated by this provider for the specified <paramref name="user"/>.
-            The task will return true if a two-factor authentication token could be generated as the user has
+            The task will return true if a two factor authentication token could be generated as the user has
             a telephone number, otherwise false.
             </returns>
         </member>
@@ -1793,7 +1781,7 @@
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
             <param name="user">The user a token should be generated for.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing a constant modifier for the specified
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing a constant modifier for the specified 
             <paramref name="user"/> and <paramref name="purpose"/>.
             </returns>
         </member>
@@ -1867,7 +1855,7 @@
             <value>An IQueryable collection of Roles if the persistence store is an <see cref="T:Microsoft.AspNetCore.Identity.IQueryableRoleStore`1"/>.</value>
             <exception cref="T:System.NotSupportedException">Thrown if the persistence store is not an <see cref="T:Microsoft.AspNetCore.Identity.IQueryableRoleStore`1"/>.</exception>
             <remarks>
-            Callers to this property should use <see cref="P:Microsoft.AspNetCore.Identity.RoleManager`1.SupportsQueryableRoles"/> to ensure the backing role store supports
+            Callers to this property should use <see cref="P:Microsoft.AspNetCore.Identity.RoleManager`1.SupportsQueryableRoles"/> to ensure the backing role store supports 
             returning an IQueryable list of roles.
             </remarks>
         </member>
@@ -1945,7 +1933,7 @@
             </summary>
             <param name="roleId">The role ID whose role should be returned.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the role
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the role 
             associated with the specified <paramref name="roleId"/>
             </returns>
         </member>
@@ -1955,7 +1943,7 @@
             </summary>
             <param name="role">The role whose name should be retrieved.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the name of the
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the name of the 
             specified <paramref name="role"/>.
             </returns>
         </member>
@@ -1976,7 +1964,7 @@
             </summary>
             <param name="role">The role whose ID should be retrieved.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the ID of the
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the ID of the 
             specified <paramref name="role"/>.
             </returns>
         </member>
@@ -1986,7 +1974,7 @@
             </summary>
             <param name="roleName">The name of the role to be returned.</param>
             <returns>
-            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the role
+            The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the role 
             associated with the specified <paramref name="roleName"/>
             </returns>
         </member>
@@ -2061,7 +2049,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.RoleValidator`1.#ctor(Microsoft.AspNetCore.Identity.IdentityErrorDescriber)">
             <summary>
-            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Identity.RoleValidator`1"/>.
+            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Identity.RoleValidator`1"/>/
             </summary>
             <param name="errors">The <see cref="T:Microsoft.AspNetCore.Identity.IdentityErrorDescriber"/> used to provider error messages.</param>
         </member>
@@ -2139,15 +2127,15 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.SignInResult.LockedOut">
             <summary>
-            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that failed because
-            the user was locked out.
+            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that failed because 
+            the user was logged out.
             </summary>
             <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents sign-in attempt that failed due to the
             user being locked out.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.SignInResult.NotAllowed">
             <summary>
-            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that failed because
+            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that failed because 
             the user is not allowed to sign-in.
             </summary>
             <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents sign-in attempt that failed due to the
@@ -2155,7 +2143,7 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.SignInResult.TwoFactorRequired">
             <summary>
-            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that needs two-factor
+            Returns a <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents a sign-in attempt that needs two-factor 
             authentication.
             </summary>
             <returns>A <see cref="T:Microsoft.AspNetCore.Identity.SignInResult"/> that represents sign-in attempt that needs two-factor
@@ -2174,13 +2162,13 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.StoreOptions.MaxLengthForKeys">
             <summary>
-            If set to a positive number, the default OnModelCreating will use this value as the max length for any
+            If set to a positive number, the default OnModelCreating will use this value as the max length for any 
             properties used as keys, i.e. UserId, LoginProvider, ProviderKey.
             </summary>
         </member>
         <member name="P:Microsoft.AspNetCore.Identity.StoreOptions.ProtectPersonalData">
             <summary>
-            If set to true, the store must protect all personally identifying data for a user.
+            If set to true, the store must protect all personally identifying data for a user. 
             This will be enforced by requiring the store to implement <see cref="T:Microsoft.AspNetCore.Identity.IProtectedUserStore`1"/>.
             </summary>
         </member>
@@ -2196,12 +2184,12 @@
         </member>
         <member name="F:Microsoft.AspNetCore.Identity.TokenOptions.DefaultEmailProvider">
             <summary>
-            Default token provider name used by the email provider.
+            Default token provider name used by the email provider. />.
             </summary>
         </member>
         <member name="F:Microsoft.AspNetCore.Identity.TokenOptions.DefaultPhoneProvider">
             <summary>
-            Default token provider name used by the phone provider.
+            Default token provider name used by the phone provider. />.
             </summary>
         </member>
         <member name="F:Microsoft.AspNetCore.Identity.TokenOptions.DefaultAuthenticatorProvider">
@@ -2282,7 +2270,7 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.TotpSecurityStampBasedTokenProvider`1">
             <summary>
-            Represents a token provider that generates time-based codes using the user's security stamp.
+            Represents a token provider that generates time based codes using the user's security stamp.
             </summary>
             <typeparam name="TUser">The type encapsulating a user.</typeparam>
         </member>
@@ -2336,7 +2324,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.TotpSecurityStampBasedTokenProvider`1.CanGenerateTwoFactorTokenAsync(Microsoft.AspNetCore.Identity.UserManager{`0},`0)">
             <summary>
-            Returns a flag indicating whether the token provider can generate a token suitable for two-factor authentication token for
+            Returns a flag indicating whether the token provider can generate a token suitable for two factor authentication token for
             the specified <paramref name="user"/>.
             </summary>
             <param name="manager">The <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> that can be used to retrieve user properties.</param>
@@ -2344,7 +2332,7 @@
             <returns>
             The <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous operation, containing the a flag indicating if a two
             factor token could be generated by this provider for the specified <paramref name="user"/>.
-            The task will return true if a two-factor authentication token could be generated, otherwise false.
+            The task will return true if a two factor authentication token could be generated, otherwise false.
             </returns>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.UpperInvariantLookupNormalizer">
@@ -2479,9 +2467,6 @@
             <value>
             The display name for the provider.
             </value>
-            <remarks>
-            Examples of the display name may be local, FACEBOOK, Google, etc.
-            </remarks>
         </member>
         <member name="T:Microsoft.AspNetCore.Identity.UserManager`1">
             <summary>
@@ -3346,7 +3331,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.UserManager`1.IsLockedOutAsync(`0)">
             <summary>
-            Returns a flag indicating whether the specified <paramref name="user"/> is locked out,
+            Returns a flag indicating whether the specified <paramref name="user"/> his locked out,
             as an asynchronous operation.
             </summary>
             <param name="user">The user whose locked out status should be retrieved.</param>
@@ -3602,7 +3587,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Identity.UserValidator`1.#ctor(Microsoft.AspNetCore.Identity.IdentityErrorDescriber)">
             <summary>
-            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Identity.UserValidator`1"/>.
+            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Identity.UserValidator`1"/>/
             </summary>
             <param name="errors">The <see cref="T:Microsoft.AspNetCore.Identity.IdentityErrorDescriber"/> used to provider error messages.</param>
         </member>
@@ -3627,7 +3612,7 @@
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.IdentityServiceCollectionExtensions.AddIdentityCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Adds and configures the identity system for the specified User type. Role services are not added
+            Adds and configures the identity system for the specified User type. Role services are not added 
             by default but can be added with <see cref="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddRoles``1"/>.
             </summary>
             <typeparam name="TUser">The type representing a User in the system.</typeparam>
@@ -3636,7 +3621,7 @@
         </member>
         <member name="M:Microsoft.Extensions.DependencyInjection.IdentityServiceCollectionExtensions.AddIdentityCore``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Microsoft.AspNetCore.Identity.IdentityOptions})">
             <summary>
-            Adds and configures the identity system for the specified User type. Role services are not added by default
+            Adds and configures the identity system for the specified User type. Role services are not added by default 
             but can be added with <see cref="M:Microsoft.AspNetCore.Identity.IdentityBuilder.AddRoles``1"/>.
             </summary>
             <typeparam name="TUser">The type representing a User in the system.</typeparam>
@@ -3663,10 +3648,10 @@
             <summary>Role name '{0}' is already taken.</summary>
         </member>
         <member name="P:Microsoft.Extensions.Identity.Core.Resources.DuplicateUserName">
-            <summary>Username '{0}' is already taken.</summary>
+            <summary>User name '{0}' is already taken.</summary>
         </member>
         <member name="M:Microsoft.Extensions.Identity.Core.Resources.FormatDuplicateUserName(System.Object)">
-            <summary>Username '{0}' is already taken.</summary>
+            <summary>User name '{0}' is already taken.</summary>
         </member>
         <member name="P:Microsoft.Extensions.Identity.Core.Resources.InvalidEmail">
             <summary>Email '{0}' is invalid.</summary>
@@ -3696,10 +3681,10 @@
             <summary>Invalid token.</summary>
         </member>
         <member name="P:Microsoft.Extensions.Identity.Core.Resources.InvalidUserName">
-            <summary>Username '{0}' is invalid, can only contain letters or digits.</summary>
+            <summary>User name '{0}' is invalid, can only contain letters or digits.</summary>
         </member>
         <member name="M:Microsoft.Extensions.Identity.Core.Resources.FormatInvalidUserName(System.Object)">
-            <summary>Username '{0}' is invalid, can only contain letters or digits.</summary>
+            <summary>User name '{0}' is invalid, can only contain letters or digits.</summary>
         </member>
         <member name="P:Microsoft.Extensions.Identity.Core.Resources.LoginAlreadyAssociated">
             <summary>A user with this login already exists.</summary>
@@ -3843,7 +3828,7 @@
         </member>
         <member name="M:System.Security.Claims.PrincipalExtensions.FindFirstValue(System.Security.Claims.ClaimsPrincipal,System.String)">
             <summary>
-            Returns the value for the first claim of the specified type, otherwise null if the claim is not present.
+            Returns the value for the first claim of the specified type otherwise null the claim is not present.
             </summary>
             <param name="principal">The <see cref="T:System.Security.Claims.ClaimsPrincipal"/> instance this method extends.</param>
             <param name="claimType">The claim type whose first value should be returned.</param>

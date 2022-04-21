@@ -246,6 +246,16 @@
     <Compile Include="Controllers\EgresoController.cs" />
     <Compile Include="Controllers\CuentasController.cs" />
     <Compile Include="Controllers\FacturaCuentaController.cs" />
+    <Compile Include="Controllers\PagoController.cs" />
+    <Compile Include="Controllers\PerfilController.cs" />
+    <Compile Include="Controllers\PlanDeTratamientoController.cs" />
+    <Compile Include="Controllers\ProcesoMedicoController.cs" />
+    <Compile Include="Controllers\ReciboIngresoController.cs" />
+    <Compile Include="Controllers\TipoDocumentoController.cs" />
+    <Compile Include="Controllers\TipoNCFController.cs" />
+    <Compile Include="Controllers\TipoPagoController.cs" />
+    <Compile Include="Controllers\TipoPersonaController.cs" />
+    <Compile Include="Controllers\TipoProcesoController.cs" />
     <Compile Include="Controllers\UserRegisterController.cs" />
     <Compile Include="Controllers\UsuarioCajaController.cs" />
     <Compile Include="Controllers\CajaController.cs" />
@@ -253,6 +263,7 @@
     <Compile Include="Controllers\AseguradoraController.cs" />
     <Compile Include="Controllers\AperturaYCierreDeCajaController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Cuentas.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

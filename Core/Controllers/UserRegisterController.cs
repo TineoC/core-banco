@@ -32,6 +32,8 @@ namespace Core.Controllers
                 {
                     UsuarioNickname = usuario.Usuario_Nickname,
                     UsuarioContraseña = usuario.Usuario_Contraseña,
+                    UsuarioIdPerfil = Convert.ToInt32(usuario.Perfil),
+                    IdPersona = usuario.IdPersona,
                     UsuarioFechaCreacion = usuario.Usuario_FechaCreacion,
                     UsuarioVigencia = true,
                     EntidadId = 21
