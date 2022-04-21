@@ -1,4 +1,5 @@
 ﻿using Core.Controllers;
+using Ryadel.Components.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -87,6 +88,8 @@ namespace Core
                     {
                         Logger.Error("Ya existe un usuario con ese nombre!");
 
+                        Console.WriteLine("Ya existe un usuario con ese nombre!");
+
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                     }
@@ -98,26 +101,58 @@ namespace Core
 
                 do
                 {
+                    Console.Clear();
+
                     Console.Write("Ingrese una contraseña: ");
-                    password = Console.ReadLine();
+                    password = PasswordCheck.GetPassword();
+
+                    PasswordStrength strength = PasswordCheck.GetPasswordStrength(password);
+
+                    switch (strength)
+                    {
+                        case PasswordStrength.Strong:
+                            simplePassword = false;
+                            break;
+                        case PasswordStrength.VeryStrong:
+                            simplePassword = false;
+                            break;
+                        default:
+                            simplePassword = true;
+                            break;
+                    }
 
                     if (simplePassword)
                     {
                         Logger.Error("La contraseña es muy simple!");
 
+                        char condicion1 = PasswordCheck.HasMinimumLength(password, 8) ? 'X' : ' ';
+                        char condicion2 = PasswordCheck.HasUpperCaseLetter(password) ? 'X' : ' '; ;
+                        char condicion3 = PasswordCheck.HasLowerCaseLetter(password) ? 'X' : ' '; ;
+                        char condicion4 = PasswordCheck.HasDigit(password) || PasswordCheck.HasSpecialChar(password) ? 'X' : ' ';
+
+                        Console.WriteLine("\nSi tienen una [X] es porque esta condición ya está cumplida, de lo contrario, estará vacía.\n");
+                        Console.WriteLine("Las contraseñas requieren:");
+                        Console.WriteLine($"\t[{condicion1}] 1.Al menos 8 caracteres de longitud:");
+                        Console.WriteLine($"\t[{condicion2}] 2.Al menos un caracter en mayúscula:");
+                        Console.WriteLine($"\t[{condicion3}] 3.Al menos un caracter en minúscula:");
+                        Console.WriteLine($"\t[{condicion4}] 4.Al menos un dígito o carácter especial:");
+
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
-                    }
-
-                    Console.Write("Comfirmar contraseña: ");
-                    confirmPassword = Console.ReadLine();
-
-                    if (!passwordMatch)
+                    } else
                     {
-                        Logger.Error("Las contraseñas no coinciden!");
+                        Console.Write("\nComfirmar contraseña: ");
+                        confirmPassword = PasswordCheck.GetPassword();
 
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey();
+                        passwordMatch = Equals(password, confirmPassword);
+
+                        if (!passwordMatch)
+                        {
+                            Logger.Error("Las contraseñas no coinciden!");
+                            Console.WriteLine("\nLas contraseñas no coinciden!");
+                            Console.Write("Press any key to continue...");
+                            Console.ReadKey();
+                        }
                     }
                 } while (simplePassword || !passwordMatch);
 
@@ -130,6 +165,14 @@ namespace Core
                     Usuario_FechaCreacion = DateTime.Now,
                     Usuario_Vigencia = true
                 });
+
+                hospital.SaveChanges();
+
+                Logger.Info($"El usuario {username} ha sido registrado");
+                Console.WriteLine($"El usuario {username} ha sido registrado");
+
+                Console.Write("\nPress any key to continue...");
+                Console.ReadKey();
 
             }
             catch (Exception e)
@@ -159,13 +202,13 @@ namespace Core
                     Console.Write("Ingrese el nombre de usuario: ");
                     string username = Console.ReadLine();
                     Console.Write("Ingrese la contraseña: ");
-                    string password = Console.ReadLine();
+                    string password = PasswordCheck.GetPassword();
 
                     Logger.Info($"Intento de inicio de sesión username: {username}  password: {password}");
 
                     // Se validan las credenciales
                     correctCredentials = Authentication(username, password);
-
+                    
                     if (correctCredentials)
                     {
                         Logger.Info($"Se ha iniciado sesión correctamente! Usuario: {username}");
@@ -176,7 +219,7 @@ namespace Core
                             )
                             .FirstOrDefault()
                             .Usuario_Id;
-                        Console.Write("Press any key to continue...");
+                        Console.Write("\nPress any key to continue...");
                         Console.ReadKey();
                         Console.Clear();
                         return;

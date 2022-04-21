@@ -74,3 +74,10 @@ C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\ru\Microsoft.Data.SqlCl
 C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\zh-Hans\Microsoft.Data.SqlClient.resources.dll
 C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\zh-Hant\Microsoft.Data.SqlClient.resources.dll
 C:\Users\chris\source\repos\Core_Hospital\Core\obj\Debug\Core.exe.config
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.Extensions.Identity.Core.dll
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.AspNetCore.Cryptography.Internal.xml
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.AspNetCore.Cryptography.KeyDerivation.xml
+C:\Users\chris\source\repos\Core_Hospital\Core\bin\Debug\Microsoft.Extensions.Identity.Core.xml
