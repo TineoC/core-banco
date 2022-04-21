@@ -174,6 +174,16 @@
     <Compile Include="Caja_Usuario.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\FacturaEncabezadoController.cs" />
+    <Compile Include="Controllers\FacturaDetalleController.cs" />
+    <Compile Include="Controllers\EgresoController.cs" />
+    <Compile Include="Controllers\CuentasController.cs" />
+    <Compile Include="Controllers\FacturaCuentaController.cs" />
+    <Compile Include="Controllers\UsuarioCajaController.cs" />
+    <Compile Include="Controllers\CajaController.cs" />
+    <Compile Include="Controllers\AutorizacionController.cs" />
+    <Compile Include="Controllers\AseguradoraController.cs" />
+    <Compile Include="Controllers\AperturaYCierreDeCajaController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
     <Compile Include="Cuentas.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -223,6 +233,7 @@
     <Compile Include="PagosPorPersona_View.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="PasswordCheck.cs" />
     <Compile Include="Perfil.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

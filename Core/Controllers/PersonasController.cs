@@ -34,6 +34,27 @@ namespace Core.Controllers
 
             try
             {
+                bool exists;
+                int TipoDocumento;
+
+                do
+                {
+                    Console.WriteLine("Ingresa el ID del Tipo de Documento: ");
+                    TipoDocumento = Int32.Parse(Console.ReadLine());
+
+                    Console.Clear();
+
+                    exists = hospital.TipoDocumento.Any(tipo => Equals(tipo.TipoDocumento_Id,TipoDocumento));
+
+                    if (!exists)
+                    {
+                        Logger.Error("No existen ID's para ese Tipo de Documento");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                    
+                } while (!exists);
+
                 Console.Write("Escribe tu documento: ");
                 string Documento = Console.ReadLine();
 
@@ -42,6 +63,26 @@ namespace Core.Controllers
 
                 Console.Write("Escribe tus apellidos: ");
                 string apellidos = Console.ReadLine();
+
+                int TipoPersona;
+
+                do
+                {
+                    Console.WriteLine("Ingresa el ID del Tipo de Persona: ");
+                    TipoPersona = Int32.Parse(Console.ReadLine());
+
+                    Console.Clear();
+
+                    exists = hospital.TipoPersona.Any(tipo => Equals(tipo.TipoPersona_Id, TipoPersona));
+
+                    if (!exists)
+                    {
+                        Logger.Error("No existen ID's para ese Tipo de Persona");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+
+                } while (!exists);
 
                 Console.Write("Escribe tu correo electrónico: ");
                 string correo = Console.ReadLine();
@@ -52,14 +93,40 @@ namespace Core.Controllers
                 Console.Write("Escribe tu dirección: ");
                 string direccion = Console.ReadLine();
 
+                int AseguradoraID;
+
+                do
+                {
+                    Console.WriteLine("Ingresa el ID de la Aseguradora: ");
+                    AseguradoraID = Int32.Parse(Console.ReadLine());
+
+                    Console.Clear();
+
+                    exists = hospital.Aseguradora.Any(aseg => Equals(aseg.Aseguraodra_Id, AseguradoraID));
+
+                    if (!exists)
+                    {
+                        Logger.Error("No existen ID's para esa Aseguradora");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+
+                } while (!exists);
+
                 hospital.Persona.Add(new Persona()
                 {
+                    Persona_TipoDocumento = TipoDocumento,
                     Persona_Documento = Documento,
                     Persona_Nombre = nombre,
                     Persona_Apellido = apellidos,
+                    Persona_TipoPersona = TipoPersona,
                     Persona_CorreoElectronico = correo,
                     Persona_Telefono = telefono,
-                    Persona_Direccion = direccion
+                    Persona_Direccion = direccion,
+                    Persona_IdUsuarioCreador = Program.loggerUserID,
+                    Persona_IdAseguradora = AseguradoraID,
+                    Persona_FechaCreacion = DateTime.Now,
+                    Persona_Vigencia = true
                 });
 
                 Logger.Info($"Se ha creado la persona correctamente con el documento {Documento}");
@@ -158,6 +225,26 @@ namespace Core.Controllers
             Console.Write("Escribe tu nueva dirección: ");
             string direccion = Console.ReadLine();
 
+            int nuevaAseguradoraID;
+
+            do
+            {
+                Console.WriteLine("Ingresa el ID de tu nueva Aseguradora: ");
+                nuevaAseguradoraID = Int32.Parse(Console.ReadLine());
+
+                Console.Clear();
+
+                exists = hospital.Aseguradora.Any(aseg => Equals(aseg.Aseguraodra_Id, nuevaAseguradoraID));
+
+                if (!exists)
+                {
+                    Logger.Error("No existen ID's para esa Aseguradora");
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+
+            } while (!exists);
+
             Persona nuevaPersona = hospital.Persona.Where(
                     pers => pers.Persona_Documento == Documento
                 ).First();
@@ -167,6 +254,8 @@ namespace Core.Controllers
             nuevaPersona.Persona_CorreoElectronico = correo;
             nuevaPersona.Persona_Telefono = telefono;
             nuevaPersona.Persona_Direccion = direccion;
+            nuevaPersona.Persona_IdAseguradora = nuevaAseguradoraID;
+            nuevaPersona.Persona_Vigencia = true;
 
             Logger.Info($"La persona con el documento {Documento} ha sido actualizado.");
 
@@ -199,10 +288,9 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Persona.Remove(hospital.Persona.Where(
-                        pers => pers.Persona_Documento == Documento
-                    ).First()
-                );
+                hospital.Persona.Where(
+                    pers => pers.Persona_Documento == Documento
+                    ).First().Persona_Vigencia = false;
 
                 hospital.SaveChanges();
 
