@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +13,16 @@ namespace Core.Controllers
     {
         static hospitalEntities hospital = new hospitalEntities();
 
+        public static UsuarioCajaController Instancia = null;
+        public static UsuarioCajaController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new UsuarioCajaController();
+            }
+
+            return Instancia;
+        }
         public static void MostrarInformacion(Caja_Usuario usuarioCaja)
         {
             Console.WriteLine($"ID Usuario: {usuarioCaja.Caja_Usuario_IdUsuario}");
@@ -19,7 +32,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {usuarioCaja.Caja_Usuario_IdUsuario_Vigencia}");
         }
 
-        public static void Crear()
+        public  async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -70,18 +83,29 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Caja_Usuario.Add(new Caja_Usuario()
+                Caja_Usuario cajauUsuario = new Caja_Usuario()
                 {
                     Caja_Usuario_IdUsuario = idUsuario,
                     Caja_Usuario_IdCaja = idCaja,
                     Caja_Usuario_IdUsuario_FechaCreacion = DateTime.Now,
                     Caja_Usuario_IdUsuario_IdUsuarioCreador = Program.loggerUserID,
                     Caja_Usuario_IdUsuario_Vigencia = true
-                });
+                };
+                hospital.Caja_Usuario.Add(cajauUsuario);
+
+                CajaUsuarioEntities cajauUsuarioEntities = new CajaUsuarioEntities()
+                {
+                    CajaUsuarioIdUsuario = cajauUsuario.Caja_Usuario_IdUsuario,
+                    CajaUsuarioIdCaja = cajauUsuario.Caja_Usuario_IdCaja,
+                    CajaUsuarioIdUsuarioFechaCreacion = cajauUsuario.Caja_Usuario_IdUsuario_FechaCreacion,
+                    CajaUsuarioIdUsuarioIdUsuarioCreador = cajauUsuario.Caja_Usuario_IdUsuario_IdUsuarioCreador,
+                    CajaUsuarioIdUsuarioVigencia = true
+                };
 
                 hospital.SaveChanges();
-
                 Logger.Info($"Se ha creado el Usuario de Caja correctamente");
+                await SendMessageQueue(cajauUsuarioEntities);
+                Logger.Info($"El usuario se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -183,7 +207,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -286,9 +310,23 @@ namespace Core.Controllers
                 nuevoUsuarioCaja.Caja_Usuario_IdCaja = nuevoIdCaja;
                 nuevoUsuarioCaja.Caja_Usuario_IdUsuario_Vigencia = true;
 
+                CajaUsuarioEntities cajauUsuarioEntities = new CajaUsuarioEntities()
+                {
+                    CajaUsuarioIdUsuario = nuevoUsuarioCaja.Caja_Usuario_IdUsuario,
+                    CajaUsuarioIdCaja = nuevoUsuarioCaja.Caja_Usuario_IdCaja,
+                    CajaUsuarioIdUsuarioFechaCreacion = nuevoUsuarioCaja.Caja_Usuario_IdUsuario_FechaCreacion,
+                    CajaUsuarioIdUsuarioIdUsuarioCreador = nuevoUsuarioCaja.Caja_Usuario_IdUsuario_IdUsuarioCreador,
+                    CajaUsuarioIdUsuarioVigencia = true
+                };
+
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado el Usuario de Caja correctamente.");
+
+                await SendMessageQueue(cajauUsuarioEntities);
+                Logger.Info($"El usuario se ha enviado correctamente");
+
             }
             catch (Exception e)
             {
@@ -297,7 +335,7 @@ namespace Core.Controllers
             }    
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -347,16 +385,30 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Caja_Usuario.Where(
+                Caja_Usuario cajaEliminar = hospital.Caja_Usuario.Where(
                     user =>
                         user.Caja_Usuario_IdUsuario == idUsuario
                         &&
                         user.Caja_Usuario_IdCaja == idCaja
-                    ).First().Caja_Usuario_IdUsuario_Vigencia = false;
+                    ).First();
+
+                cajaEliminar.Caja_Usuario_IdUsuario_Vigencia = false;
+
+                CajaUsuarioEntities cajauUsuarioEntities = new CajaUsuarioEntities()
+                {
+                    CajaUsuarioIdUsuario = cajaEliminar.Caja_Usuario_IdUsuario,
+                    CajaUsuarioIdCaja = cajaEliminar.Caja_Usuario_IdCaja,
+                    CajaUsuarioIdUsuarioFechaCreacion = cajaEliminar.Caja_Usuario_IdUsuario_FechaCreacion,
+                    CajaUsuarioIdUsuarioIdUsuarioCreador = cajaEliminar.Caja_Usuario_IdUsuario_IdUsuarioCreador,
+                    CajaUsuarioIdUsuarioVigencia = true
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado el Usuario de Caja ID: {idCaja} correctamente.");
+
+                await SendMessageQueue(cajauUsuarioEntities);
+                Logger.Info($"El usuario se ha enviado correctamente");
             }
 
             catch (Exception e)
@@ -365,5 +417,20 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(CajaUsuarioEntities CajaUsuarioEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(CajaUsuarioEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

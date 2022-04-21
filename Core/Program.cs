@@ -381,6 +381,7 @@ namespace Core
 
                 Console.Clear();
                 PersonasController personas = new PersonasController();
+                UsuarioCajaController usuariosCaja = new UsuarioCajaController();
                 switch (opcion)
                 {
             // Instanciar clase controller en cada accion
@@ -784,7 +785,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                UsuarioCajaController.Crear();
+                                usuariosCaja.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -799,12 +800,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                UsuarioCajaController.Actualizar();
+                                usuariosCaja.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                UsuarioCajaController.Eliminar();
+                                usuariosCaja.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
