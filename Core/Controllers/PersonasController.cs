@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,17 @@ namespace Core.Controllers
     internal class PersonasController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static PersonasController Instancia = null;
+        public static PersonasController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new PersonasController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(Persona persona)
         {
@@ -26,7 +40,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {persona.Persona_Vigencia}");
         }
 
-        public static void Crear()
+        public  async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -113,7 +127,7 @@ namespace Core.Controllers
 
                 } while (!exists);
 
-                hospital.Persona.Add(new Persona()
+                Persona persona = new Persona()
                 {
                     Persona_TipoDocumento = TipoDocumento,
                     Persona_Documento = Documento,
@@ -127,7 +141,27 @@ namespace Core.Controllers
                     Persona_IdAseguradora = AseguradoraID,
                     Persona_FechaCreacion = DateTime.Now,
                     Persona_Vigencia = true
-                });
+                };
+
+                PersonaEntities personaEntities = new PersonaEntities()
+                {
+                    PersonaTipoDocumento = persona.Persona_TipoDocumento,
+                    PersonaDocumento = persona.Persona_Documento,
+                    PersonaNombre = persona.Persona_Nombre,
+                    PersonaApellido = persona.Persona_Apellido,
+                    PersonaTipoPersona = persona.Persona_TipoPersona,
+                    PersonaCorreoElectronico = persona.Persona_CorreoElectronico,
+                    PersonaTelefono = persona.Persona_Telefono,
+                    PersonaIdAseguradora = persona.Persona_IdAseguradora,
+                    PersonaFechaCreacion = DateTime.Now,
+                    PersonaDireccion = persona.Persona_Direccion,
+                    PersonaIdUsuarioCreador = persona.Persona_IdUsuarioCreador,
+                    PersonaVigencia = true,
+                    EntidadId = 13
+                };
+
+                hospital.Persona.Add(persona);
+                await SendMessageQueue(personaEntities);
 
                 Logger.Info($"Se ha creado la persona correctamente con el documento {Documento}");
 
@@ -186,7 +220,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             string Documento;
@@ -257,11 +291,30 @@ namespace Core.Controllers
             nuevaPersona.Persona_IdAseguradora = nuevaAseguradoraID;
             nuevaPersona.Persona_Vigencia = true;
 
+            PersonaEntities personaEntities = new PersonaEntities()
+            {
+                PersonaTipoDocumento = nuevaPersona.Persona_TipoDocumento,
+                PersonaDocumento = nuevaPersona.Persona_Documento,
+                PersonaNombre = nuevaPersona.Persona_Nombre,
+                PersonaApellido = nuevaPersona.Persona_Apellido,
+                PersonaTipoPersona = nuevaPersona.Persona_TipoPersona,
+                PersonaCorreoElectronico = nuevaPersona.Persona_CorreoElectronico,
+                PersonaTelefono = nuevaPersona.Persona_Telefono,
+                PersonaIdAseguradora = nuevaPersona.Persona_IdAseguradora,
+                PersonaFechaCreacion = nuevaPersona.Persona_FechaCreacion,
+                PersonaDireccion = nuevaPersona.Persona_Direccion,
+                PersonaIdUsuarioCreador = nuevaPersona.Persona_IdUsuarioCreador,
+                PersonaVigencia = true,
+                EntidadId = 13
+            };
+
+
             Logger.Info($"La persona con el documento {Documento} ha sido actualizado.");
 
             hospital.SaveChanges();
+            await SendMessageQueue(personaEntities);
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -288,13 +341,32 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Persona.Where(
-                    pers => pers.Persona_Documento == Documento
-                    ).First().Persona_Vigencia = false;
+                Persona PersonaEliminar = hospital.Persona.Where(
+                  pers => pers.Persona_Documento == Documento
+              ).First();
 
+                PersonaEliminar.Persona_Vigencia = false;
+
+
+                PersonaEntities personaEntities = new PersonaEntities()
+                {
+                    PersonaTipoDocumento = PersonaEliminar.Persona_TipoDocumento,
+                    PersonaDocumento = PersonaEliminar.Persona_Documento,
+                    PersonaNombre = PersonaEliminar.Persona_Nombre,
+                    PersonaApellido = PersonaEliminar.Persona_Apellido,
+                    PersonaTipoPersona = PersonaEliminar.Persona_TipoPersona,
+                    PersonaCorreoElectronico = PersonaEliminar.Persona_CorreoElectronico,
+                    PersonaTelefono = PersonaEliminar.Persona_Telefono,
+                    PersonaIdAseguradora = PersonaEliminar.Persona_IdAseguradora,
+                    PersonaFechaCreacion = PersonaEliminar.Persona_FechaCreacion,
+                    PersonaDireccion = PersonaEliminar.Persona_Direccion,
+                    PersonaIdUsuarioCreador = PersonaEliminar.Persona_IdUsuarioCreador,
+                    PersonaVigencia = PersonaEliminar.Persona_Vigencia,
+                    EntidadId = 13
+                };
                 hospital.SaveChanges();
-
                 Logger.Info($"La persona con el documento {Documento} ha sido eliminado.");
+                await SendMessageQueue(personaEntities);
             }
             catch (Exception e)
             {
@@ -302,5 +374,20 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(PersonaEntities personaEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(personaEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }
