@@ -161,9 +161,10 @@ namespace Core.Controllers
                 };
 
                 hospital.Persona.Add(persona);
-                await SendMessageQueue(personaEntities);
 
                 Logger.Info($"Se ha creado la persona correctamente con el documento {Documento}");
+                await SendMessageQueue(personaEntities);
+                Logger.Info($"Se ha enviado la persona correctamente con el documento {Documento}");
 
                 hospital.SaveChanges();
             }

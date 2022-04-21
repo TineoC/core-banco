@@ -382,6 +382,10 @@ namespace Core
                 Console.Clear();
                 PersonasController personas = new PersonasController();
                 UsuarioCajaController usuariosCaja = new UsuarioCajaController();
+                FacturaEncabezadoController facturaEncabezado = new FacturaEncabezadoController();
+                FacturaDetalleController FacturaDetalle = new FacturaDetalleController();
+                FacturaCuentaController facturaCuenta = new FacturaCuentaController();
+                EgresoController egreso = new EgresoController();
                 switch (opcion)
                 {
             // Instanciar clase controller en cada accion
@@ -470,7 +474,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                FacturaEncabezadoController.Crear();
+                                facturaEncabezado.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -485,12 +489,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                FacturaEncabezadoController.Actualizar();
+                                facturaEncabezado.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                FacturaEncabezadoController.Eliminar();
+                                facturaEncabezado.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -575,7 +579,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                EgresoController.Crear();
+                                egreso.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -590,12 +594,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                EgresoController.Actualizar();
+                                egreso.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                EgresoController.Eliminar();
+                                egreso.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -645,7 +649,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                FacturaCuentaController.Crear();
+                                facturaCuenta.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -660,12 +664,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                FacturaCuentaController.Actualizar();
+                                facturaCuenta.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                FacturaCuentaController.Eliminar();
+                                facturaCuenta.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -680,7 +684,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                FacturaDetalleController.Crear();
+                                FacturaDetalle.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -695,12 +699,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                FacturaDetalleController.Actualizar();
+                                FacturaDetalle.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                FacturaDetalleController.Eliminar();
+                                FacturaDetalle.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;

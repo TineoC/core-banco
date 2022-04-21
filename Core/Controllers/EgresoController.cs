@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,19 @@ namespace Core.Controllers
     internal class EgresoController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+
+        public static EgresoController Instancia = null;
+        public static EgresoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new EgresoController();
+            }
+
+            return Instancia;
+        }
+
 
         public static void MostrarInformacion(Egreso egreso)
         {
@@ -25,7 +41,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {egreso.Egreso_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -54,7 +70,7 @@ namespace Core.Controllers
                 Console.WriteLine("Escribe quien recibió el egreso: ");
                 string recibidoPor = Console.ReadLine();
 
-                hospital.Egreso.Add(new Egreso()
+                Egreso egreso1 = new Egreso()
                 {
                     Egreso_PagadoA = pagadoA,
                     Egreso_Cedula = cedula,
@@ -66,11 +82,30 @@ namespace Core.Controllers
                     Egreso_FechaCreacion = DateTime.Now,
                     Egreso_IdUsuarioCreador = Program.loggerUserID,
                     Egreso_Vigencia = true
-                });
+                };
+
+                EgresoEntities egresoEntities = new EgresoEntities() {
+                    EgresoPagadoA = egreso1.Egreso_PagadoA,
+                    EgresoCedula = egreso1.Egreso_Cedula,
+                    EgresoMonto = Convert.ToDecimal(egreso1.Egreso_Monto),
+                    EgresoConcepto = egreso1.Egreso_Concepto,
+                    EgresoPreparado = egreso1.Egreso_Preparado,
+                    EgrespAprobado = egreso1.Egresp_Aprobado,
+                    EgresoRecibido = egreso1.Egreso_Recibido,
+                    EgresoFechaCreacion = egreso1.Egreso_FechaCreacion,
+                    EgresoIdUsuarioCreador = egreso1.Egreso_IdUsuarioCreador,
+                    EgresoVigencia = true,
+                    EntidadId = 8
+                };
+
+                hospital.Egreso.Add(egreso1);
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado el Egreso correctamente");
+
+                await SendMessageQueue(egresoEntities);
+                Logger.Info($"Se ha enviado correctamente el egreso por {egresoEntities.EgresoCedula} pagado a {egresoEntities.EgresoPagadoA}, por un monto de {egresoEntities.EgresoMonto}, el dia {egresoEntities.EgresoFechaCreacion}");
             }
             catch (Exception e)
             {
@@ -146,7 +181,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -215,9 +250,26 @@ namespace Core.Controllers
                 nuevoEgreso.Egreso_IdUsuarioCreador = Program.loggerUserID;
                 nuevoEgreso.Egreso_Vigencia = true;
 
+                EgresoEntities egresoEntities = new EgresoEntities()
+                {
+                    EgresoPagadoA = nuevoEgreso.Egreso_PagadoA,
+                    EgresoCedula = nuevoEgreso.Egreso_Cedula,
+                    EgresoMonto = Convert.ToDecimal(nuevoEgreso.Egreso_Monto),
+                    EgresoConcepto = nuevoEgreso.Egreso_Concepto,
+                    EgresoPreparado = nuevoEgreso.Egreso_Preparado,
+                    EgrespAprobado = nuevoEgreso.Egresp_Aprobado,
+                    EgresoRecibido = nuevoEgreso.Egreso_Recibido,
+                    EgresoFechaCreacion = nuevoEgreso.Egreso_FechaCreacion,
+                    EgresoIdUsuarioCreador = nuevoEgreso.Egreso_IdUsuarioCreador,
+                    EgresoVigencia = true,
+                    EntidadId = 8
+                };
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado el Egreso ID:{nuevoEgreso.Egreso_Id}.");
+                await SendMessageQueue(egresoEntities);
+                Logger.Info($"Se ha enviado correctamente el egreso por {egresoEntities.EgresoCedula} pagado a {egresoEntities.EgresoPagadoA}, por un monto de {egresoEntities.EgresoMonto}, el dia {egresoEntities.EgresoFechaCreacion}");
             }
             catch (Exception e)
             {
@@ -226,7 +278,7 @@ namespace Core.Controllers
             }
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -257,14 +309,33 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Egreso.Where(
+                Egreso egresoEliminar = hospital.Egreso.Where(
                         egreso =>
                             egreso.Egreso_Id == idEgreso
-                    ).First().Egreso_Vigencia = false;
+                    ).First();
+                egresoEliminar.Egreso_Vigencia = false;
+
+                EgresoEntities egresoEntities = new EgresoEntities()
+                {
+                    EgresoPagadoA = egresoEliminar.Egreso_PagadoA,
+                    EgresoCedula = egresoEliminar.Egreso_Cedula,
+                    EgresoMonto = Convert.ToDecimal(egresoEliminar.Egreso_Monto),
+                    EgresoConcepto = egresoEliminar.Egreso_Concepto,
+                    EgresoPreparado = egresoEliminar.Egreso_Preparado,
+                    EgrespAprobado = egresoEliminar.Egresp_Aprobado,
+                    EgresoRecibido = egresoEliminar.Egreso_Recibido,
+                    EgresoFechaCreacion = egresoEliminar.Egreso_FechaCreacion,
+                    EgresoIdUsuarioCreador = egresoEliminar.Egreso_IdUsuarioCreador,
+                    EgresoVigencia = true,
+                    EntidadId = 8
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado el Egreso con el ID: {idEgreso}.");
+
+                await SendMessageQueue(egresoEntities);
+                Logger.Info($"Se ha enviado correctamente el egreso por {egresoEntities.EgresoCedula} pagado a {egresoEntities.EgresoPagadoA}, por un monto de {egresoEntities.EgresoMonto}, el dia {egresoEntities.EgresoFechaCreacion}");
             }
 
             catch (Exception e)
@@ -273,5 +344,22 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(EgresoEntities egresoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(egresoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
+
     }
 }

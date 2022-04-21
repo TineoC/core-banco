@@ -99,7 +99,8 @@ namespace Core.Controllers
                     CajaUsuarioIdCaja = cajauUsuario.Caja_Usuario_IdCaja,
                     CajaUsuarioIdUsuarioFechaCreacion = cajauUsuario.Caja_Usuario_IdUsuario_FechaCreacion,
                     CajaUsuarioIdUsuarioIdUsuarioCreador = cajauUsuario.Caja_Usuario_IdUsuario_IdUsuarioCreador,
-                    CajaUsuarioIdUsuarioVigencia = true
+                    CajaUsuarioIdUsuarioVigencia = true,
+                    EntidadId = 5
                 };
 
                 hospital.SaveChanges();
@@ -316,7 +317,8 @@ namespace Core.Controllers
                     CajaUsuarioIdCaja = nuevoUsuarioCaja.Caja_Usuario_IdCaja,
                     CajaUsuarioIdUsuarioFechaCreacion = nuevoUsuarioCaja.Caja_Usuario_IdUsuario_FechaCreacion,
                     CajaUsuarioIdUsuarioIdUsuarioCreador = nuevoUsuarioCaja.Caja_Usuario_IdUsuario_IdUsuarioCreador,
-                    CajaUsuarioIdUsuarioVigencia = true
+                    CajaUsuarioIdUsuarioVigencia = true,
+                    EntidadId = 5
                 };
 
 
@@ -400,7 +402,8 @@ namespace Core.Controllers
                     CajaUsuarioIdCaja = cajaEliminar.Caja_Usuario_IdCaja,
                     CajaUsuarioIdUsuarioFechaCreacion = cajaEliminar.Caja_Usuario_IdUsuario_FechaCreacion,
                     CajaUsuarioIdUsuarioIdUsuarioCreador = cajaEliminar.Caja_Usuario_IdUsuario_IdUsuarioCreador,
-                    CajaUsuarioIdUsuarioVigencia = true
+                    CajaUsuarioIdUsuarioVigencia = true,
+                    EntidadId = 5
                 };
 
                 hospital.SaveChanges();
