@@ -299,9 +299,16 @@ namespace Core
 
                 return opcionElegida;
             }
+            catch (FormatException wrongFormat)
+            {
+                Logger.Error(wrongFormat, " ERROR: Debes ingresar un número");
+                Console.WriteLine("ERROR: Debes ingresar un número");
+                throw;
+            }
             catch (Exception error)
             {
                 Logger.Error(error, " Ha ocurrido un error inesperado");
+                Console.WriteLine(error.Message, " Ha ocurrido un error inesperado");
                 throw;
             }
         }
@@ -345,9 +352,16 @@ namespace Core
 
                 return opcionElegida;
             }
+            catch (FormatException wrongFormat)
+            {
+                Logger.Error(wrongFormat, " ERROR: Debes ingresar un número");
+                Console.WriteLine("ERROR: Debes ingresar un número");
+                throw;
+            }
             catch (Exception error)
             {
                 Logger.Error(error, " Ha ocurrido un error inesperado");
+                Console.WriteLine(error.Message, " Ha ocurrido un error inesperado");
                 throw;
             }
         }
