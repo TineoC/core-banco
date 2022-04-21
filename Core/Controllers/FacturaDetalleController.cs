@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,18 @@ namespace Core.Controllers
     internal class FacturaDetalleController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static FacturaDetalleController Instancia = null;
+        public static FacturaDetalleController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new FacturaDetalleController();
+            }
+
+            return Instancia;
+        }
+
 
         public static void MostrarInformacion(FacturaDetalle facturaDetalle)
         {
@@ -25,7 +40,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {facturaDetalle.FacturaDetalle_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -90,9 +105,7 @@ namespace Core.Controllers
 
                 Console.WriteLine("Escribe el Total de la Factura: ");
                 Decimal Total = Decimal.Parse(Console.ReadLine());
-
-                hospital.FacturaDetalle.Add(new FacturaDetalle()
-                {
+                FacturaDetalle FacturaDetalle = new FacturaDetalle(){
                     FacturaDetalle_IdFactura = idFactura,
                     FacturaDetalle_PlanDeTratamiento = idPlanDeTratamiento,
                     FacturaDetalle_MontoBruto = monto,
@@ -103,11 +116,31 @@ namespace Core.Controllers
                     FacturaDetalle_FechaCreacion = DateTime.Now,
                     FacturaDetalle_IdUsuarioCreador = Program.loggerUserID,
                     FacturaDetalle_Vigencia = true
-                });
+                };
+
+                FacturaDetalleEntities FacturaDetalleEntities = new FacturaDetalleEntities()
+                {
+                    FacturaDetalleIdFactura = FacturaDetalle.FacturaDetalle_IdFactura,
+                    FacturaDetallePlanDeTratamiento = FacturaDetalle.FacturaDetalle_PlanDeTratamiento,
+                    FacturaDetalleMontoBruto = FacturaDetalle.FacturaDetalle_MontoBruto,
+                    FacturaDetalleMontoCobertura = FacturaDetalle.FacturaDetalle_MontoCobertura,
+                    FacturaDetalleMontoItbis = FacturaDetalle.FacturaDetalle_MontoItbis,
+                    FacturaDetalleMontoDescuento = FacturaDetalle.FacturaDetalle_MontoDescuento,
+                    FacturaDetalleMontoTotal = FacturaDetalle.FacturaDetalle_MontoTotal,
+                    FacturaDetalleFechaCreacion = FacturaDetalle.FacturaDetalle_FechaCreacion,
+                    FacturaDetalleIdUsuarioCreador = FacturaDetalle.FacturaDetalle_IdUsuarioCreador,
+                    FacturaDetalleVigencia = true,
+                    EntidadId = 9
+                };
+                hospital.FacturaDetalle.Add(FacturaDetalle);
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado el Detalle de la Factura correctamente");
+
+                await SendMessageQueue(FacturaDetalleEntities);
+                Logger.Info($"Se ha enviado correctamente la factura detalle de Id Factura {FacturaDetalleEntities.FacturaDetalleIdFactura} para el plan de tratamiento {FacturaDetalleEntities.FacturaDetallePlanDeTratamiento}");
+
             }
             catch (Exception e)
             {
@@ -183,7 +216,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public  async Task Actualizar()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -263,9 +296,27 @@ namespace Core.Controllers
                 nuevoDetalle.FacturaDetalle_IdUsuarioCreador = Program.loggerUserID;
                 nuevoDetalle.FacturaDetalle_Vigencia = true;
 
+                FacturaDetalleEntities FacturaDetalleEntities = new FacturaDetalleEntities()
+                {
+                    FacturaDetalleIdFactura = nuevoDetalle.FacturaDetalle_IdFactura,
+                    FacturaDetallePlanDeTratamiento = nuevoDetalle.FacturaDetalle_PlanDeTratamiento,
+                    FacturaDetalleMontoBruto = nuevoDetalle.FacturaDetalle_MontoBruto,
+                    FacturaDetalleMontoCobertura = nuevoDetalle.FacturaDetalle_MontoCobertura,
+                    FacturaDetalleMontoItbis = nuevoDetalle.FacturaDetalle_MontoItbis,
+                    FacturaDetalleMontoDescuento = nuevoDetalle.FacturaDetalle_MontoDescuento,
+                    FacturaDetalleMontoTotal = nuevoDetalle.FacturaDetalle_MontoTotal,
+                    FacturaDetalleFechaCreacion = nuevoDetalle.FacturaDetalle_FechaCreacion,
+                    FacturaDetalleIdUsuarioCreador = nuevoDetalle.FacturaDetalle_IdUsuarioCreador,
+                    FacturaDetalleVigencia = true
+                };
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado el Egreso ID:{nuevoDetalle.FacturaDetalle_Id}.");
+
+                await SendMessageQueue(FacturaDetalleEntities);
+                Logger.Info($"Se ha enviado correctamente la factura detalle de Id Factura {FacturaDetalleEntities.FacturaDetalleIdFactura} para el plan de tratamiento {FacturaDetalleEntities.FacturaDetallePlanDeTratamiento}");
+
             }
             catch (Exception e)
             {
@@ -274,7 +325,7 @@ namespace Core.Controllers
             }
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -305,13 +356,35 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.FacturaDetalle.Where(
+                FacturaDetalle facturadetalle = hospital.FacturaDetalle.Where(
                         detalle => detalle.FacturaDetalle_Id == idDetalle
-                    ).First().FacturaDetalle_Vigencia = false;
+                    ).First();
+
+                facturadetalle.FacturaDetalle_Vigencia = false;
+
+
+                FacturaDetalleEntities FacturaDetalleEntities = new FacturaDetalleEntities()
+                {
+                    FacturaDetalleIdFactura = facturadetalle.FacturaDetalle_IdFactura,
+                    FacturaDetallePlanDeTratamiento = facturadetalle.FacturaDetalle_PlanDeTratamiento,
+                    FacturaDetalleMontoBruto = facturadetalle.FacturaDetalle_MontoBruto,
+                    FacturaDetalleMontoCobertura = facturadetalle.FacturaDetalle_MontoCobertura,
+                    FacturaDetalleMontoItbis = facturadetalle.FacturaDetalle_MontoItbis,
+                    FacturaDetalleMontoDescuento = facturadetalle.FacturaDetalle_MontoDescuento,
+                    FacturaDetalleMontoTotal = facturadetalle.FacturaDetalle_MontoTotal,
+                    FacturaDetalleFechaCreacion = facturadetalle.FacturaDetalle_FechaCreacion,
+                    FacturaDetalleIdUsuarioCreador = facturadetalle.FacturaDetalle_IdUsuarioCreador,
+                    FacturaDetalleVigencia = facturadetalle.FacturaDetalle_Vigencia,
+                     EntidadId = 9
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado el Detalle de Factura con el ID: {idDetalle}.");
+
+                await SendMessageQueue(FacturaDetalleEntities);
+                Logger.Info($"Se ha enviado correctamente la factura detalle de Id Factura {FacturaDetalleEntities.FacturaDetalleIdFactura} para el plan de tratamiento {FacturaDetalleEntities.FacturaDetallePlanDeTratamiento}");
+
             }
 
             catch (Exception e)
@@ -320,5 +393,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(FacturaDetalleEntities facturadetalleEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(facturadetalleEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

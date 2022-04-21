@@ -3,12 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 
 namespace Core.Controllers
 {
     internal class AseguradoraController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static AseguradoraController Instancia = null;
+        public static AseguradoraController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new AseguradoraController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(Aseguradora aseguradora)
         {
@@ -19,7 +33,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {aseguradora.Aseguradora_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -30,17 +44,30 @@ namespace Core.Controllers
                 Console.Write("Escribe el nombre de la aseguradora: ");
                 string nombre = Console.ReadLine();
 
-                hospital.Aseguradora.Add(new Aseguradora()
-                {
+                Aseguradora aseguradora = new Aseguradora() {
                     Aseguradora_Descripcion = nombre,
                     Aseguradora_FechaCreacion = DateTime.Now,
                     Aseguradora_IdUsuarioCreador = Program.loggerUserID,
-                    Aseguradora_Vigencia = true
-                });
+                    Aseguradora_Vigencia = true,
+                };
+
+                AseguradoraEntities aseguradoraEntity = new AseguradoraEntities()
+                {
+                    AseguradoraDescripcion = aseguradora.Aseguradora_Descripcion,
+                    AseguradoraFechaCreacion = aseguradora.Aseguradora_FechaCreacion,
+                    AseguradoraIdUsuarioCreador = aseguradora.Aseguradora_IdUsuarioCreador,
+                    AseguradoraVigencia = true,
+                    EntidadId = 2
+
+                };
+                hospital.Aseguradora.Add(aseguradora);
 
                 Logger.Info($"Se ha creado la Aseguradora correctamente");
 
                 hospital.SaveChanges();
+
+                await SendMessageQueue(aseguradoraEntity);
+                Logger.Info($"La aseguradora {aseguradoraEntity.AseguradoraDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -96,7 +123,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int id;
@@ -129,15 +156,28 @@ namespace Core.Controllers
                     aseg => aseg.Aseguraodra_Id == id
                 ).First();
 
+
             aseguradora.Aseguradora_Descripcion = nombre;
             aseguradora.Aseguradora_Vigencia = true;
+
+            AseguradoraEntities aseguradoraEntity = new AseguradoraEntities()
+            {
+                AseguradoraDescripcion = aseguradora.Aseguradora_Descripcion,
+                AseguradoraFechaCreacion = aseguradora.Aseguradora_FechaCreacion,
+                AseguradoraIdUsuarioCreador = aseguradora.Aseguradora_IdUsuarioCreador,
+                AseguradoraVigencia = true,
+                EntidadId = 2
+
+            };
 
             hospital.SaveChanges();
 
             Logger.Info($"Se ha actualizado la Aseguradora correctamente.");
+            await SendMessageQueue(aseguradoraEntity);
+            Logger.Info($"La aseguradora {aseguradoraEntity.AseguradoraDescripcion} se ha enviado correctamente");
 
         }
-        public static void Eliminar()
+        public async  Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -165,13 +205,28 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Aseguradora.Where(
+                Aseguradora aseguradora = hospital.Aseguradora.Where(
                     aseg => aseg.Aseguraodra_Id == id
-                    ).First().Aseguradora_Vigencia = false;
+                    ).First();
+
+                aseguradora.Aseguradora_Vigencia = false;
+
+                AseguradoraEntities aseguradoraEntity = new AseguradoraEntities()
+                {
+                    AseguradoraDescripcion = aseguradora.Aseguradora_Descripcion,
+                    AseguradoraFechaCreacion = aseguradora.Aseguradora_FechaCreacion,
+                    AseguradoraIdUsuarioCreador = aseguradora.Aseguradora_IdUsuarioCreador,
+                    AseguradoraVigencia = aseguradora.Aseguradora_Vigencia,
+                    EntidadId = 2
+
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado la Aseguradora ID: {id} correctamente.");
+
+                await SendMessageQueue(aseguradoraEntity);
+                Logger.Info($"La aseguradora {aseguradoraEntity.AseguradoraDescripcion} se ha enviado correctamente");
             }
 
             catch (Exception e)
@@ -180,5 +235,20 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(AseguradoraEntities AseguradoraEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(AseguradoraEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

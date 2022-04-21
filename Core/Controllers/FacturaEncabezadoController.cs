@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,17 @@ namespace Core.Controllers
     internal class FacturaEncabezadoController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static FacturaEncabezadoController Instancia = null;
+        public static FacturaEncabezadoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new FacturaEncabezadoController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(FacturaEncabezado facturaEncabezado)
         {
@@ -26,7 +40,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {facturaEncabezado.FacturaEncabezado_Vigencia}");
         }
 
-        public static void Crear()
+        public  async Task Crear()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -140,7 +154,7 @@ namespace Core.Controllers
                 Console.WriteLine("Escribe el Total General: ");
                 Decimal totalGeneral = Decimal.Parse(Console.ReadLine());
 
-                hospital.FacturaEncabezado.Add(new FacturaEncabezado()
+                FacturaEncabezado FacturaEncabezado = new FacturaEncabezado()
                 {
                     FacturaEncabezado_IdNCF = idNCF,
                     FacturaEncabezado_NCF = NCF,
@@ -154,11 +168,34 @@ namespace Core.Controllers
                     FacturaEncabezado_FechaCreacion = DateTime.Now,
                     FacturaEncabezado_IdUsuarioCreador = Program.loggerUserID,
                     FacturaEncabezado_Vigencia = true
-                });
+                };
+
+
+                FacturaEncabezadoEntities facturaEncabezado = new FacturaEncabezadoEntities()
+                {
+                    FacturaEncabezadoIdNcf = FacturaEncabezado.FacturaEncabezado_IdNCF,
+                    FacturaEncabezadoNcf = FacturaEncabezado.FacturaEncabezado_NCF,
+                    FacturaEncabezadoIdCliente = FacturaEncabezado.FacturaEncabezado_IdCliente,
+                    FacturaEncabezadoIdCajero = FacturaEncabezado.FacturaEncabezado_IdCajero,
+                    FacturaEncabezadoTotalBruto = FacturaEncabezado.FacturaEncabezado_TotalBruto,
+                    FacturaEncabezadoTotalCobertura = FacturaEncabezado.FacturaEncabezado_TotalCobertura,
+                    FacturaEncabezadoTotalItbis = FacturaEncabezado.FacturaEncabezado_TotalItbis,
+                    FacturaEncabezadoTotalDescuento = FacturaEncabezado.FacturaEncabezado_TotalDescuento,
+                    FacturaEncabezadoTotalGeneral = FacturaEncabezado.FacturaEncabezado_TotalGeneral,
+                    FacturaEncabezadoFechaCreacion = FacturaEncabezado.FacturaEncabezado_FechaCreacion,
+                    FacturaEncabezadoIdUsuarioCreador = FacturaEncabezado.FacturaEncabezado_IdUsuarioCreador,
+                    FacturaEncabezadoVigencia = true,
+                    EntidadId = 10
+                };
+
+                hospital.FacturaEncabezado.Add(FacturaEncabezado);
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado la Factura correctamente");
+
+                await SendMessageQueue(facturaEncabezado);
+                Logger.Info($"Se ha enviado correctamente la factura de tipo NCF {facturaEncabezado.FacturaEncabezadoNcf} de la persona de tipo documento {facturaEncabezado.FacturaEncabezadoIdCliente}");
             }
             catch (Exception e)
             {
@@ -166,6 +203,8 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+      
         public static void Mostrar()
         {
             bool exists = false;
@@ -234,7 +273,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public  async Task Actualizar()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -365,9 +404,30 @@ namespace Core.Controllers
                 nuevaFactura.FacturaEncabezado_IdUsuarioCreador = Program.loggerUserID;
                 nuevaFactura.FacturaEncabezado_Vigencia = true;
 
+
+                FacturaEncabezadoEntities cuentaFacturaEntities = new FacturaEncabezadoEntities()
+                {
+                    FacturaEncabezadoIdNcf = nuevaFactura.FacturaEncabezado_IdNCF,
+                    FacturaEncabezadoNcf = nuevaFactura.FacturaEncabezado_NCF,
+                    FacturaEncabezadoIdCliente = nuevaFactura.FacturaEncabezado_IdCliente,
+                    FacturaEncabezadoIdCajero = nuevaFactura.FacturaEncabezado_IdCajero,
+                    FacturaEncabezadoTotalBruto = nuevaFactura.FacturaEncabezado_TotalBruto,
+                    FacturaEncabezadoTotalCobertura = nuevaFactura.FacturaEncabezado_TotalCobertura,
+                    FacturaEncabezadoTotalItbis = nuevaFactura.FacturaEncabezado_TotalItbis,
+                    FacturaEncabezadoTotalDescuento = nuevaFactura.FacturaEncabezado_TotalDescuento,
+                    FacturaEncabezadoTotalGeneral = nuevaFactura.FacturaEncabezado_TotalGeneral,
+                    FacturaEncabezadoFechaCreacion = nuevaFactura.FacturaEncabezado_FechaCreacion,
+                    FacturaEncabezadoIdUsuarioCreador = nuevaFactura.FacturaEncabezado_IdUsuarioCreador,
+                    FacturaEncabezadoVigencia = true,
+                    EntidadId = 10
+                };
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado la factura ID:{nuevaFactura.FacturaEncabezado_Id}.");
+
+                await SendMessageQueue(cuentaFacturaEntities);
+                Logger.Info($"Se ha enviado correctamente la factura de tipo NCF {cuentaFacturaEntities.FacturaEncabezadoNcf} de la persona de tipo documento {cuentaFacturaEntities.FacturaEncabezadoIdCliente}");
             }
             catch (Exception e)
             {
@@ -376,7 +436,7 @@ namespace Core.Controllers
             }
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -407,13 +467,34 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.FacturaEncabezado.Where(
+                FacturaEncabezado FacturaEncabezado = hospital.FacturaEncabezado.Where(
                         factura => factura.FacturaEncabezado_Id == idFactura
-                    ).First().FacturaEncabezado_Vigencia = false;
+                    ).First();
+                FacturaEncabezado.FacturaEncabezado_Vigencia = false;
+
+                FacturaEncabezadoEntities cuentaFacturaEntities = new FacturaEncabezadoEntities()
+                {
+                    FacturaEncabezadoIdNcf = FacturaEncabezado.FacturaEncabezado_IdNCF,
+                    FacturaEncabezadoNcf = FacturaEncabezado.FacturaEncabezado_NCF,
+                    FacturaEncabezadoIdCliente = FacturaEncabezado.FacturaEncabezado_IdCliente,
+                    FacturaEncabezadoIdCajero = FacturaEncabezado.FacturaEncabezado_IdCajero,
+                    FacturaEncabezadoTotalBruto = FacturaEncabezado.FacturaEncabezado_TotalBruto,
+                    FacturaEncabezadoTotalCobertura = FacturaEncabezado.FacturaEncabezado_TotalCobertura,
+                    FacturaEncabezadoTotalItbis = FacturaEncabezado.FacturaEncabezado_TotalItbis,
+                    FacturaEncabezadoTotalDescuento = FacturaEncabezado.FacturaEncabezado_TotalDescuento,
+                    FacturaEncabezadoTotalGeneral = FacturaEncabezado.FacturaEncabezado_TotalGeneral,
+                    FacturaEncabezadoFechaCreacion = FacturaEncabezado.FacturaEncabezado_FechaCreacion,
+                    FacturaEncabezadoIdUsuarioCreador = FacturaEncabezado.FacturaEncabezado_IdUsuarioCreador,
+                    FacturaEncabezadoVigencia = FacturaEncabezado.FacturaEncabezado_Vigencia,
+                    EntidadId = 10
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado la Factura con el ID: {idFactura}.");
+
+                await SendMessageQueue(cuentaFacturaEntities);
+                Logger.Info($"Se ha enviado correctamente la factura de tipo NCF {cuentaFacturaEntities.FacturaEncabezadoNcf} de la persona de tipo documento {cuentaFacturaEntities.FacturaEncabezadoIdCliente}");
             }
 
             catch (Exception e)
@@ -422,5 +503,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(FacturaEncabezadoEntities FacturaEncabezadoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(FacturaEncabezadoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

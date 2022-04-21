@@ -2,13 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.DTO;
 using System.Threading.Tasks;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 
 namespace Core.Controllers
 {
     internal class AperturaYCierreDeCajaController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static AperturaYCierreDeCajaController Instancia = null;
+        public static AperturaYCierreDeCajaController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new AperturaYCierreDeCajaController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(AperturaYCierreDeCaja caja)
         {
@@ -37,7 +51,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {caja.AperturaYCierreDeCaja_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -99,8 +113,8 @@ namespace Core.Controllers
                 Console.Write("Total General: ");
                 Decimal totalGeneral = Decimal.Parse(Console.ReadLine());
 
-                hospital.AperturaYCierreDeCaja.Add(new AperturaYCierreDeCaja()
-                {
+                AperturaYCierreDeCaja aperturaYCierreDeCaja = new AperturaYCierreDeCaja() {
+
                     AperturaYCierreDeCaja_IdCaja = idCaja,
                     AperturaYCierreDeCaja_DosMIlPesos = dosMilPesos,
                     AperturaYCierreDeCaja_MIlPesos = milPesos,
@@ -123,11 +137,44 @@ namespace Core.Controllers
                     AperturaYCierreDeCaja_Fecha = DateTime.Now,
                     AperturaYCierreDeCaja_IdUsuarioCreador = Program.loggerUserID,
                     AperturaYCierreDeCaja_Vigencia = true
-                });
+                };
+
+                AperturaYCierreDeCajaEntities aperturaYCierreDeCajaEntities = new AperturaYCierreDeCajaEntities()
+                {
+
+                    AperturaYcierreDeCajaIdCaja = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Id,
+                    AperturaYcierreDeCajaDosMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DosMIlPesos,
+                    AperturaYcierreDeCajaMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_MIlPesos,
+                    AperturaYcierreDeCajaQuinientosPeso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_QuinientosPeso,
+                    AperturaYcierreDeCajaDoscientosPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DoscientosPesos,
+                    AperturaYcierreDeCajaCienPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CienPesos,
+                    AperturaYcierreDeCajaCincuentaPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CincuentaPesos,
+                    AperturaYcierreDeCaja25pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_25Pesos,
+                    AperturaYcierreDeCaja10pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_10Pesos,
+                    AperturaYcierreDeCaja5peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_5Peso,
+                    AperturaYcierreDeCaja1peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_1Peso,
+                    AperturaYcierreDeCajaTotalEfectivo = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalEfectivo,
+                    AperturaYcierreDeCajaTotalCredito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCredito,
+                    AperturaYcierreDeCajaTotalTarjeta = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalTarjeta,
+                    AperturaYcierreDeCajaTransferencia = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Transferencia,
+                    AperturaYcierreDeCajaDeposito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Deposito,
+                    AperturaYcierreDeCajaTotalCheques = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCheques,
+                    AperturaYcierreDeCajaTotalGeneral = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalGeneral,
+                    AperturaYcierreDeCajaAperturaOcierre = aperturaYCierreDeCaja.AperturaYCierreDeCaja_AperturaOCierre,
+                    AperturaYcierreDeCajaFecha = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Fecha,
+                    AperturaYcierreDeCajaIdUsuarioCreador = aperturaYCierreDeCaja.AperturaYCierreDeCaja_IdUsuarioCreador,
+                    AperturaYcierreDeCajaVigencia = true,
+                    EntidadId = 1
+                };
+
+                hospital.AperturaYCierreDeCaja.Add(aperturaYCierreDeCaja);
 
                 Logger.Info($"Se ha creado la Apertura o Cierre de Caja correctamente");
 
                 hospital.SaveChanges();
+
+                await SendMessageQueue(aperturaYCierreDeCajaEntities);
+                Logger.Info($"La apertura y cierra de caja  se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -183,7 +230,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int id;
@@ -290,11 +337,43 @@ namespace Core.Controllers
                     aperturaYCierreDeCaja.AperturaYCierreDeCaja_IdUsuarioCreador = Program.loggerUserID;
                     aperturaYCierreDeCaja.AperturaYCierreDeCaja_Vigencia = true;
 
+            AperturaYCierreDeCajaEntities aperturaYCierreDeCajaEntities = new AperturaYCierreDeCajaEntities()
+            {
+
+                AperturaYcierreDeCajaIdCaja = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Id,
+                AperturaYcierreDeCajaDosMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DosMIlPesos,
+                AperturaYcierreDeCajaMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_MIlPesos,
+                AperturaYcierreDeCajaQuinientosPeso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_QuinientosPeso,
+                AperturaYcierreDeCajaDoscientosPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DoscientosPesos,
+                AperturaYcierreDeCajaCienPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CienPesos,
+                AperturaYcierreDeCajaCincuentaPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CincuentaPesos,
+                AperturaYcierreDeCaja25pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_25Pesos,
+                AperturaYcierreDeCaja10pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_10Pesos,
+                AperturaYcierreDeCaja5peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_5Peso,
+                AperturaYcierreDeCaja1peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_1Peso,
+                AperturaYcierreDeCajaTotalEfectivo = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalEfectivo,
+                AperturaYcierreDeCajaTotalCredito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCredito,
+                AperturaYcierreDeCajaTotalTarjeta = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalTarjeta,
+                AperturaYcierreDeCajaTransferencia = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Transferencia,
+                AperturaYcierreDeCajaDeposito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Deposito,
+                AperturaYcierreDeCajaTotalCheques = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCheques,
+                AperturaYcierreDeCajaTotalGeneral = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalGeneral,
+                AperturaYcierreDeCajaAperturaOcierre = aperturaYCierreDeCaja.AperturaYCierreDeCaja_AperturaOCierre,
+                AperturaYcierreDeCajaFecha = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Fecha,
+                AperturaYcierreDeCajaIdUsuarioCreador = aperturaYCierreDeCaja.AperturaYCierreDeCaja_IdUsuarioCreador,
+                AperturaYcierreDeCajaVigencia = true,
+                EntidadId = 1
+            };
+
             Logger.Info($"Se ha actualizado la Apertura o Cierre de Caja correctamente.");
 
             hospital.SaveChanges();
+
+
+            await SendMessageQueue(aperturaYCierreDeCajaEntities);
+            Logger.Info($"La apertura y cierra de caja  se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async  Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -322,13 +401,47 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.AperturaYCierreDeCaja.Where(
+                AperturaYCierreDeCaja aperturaYCierreDeCaja = hospital.AperturaYCierreDeCaja.Where(
                     aper => aper.AperturaYCierreDeCaja_Id == id
-                    ).First().AperturaYCierreDeCaja_Vigencia = false;
+                    ).First();
+
+                    aperturaYCierreDeCaja.AperturaYCierreDeCaja_Vigencia = false;
+
+                AperturaYCierreDeCajaEntities aperturaYCierreDeCajaEntities = new AperturaYCierreDeCajaEntities()
+                {
+
+                    AperturaYcierreDeCajaIdCaja = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Id,
+                    AperturaYcierreDeCajaDosMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DosMIlPesos,
+                    AperturaYcierreDeCajaMilPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_MIlPesos,
+                    AperturaYcierreDeCajaQuinientosPeso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_QuinientosPeso,
+                    AperturaYcierreDeCajaDoscientosPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_DoscientosPesos,
+                    AperturaYcierreDeCajaCienPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CienPesos,
+                    AperturaYcierreDeCajaCincuentaPesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_CincuentaPesos,
+                    AperturaYcierreDeCaja25pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_25Pesos,
+                    AperturaYcierreDeCaja10pesos = aperturaYCierreDeCaja.AperturaYCierreDeCaja_10Pesos,
+                    AperturaYcierreDeCaja5peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_5Peso,
+                    AperturaYcierreDeCaja1peso = aperturaYCierreDeCaja.AperturaYCierreDeCaja_1Peso,
+                    AperturaYcierreDeCajaTotalEfectivo = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalEfectivo,
+                    AperturaYcierreDeCajaTotalCredito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCredito,
+                    AperturaYcierreDeCajaTotalTarjeta = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalTarjeta,
+                    AperturaYcierreDeCajaTransferencia = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Transferencia,
+                    AperturaYcierreDeCajaDeposito = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Deposito,
+                    AperturaYcierreDeCajaTotalCheques = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalCheques,
+                    AperturaYcierreDeCajaTotalGeneral = aperturaYCierreDeCaja.AperturaYCierreDeCaja_TotalGeneral,
+                    AperturaYcierreDeCajaAperturaOcierre = aperturaYCierreDeCaja.AperturaYCierreDeCaja_AperturaOCierre,
+                    AperturaYcierreDeCajaFecha = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Fecha,
+                    AperturaYcierreDeCajaIdUsuarioCreador = aperturaYCierreDeCaja.AperturaYCierreDeCaja_IdUsuarioCreador,
+                    AperturaYcierreDeCajaVigencia = aperturaYCierreDeCaja.AperturaYCierreDeCaja_Vigencia,
+                    EntidadId = 1
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado la Apertura o Cierre de Caja con ID: {id} correctamente.");
+
+
+                await SendMessageQueue(aperturaYCierreDeCajaEntities);
+                Logger.Info($"La apertura y cierra de caja  se ha enviado correctamente");
             }
 
             catch (Exception e)
@@ -337,5 +450,20 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(AperturaYCierreDeCajaEntities AperturaYCierreDeCajaEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(AperturaYCierreDeCajaEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

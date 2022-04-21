@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,18 @@ namespace Core.Controllers
     internal class AutorizacionController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+
+        public static AutorizacionController Instancia = null;
+        public static AutorizacionController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new AutorizacionController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(Autorizacion autorizacion)
         {
@@ -24,7 +39,7 @@ namespace Core.Controllers
             Console.WriteLine($"Número de Autorización: {autorizacion.Autorizacion_NoAutorizacion}");
         }
 
-        public static void Crear()
+        public async  Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -96,7 +111,7 @@ namespace Core.Controllers
                 Console.WriteLine("Escribe el número de autorización: ");
                 int numeroAutorizacion = Int32.Parse(Console.ReadLine());
 
-                hospital.Autorizacion.Add(new Autorizacion()
+                Autorizacion autorizacion = new Autorizacion()
                 {
                     Autorizacion_IdAseguradora = idAseguradora,
                     Autorizacion_IdProcedimiento = idProcedimiento,
@@ -107,11 +122,28 @@ namespace Core.Controllers
                     Autorizacion_Cobertura = cobertura,
                     Autorizacion_Diferencia = diferencia,
                     Autorizacion_NoAutorizacion = numeroAutorizacion
-                });
+                };
+
+                AutorizacionEntities autorizacionEntities = new AutorizacionEntities()
+                {
+                    AutorizacionIdAseguradora = autorizacion.Autorizacion_IdAseguradora,
+                    AutorizacionIdProcedimiento = autorizacion.Autorizacion_IdProcedimiento,
+                    AutorizacionFechaCreacion = autorizacion.Autorizacion_FechaCreacion,
+                    AutorizacionIdUsuarioCreador = autorizacion.Autorizacion_IdUsuarioCreador,
+                    AutorizacionVigencia = true,
+                    AutorizacionPrecio = autorizacion.Autorizacion_Precio,
+                    AutorizacionCobertura = autorizacion.Autorizacion_Cobertura,
+                    AutorizacionDiferencia = autorizacion.Autorizacion_Diferencia,
+                    AutorizacionNoAutorizacion = autorizacion.Autorizacion_NoAutorizacion,
+                    EntidadId = 3
+                };
+                hospital.Autorizacion.Add(autorizacion);
+                hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado la Autorización correctamente");
+                await SendMessageQueue(autorizacionEntities);
+                Logger.Info($"La autorización de numero autorización {autorizacionEntities.AutorizacionNoAutorizacion} se ha enviado correctamente");
 
-                hospital.SaveChanges();
             }
             catch (Exception e)
             {
@@ -185,7 +217,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int id;
@@ -290,9 +322,26 @@ namespace Core.Controllers
                 autorizacion.Autorizacion_NoAutorizacion = numeroAutorizacion;
                 autorizacion.Autorizacion_Vigencia = true;
 
+                AutorizacionEntities autorizacionEntities = new AutorizacionEntities()
+                {
+                    AutorizacionIdAseguradora = autorizacion.Autorizacion_IdAseguradora,
+                    AutorizacionIdProcedimiento = autorizacion.Autorizacion_IdProcedimiento,
+                    AutorizacionFechaCreacion = autorizacion.Autorizacion_FechaCreacion,
+                    AutorizacionIdUsuarioCreador = autorizacion.Autorizacion_IdUsuarioCreador,
+                    AutorizacionVigencia = true,
+                    AutorizacionPrecio = autorizacion.Autorizacion_Precio,
+                    AutorizacionCobertura = autorizacion.Autorizacion_Cobertura,
+                    AutorizacionDiferencia = autorizacion.Autorizacion_Diferencia,
+                    AutorizacionNoAutorizacion = autorizacion.Autorizacion_NoAutorizacion,
+                    EntidadId = 3
+                };
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado la Autorización correctamente.");
+
+                await SendMessageQueue(autorizacionEntities);
+                Logger.Info($"La autorización de numero autorización {autorizacionEntities.AutorizacionNoAutorizacion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -301,7 +350,7 @@ namespace Core.Controllers
             }    
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -329,13 +378,31 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Autorizacion.Where(
+                Autorizacion autorizacion = hospital.Autorizacion.Where(
                     aut => aut.Autorizacion_Id == id
-                    ).First().Autorizacion_Vigencia = false;
+                    ).First();
+                autorizacion.Autorizacion_Vigencia = false;
+
+                AutorizacionEntities autorizacionEntities = new AutorizacionEntities()
+                {
+                    AutorizacionIdAseguradora = autorizacion.Autorizacion_IdAseguradora,
+                    AutorizacionIdProcedimiento = autorizacion.Autorizacion_IdProcedimiento,
+                    AutorizacionFechaCreacion = autorizacion.Autorizacion_FechaCreacion,
+                    AutorizacionIdUsuarioCreador = autorizacion.Autorizacion_IdUsuarioCreador,
+                    AutorizacionVigencia = autorizacion.Autorizacion_Vigencia,
+                    AutorizacionPrecio = autorizacion.Autorizacion_Precio,
+                    AutorizacionCobertura = autorizacion.Autorizacion_Cobertura,
+                    AutorizacionDiferencia = autorizacion.Autorizacion_Diferencia,
+                    AutorizacionNoAutorizacion = autorizacion.Autorizacion_NoAutorizacion,
+                    EntidadId = 3
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado la Autorización correctamente.");
+
+                await SendMessageQueue(autorizacionEntities);
+                Logger.Info($"La autorización de numero autorización {autorizacionEntities.AutorizacionNoAutorizacion} se ha enviado correctamente");
             }
 
             catch (Exception e)
@@ -344,5 +411,20 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(AutorizacionEntities AutorizacionEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(AutorizacionEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }
