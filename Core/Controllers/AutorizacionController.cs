@@ -138,12 +138,12 @@ namespace Core.Controllers
                     EntidadId = 3
                 };
                 hospital.Autorizacion.Add(autorizacion);
+                hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado la Autorización correctamente");
                 await SendMessageQueue(autorizacionEntities);
                 Logger.Info($"La autorización de numero autorización {autorizacionEntities.AutorizacionNoAutorizacion} se ha enviado correctamente");
 
-                hospital.SaveChanges();
             }
             catch (Exception e)
             {

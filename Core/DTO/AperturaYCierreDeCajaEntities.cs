@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.DTO
 {
-    public class AperturaYCierreDeCaja
+    public class AperturaYCierreDeCajaEntities
     {
         public int AperturaYcierreDeCajaId { get; set; }
         public int? AperturaYcierreDeCajaIdCaja { get; set; }

@@ -246,6 +246,7 @@
     <Compile Include="Controllers\EgresoController.cs" />
     <Compile Include="Controllers\CuentasController.cs" />
     <Compile Include="Controllers\FacturaCuentaController.cs" />
+    <Compile Include="Controllers\UserRegisterController.cs" />
     <Compile Include="Controllers\UsuarioCajaController.cs" />
     <Compile Include="Controllers\CajaController.cs" />
     <Compile Include="Controllers\AutorizacionController.cs" />
@@ -261,7 +262,7 @@
     <Compile Include="database_firewall_rules.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="DTO\AperturaYCierreDeCaja.cs" />
+    <Compile Include="DTO\AperturaYCierreDeCajaEntities.cs" />
     <Compile Include="DTO\AseguradoraEntities.cs" />
     <Compile Include="DTO\AutorizacionEntities.cs" />
     <Compile Include="DTO\CajaEntities.cs" />

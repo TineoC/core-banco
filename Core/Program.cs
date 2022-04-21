@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Core.DTO
 using System.Threading.Tasks;
 
 namespace Core
@@ -158,19 +159,22 @@ namespace Core
 
                 Logger.Info($"Intento de registro username: {username}  password: {password}");
 
-                hospital.Usuarios.Add(new Usuarios()
+                UserRegister RegistroUsuario = new UserRegister();
+                //Integracion
+                Usuarios usuarios = new Usuarios()
                 {
                     Usuario_Nickname = username,
                     Usuario_Contraseña = password,
                     Usuario_FechaCreacion = DateTime.Now,
                     Usuario_Vigencia = true
-                });
+                };
 
+                hospital.Usuarios.Add(usuarios);
                 hospital.SaveChanges();
-
+                //Integracion
+                RegistroUsuario.Crear(usuarios);
                 Logger.Info($"El usuario {username} ha sido registrado");
                 Console.WriteLine($"El usuario {username} ha sido registrado");
-
                 Console.Write("\nPress any key to continue...");
                 Console.ReadKey();
 
@@ -380,6 +384,7 @@ namespace Core
                 string accion;
 
                 Console.Clear();
+                //Integracion
                 PersonasController personas = new PersonasController();
                 UsuarioCajaController usuariosCaja = new UsuarioCajaController();
                 FacturaEncabezadoController facturaEncabezado = new FacturaEncabezadoController();
@@ -389,6 +394,8 @@ namespace Core
                 CuentasController cuenta = new CuentasController();
                 CajaController caja = new CajaController();
                 AutorizacionController autorizacion = new AutorizacionController();
+                AseguradoraController aseguradora = new AseguradoraController();
+                AperturaYCierreDeCajaController aperturaYCierreDeCaja = new AperturaYCierreDeCajaController();
                 switch (opcion)
                 {
             // Instanciar clase controller en cada accion
@@ -512,7 +519,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                AseguradoraController.Crear();
+                                aseguradora.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -527,12 +534,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                AseguradoraController.Actualizar();
+                                aseguradora.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                AseguradoraController.Eliminar();
+                                aseguradora.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -757,7 +764,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                AperturaYCierreDeCajaController.Crear();
+                                aperturaYCierreDeCaja.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -772,12 +779,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                AperturaYCierreDeCajaController.Actualizar();
+                                aperturaYCierreDeCaja.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                AperturaYCierreDeCajaController.Eliminar();
+                                aperturaYCierreDeCaja.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
