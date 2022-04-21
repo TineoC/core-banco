@@ -16,9 +16,9 @@ namespace Core
     {
         public int Caja_Usuario_IdUsuario { get; set; }
         public int Caja_Usuario_IdCaja { get; set; }
-        public Nullable<System.DateTime> Caja_Usuario_IdUsuario_FechaCreacion { get; set; }
+        public System.DateTime Caja_Usuario_IdUsuario_FechaCreacion { get; set; }
         public Nullable<int> Caja_Usuario_IdUsuario_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Caja_Usuario_IdUsuario_Vigencia { get; set; }
+        public bool Caja_Usuario_IdUsuario_Vigencia { get; set; }
     
         public virtual Caja Caja { get; set; }
         public virtual Usuarios Usuarios { get; set; }

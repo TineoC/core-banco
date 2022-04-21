@@ -24,9 +24,9 @@ namespace Core
         public int Cuenta_Id { get; set; }
         public string Cuenta_IdPersona { get; set; }
         public Nullable<decimal> Cuenta_Balance { get; set; }
-        public Nullable<System.DateTime> Cuenta_FechaCreacion { get; set; }
+        public System.DateTime Cuenta_FechaCreacion { get; set; }
         public Nullable<int> Cuenta_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Cuenta_Vigencia { get; set; }
+        public bool Cuenta_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cuenta_Factura> Cuenta_Factura { get; set; }

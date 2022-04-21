@@ -22,9 +22,9 @@ namespace Core
     
         public int Perfil_Id { get; set; }
         public string Perfil_Descripcion { get; set; }
-        public Nullable<System.DateTime> Perfil_FechaCreacion { get; set; }
+        public System.DateTime Perfil_FechaCreacion { get; set; }
         public Nullable<int> Perfil_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Perfil_Vigencia { get; set; }
+        public bool Perfil_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuarios> Usuarios { get; set; }

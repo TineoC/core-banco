@@ -22,9 +22,9 @@ namespace Core
     
         public int TipoDocumento_Id { get; set; }
         public string TipoDocumento_Descripcion { get; set; }
-        public Nullable<System.DateTime> TipoDocumento_FechaCreacion { get; set; }
+        public System.DateTime TipoDocumento_FechaCreacion { get; set; }
         public Nullable<int> TipoDocumento_IdUsuarioCreador { get; set; }
-        public Nullable<bool> TipoDocumento_Vigencia { get; set; }
+        public bool TipoDocumento_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Persona> Persona { get; set; }

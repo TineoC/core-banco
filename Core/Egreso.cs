@@ -22,9 +22,9 @@ namespace Core
         public string Egreso_Preparado { get; set; }
         public string Egresp_Aprobado { get; set; }
         public string Egreso_Recibido { get; set; }
-        public Nullable<System.DateTime> Egreso_FechaCreacion { get; set; }
+        public System.DateTime Egreso_FechaCreacion { get; set; }
         public Nullable<int> Egreso_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Egreso_Vigencia { get; set; }
+        public bool Egreso_Vigencia { get; set; }
     
         public virtual Usuarios Usuarios { get; set; }
     }

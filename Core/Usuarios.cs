@@ -20,17 +20,18 @@ namespace Core
             this.AperturaYCierreDeCaja = new HashSet<AperturaYCierreDeCaja>();
             this.Caja_Usuario = new HashSet<Caja_Usuario>();
             this.Egreso = new HashSet<Egreso>();
+            this.LogGeneral = new HashSet<LogGeneral>();
             this.Pago = new HashSet<Pago>();
         }
     
         public int Usuario_Id { get; set; }
         public string Usuario_Nickname { get; set; }
         public string Usuario_Contraseña { get; set; }
-        public Nullable<int> Usuario_IdPerfil { get; set; }
+        public int Usuario_IdPerfil { get; set; }
         public string IdPersona { get; set; }
-        public Nullable<System.DateTime> Usuario_FechaCreacion { get; set; }
+        public System.DateTime Usuario_FechaCreacion { get; set; }
         public Nullable<int> Usuario_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Usuario_Vigencia { get; set; }
+        public bool Usuario_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AperturaYCierreDeCaja> AperturaYCierreDeCaja { get; set; }
@@ -38,6 +39,8 @@ namespace Core
         public virtual ICollection<Caja_Usuario> Caja_Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Egreso> Egreso { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LogGeneral> LogGeneral { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pago> Pago { get; set; }
         public virtual Perfil Perfil { get; set; }

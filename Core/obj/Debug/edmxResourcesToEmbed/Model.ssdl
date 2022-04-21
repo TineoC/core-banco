@@ -24,19 +24,19 @@
     <Property Name="AperturaYCierreDeCaja_TotalCheques" Type="decimal" Precision="18" Scale="2" />
     <Property Name="AperturaYCierreDeCaja_TotalGeneral" Type="decimal" Precision="18" Scale="2" />
     <Property Name="AperturaYCierreDeCaja_AperturaOCierre" Type="bit" />
-    <Property Name="AperturaYCierreDeCaja_Fecha" Type="datetime" />
+    <Property Name="AperturaYCierreDeCaja_Fecha" Type="datetime" Nullable="false" />
     <Property Name="AperturaYCierreDeCaja_IdUsuarioCreador" Type="int" />
-    <Property Name="AperturaYCierreDeCaja_Vigencia" Type="bit" />
+    <Property Name="AperturaYCierreDeCaja_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Aseguradora">
     <Key>
       <PropertyRef Name="Aseguraodra_Id" />
     </Key>
     <Property Name="Aseguraodra_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Aseguradora_Descripcion" Type="nvarchar" MaxLength="250" />
-    <Property Name="Aseguradora_FechaCreacion" Type="datetime" />
+    <Property Name="Aseguradora_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Aseguradora_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Aseguradora_IdUsuarioCreador" Type="int" />
-    <Property Name="Aseguradora_Vigencia" Type="bit" />
+    <Property Name="Aseguradora_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Autorizacion">
     <Key>
@@ -45,9 +45,9 @@
     <Property Name="Autorizacion_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Autorizacion_IdAseguradora" Type="int" />
     <Property Name="Autorizacion_IdProcedimiento" Type="int" />
-    <Property Name="Autorizacion_FechaCreacion" Type="datetime" />
+    <Property Name="Autorizacion_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Autorizacion_IdUsuarioCreador" Type="int" />
-    <Property Name="Autorizacion_Vigencia" Type="bit" />
+    <Property Name="Autorizacion_Vigencia" Type="bit" Nullable="false" />
     <Property Name="Autorizacion_Precio" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Autorizacion_Cobertura" Type="decimal" Precision="10" Scale="2" />
     <Property Name="Autorizacion_Diferencia" Type="decimal" Precision="18" Scale="2" />
@@ -58,10 +58,10 @@
       <PropertyRef Name="Caja_Id" />
     </Key>
     <Property Name="Caja_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Caja_Descripcion" Type="nvarchar" MaxLength="250" />
-    <Property Name="Caja_FechaCreacion" Type="datetime" />
+    <Property Name="Caja_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Caja_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Caja_IdUsuarioCreador" Type="int" />
-    <Property Name="Caja_Vigencia" Type="bit" />
+    <Property Name="Caja_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Caja_Usuario">
     <Key>
@@ -70,9 +70,9 @@
     </Key>
     <Property Name="Caja_Usuario_IdUsuario" Type="int" Nullable="false" />
     <Property Name="Caja_Usuario_IdCaja" Type="int" Nullable="false" />
-    <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="datetime" />
+    <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" Type="int" />
-    <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="bit" />
+    <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Cuenta_Factura">
     <Key>
@@ -82,9 +82,9 @@
     <Property Name="Cuenta_Factura_IdFactura" Type="int" Nullable="false" />
     <Property Name="Cuenta_Factura_IdCuenta" Type="int" Nullable="false" />
     <Property Name="Cuenta_Factura_Monto" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Cuenta_Factura_FechaCreacion" Type="datetime" />
+    <Property Name="Cuenta_Factura_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Cuenta_Factura_dUsuarioCreador" Type="int" />
-    <Property Name="Cuenta_Factura_Vigencia" Type="bit" />
+    <Property Name="Cuenta_Factura_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Cuentas">
     <Key>
@@ -93,9 +93,9 @@
     <Property Name="Cuenta_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Cuenta_IdPersona" Type="nvarchar" MaxLength="20" />
     <Property Name="Cuenta_Balance" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="Cuenta_FechaCreacion" Type="datetime" />
+    <Property Name="Cuenta_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Cuenta_IdUsuarioCreador" Type="int" />
-    <Property Name="Cuenta_Vigencia" Type="bit" />
+    <Property Name="Cuenta_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Egreso">
     <Key>
@@ -109,9 +109,9 @@
     <Property Name="Egreso_Preparado" Type="nvarchar" MaxLength="50" />
     <Property Name="Egresp_Aprobado" Type="nvarchar" MaxLength="50" />
     <Property Name="Egreso_Recibido" Type="nvarchar" MaxLength="50" />
-    <Property Name="Egreso_FechaCreacion" Type="datetime" />
+    <Property Name="Egreso_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Egreso_IdUsuarioCreador" Type="int" />
-    <Property Name="Egreso_Vigencia" Type="bit" />
+    <Property Name="Egreso_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="FacturaDetalle">
     <Key>
@@ -159,6 +159,19 @@
     <Property Name="Logger" Type="nvarchar" MaxLength="250" />
     <Property Name="Callsite" Type="nvarchar(max)" />
     <Property Name="Exception" Type="nvarchar(max)" />
+    <Property Name="Tenant" Type="nvarchar" MaxLength="2000" />
+  </EntityType>
+  <EntityType Name="LogGeneral">
+    <Key>
+      <PropertyRef Name="LogGeneral_Id" />
+    </Key>
+    <Property Name="LogGeneral_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LogGeneral_Pantalla" Type="nvarchar" MaxLength="250" />
+    <Property Name="LogGeneral_Accion" Type="nvarchar" MaxLength="250" />
+    <Property Name="LogGeneral_Mensaje" Type="nvarchar" MaxLength="250" />
+    <Property Name="LogGeneral_Fecha" Type="datetime" />
+    <Property Name="LogGeneral_IdUsuario" Type="int" />
+    <Property Name="LogGeneral_Vigencia" Type="bit" />
   </EntityType>
   <EntityType Name="NCF">
     <Key>
@@ -196,10 +209,10 @@
       <PropertyRef Name="Perfil_Id" />
     </Key>
     <Property Name="Perfil_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Perfil_Descripcion" Type="nvarchar" MaxLength="250" />
-    <Property Name="Perfil_FechaCreacion" Type="datetime" />
+    <Property Name="Perfil_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Perfil_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Perfil_IdUsuarioCreador" Type="int" />
-    <Property Name="Perfil_Vigencia" Type="bit" />
+    <Property Name="Perfil_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Persona">
     <Key>
@@ -214,9 +227,9 @@
     <Property Name="Persona_Telefono" Type="nvarchar" MaxLength="50" />
     <Property Name="Persona_Direccion" Type="nvarchar" MaxLength="250" />
     <Property Name="Persona_IdAseguradora" Type="int" />
-    <Property Name="Persona_FechaCreacion" Type="datetime" />
+    <Property Name="Persona_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Persona_IdUsuarioCreador" Type="int" />
-    <Property Name="Persona_Vigencia" Type="bit" />
+    <Property Name="Persona_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="PlanDeTratamiento">
     <Key>
@@ -264,10 +277,10 @@
       <PropertyRef Name="TipoDocumento_Id" />
     </Key>
     <Property Name="TipoDocumento_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TipoDocumento_Descripcion" Type="nvarchar" MaxLength="250" />
-    <Property Name="TipoDocumento_FechaCreacion" Type="datetime" />
+    <Property Name="TipoDocumento_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="TipoDocumento_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="TipoDocumento_IdUsuarioCreador" Type="int" />
-    <Property Name="TipoDocumento_Vigencia" Type="bit" />
+    <Property Name="TipoDocumento_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TipoNCF">
     <Key>
@@ -295,10 +308,10 @@
       <PropertyRef Name="TipoPersona_Id" />
     </Key>
     <Property Name="TipoPersona_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="TipoPersona_Descripcion" Type="nvarchar" MaxLength="250" />
-    <Property Name="TipoPersona_FechaCreacion" Type="datetime" />
+    <Property Name="TipoPersona_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="TipoPersona_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="TipoPersona_IdUsuarioCreador" Type="int" />
-    <Property Name="TipoPersona_Vigencia" Type="bit" />
+    <Property Name="TipoPersona_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="TipoProceso">
     <Key>
@@ -315,13 +328,13 @@
       <PropertyRef Name="Usuario_Id" />
     </Key>
     <Property Name="Usuario_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Usuario_Nickname" Type="nvarchar" MaxLength="250" />
-    <Property Name="Usuario_Contraseña" Type="nvarchar" MaxLength="250" />
-    <Property Name="Usuario_IdPerfil" Type="int" />
+    <Property Name="Usuario_Nickname" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Usuario_Contraseña" Type="nvarchar" MaxLength="250" Nullable="false" />
+    <Property Name="Usuario_IdPerfil" Type="int" Nullable="false" />
     <Property Name="IdPersona" Type="nvarchar" MaxLength="20" />
-    <Property Name="Usuario_FechaCreacion" Type="datetime" />
+    <Property Name="Usuario_FechaCreacion" Type="datetime" Nullable="false" />
     <Property Name="Usuario_IdUsuarioCreador" Type="int" />
-    <Property Name="Usuario_Vigencia" Type="bit" />
+    <Property Name="Usuario_Vigencia" Type="bit" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'hospital.dbo.PagosPorPersona_View' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -543,6 +556,18 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LogGeneral_LogGeneral_IdUsuario">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="LogGeneral" Type="Self.LogGeneral" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="LogGeneral">
+        <PropertyRef Name="LogGeneral_IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Pago_Pago_IdCuenta">
     <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="0..1" />
     <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
@@ -712,7 +737,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Usuarios_Usuario_IdPerfil">
-    <End Role="Perfil" Type="Self.Perfil" Multiplicity="0..1" />
+    <End Role="Perfil" Type="Self.Perfil" Multiplicity="1" />
     <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Perfil">
@@ -823,6 +848,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
     <EntitySet Name="FacturaDetalle" EntityType="Self.FacturaDetalle" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FacturaEncabezado" EntityType="Self.FacturaEncabezado" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LogGeneral" EntityType="Self.LogGeneral" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NCF" EntityType="Self.NCF" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Pago" EntityType="Self.Pago" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
@@ -924,6 +950,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
     <AssociationSet Name="FK_FacturaEncabezado_FacturaEncabezado_IdCliente" Association="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente">
       <End Role="Persona" EntitySet="Persona" />
       <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LogGeneral_LogGeneral_IdUsuario" Association="Self.FK_LogGeneral_LogGeneral_IdUsuario">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="LogGeneral" EntitySet="LogGeneral" />
     </AssociationSet>
     <AssociationSet Name="FK_Pago_Pago_IdCuenta" Association="Self.FK_Pago_Pago_IdCuenta">
       <End Role="Cuentas" EntitySet="Cuentas" />

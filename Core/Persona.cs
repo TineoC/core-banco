@@ -37,9 +37,9 @@ namespace Core
         public string Persona_Telefono { get; set; }
         public string Persona_Direccion { get; set; }
         public Nullable<int> Persona_IdAseguradora { get; set; }
-        public Nullable<System.DateTime> Persona_FechaCreacion { get; set; }
+        public System.DateTime Persona_FechaCreacion { get; set; }
         public Nullable<int> Persona_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Persona_Vigencia { get; set; }
+        public bool Persona_Vigencia { get; set; }
     
         public virtual Aseguradora Aseguradora { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

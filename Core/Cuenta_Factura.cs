@@ -17,9 +17,9 @@ namespace Core
         public int Cuenta_Factura_IdFactura { get; set; }
         public int Cuenta_Factura_IdCuenta { get; set; }
         public Nullable<decimal> Cuenta_Factura_Monto { get; set; }
-        public Nullable<System.DateTime> Cuenta_Factura_FechaCreacion { get; set; }
+        public System.DateTime Cuenta_Factura_FechaCreacion { get; set; }
         public Nullable<int> Cuenta_Factura_dUsuarioCreador { get; set; }
-        public Nullable<bool> Cuenta_Factura_Vigencia { get; set; }
+        public bool Cuenta_Factura_Vigencia { get; set; }
     
         public virtual Cuentas Cuentas { get; set; }
         public virtual FacturaEncabezado FacturaEncabezado { get; set; }

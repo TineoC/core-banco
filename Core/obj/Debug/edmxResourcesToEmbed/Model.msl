@@ -156,6 +156,34 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Log">
+      <EntityTypeMapping TypeName="hospitalModel.Log">
+        <MappingFragment StoreEntitySet="Log">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+          <ScalarProperty Name="Logged" ColumnName="Logged" />
+          <ScalarProperty Name="Level" ColumnName="Level" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Logger" ColumnName="Logger" />
+          <ScalarProperty Name="Callsite" ColumnName="Callsite" />
+          <ScalarProperty Name="Exception" ColumnName="Exception" />
+          <ScalarProperty Name="Tenant" ColumnName="Tenant" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LogGeneral">
+      <EntityTypeMapping TypeName="hospitalModel.LogGeneral">
+        <MappingFragment StoreEntitySet="LogGeneral">
+          <ScalarProperty Name="LogGeneral_Id" ColumnName="LogGeneral_Id" />
+          <ScalarProperty Name="LogGeneral_Pantalla" ColumnName="LogGeneral_Pantalla" />
+          <ScalarProperty Name="LogGeneral_Accion" ColumnName="LogGeneral_Accion" />
+          <ScalarProperty Name="LogGeneral_Mensaje" ColumnName="LogGeneral_Mensaje" />
+          <ScalarProperty Name="LogGeneral_Fecha" ColumnName="LogGeneral_Fecha" />
+          <ScalarProperty Name="LogGeneral_IdUsuario" ColumnName="LogGeneral_IdUsuario" />
+          <ScalarProperty Name="LogGeneral_Vigencia" ColumnName="LogGeneral_Vigencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="NCF">
       <EntityTypeMapping TypeName="hospitalModel.NCF">
         <MappingFragment StoreEntitySet="NCF">
@@ -378,19 +406,5 @@
     <FunctionImportMapping FunctionImportName="PPAperturaOCierreDeCaja" FunctionName="hospitalModel.Store.PPAperturaOCierreDeCaja" />
     <FunctionImportMapping FunctionImportName="PPEgreso" FunctionName="hospitalModel.Store.PPEgreso" />
     <FunctionImportMapping FunctionImportName="PPpagos" FunctionName="hospitalModel.Store.PPpagos" />
-    <EntitySetMapping Name="Log">
-      <EntityTypeMapping TypeName="hospitalModel.Log">
-        <MappingFragment StoreEntitySet="Log">
-          <ScalarProperty Name="Exception" ColumnName="Exception" />
-          <ScalarProperty Name="Callsite" ColumnName="Callsite" />
-          <ScalarProperty Name="Logger" ColumnName="Logger" />
-          <ScalarProperty Name="Message" ColumnName="Message" />
-          <ScalarProperty Name="Level" ColumnName="Level" />
-          <ScalarProperty Name="Logged" ColumnName="Logged" />
-          <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

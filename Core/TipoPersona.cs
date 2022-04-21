@@ -22,9 +22,9 @@ namespace Core
     
         public int TipoPersona_Id { get; set; }
         public string TipoPersona_Descripcion { get; set; }
-        public Nullable<System.DateTime> TipoPersona_FechaCreacion { get; set; }
+        public System.DateTime TipoPersona_FechaCreacion { get; set; }
         public Nullable<int> TipoPersona_IdUsuarioCreador { get; set; }
-        public Nullable<bool> TipoPersona_Vigencia { get; set; }
+        public bool TipoPersona_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Persona> Persona { get; set; }

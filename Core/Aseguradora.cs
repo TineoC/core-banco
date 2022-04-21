@@ -23,9 +23,9 @@ namespace Core
     
         public int Aseguraodra_Id { get; set; }
         public string Aseguradora_Descripcion { get; set; }
-        public Nullable<System.DateTime> Aseguradora_FechaCreacion { get; set; }
+        public System.DateTime Aseguradora_FechaCreacion { get; set; }
         public Nullable<int> Aseguradora_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Aseguradora_Vigencia { get; set; }
+        public bool Aseguradora_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Autorizacion> Autorizacion { get; set; }

@@ -24,9 +24,9 @@
     <Property Name="AperturaYCierreDeCaja_TotalCheques" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="AperturaYCierreDeCaja_TotalGeneral" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="AperturaYCierreDeCaja_AperturaOCierre" Type="Boolean" />
-    <Property Name="AperturaYCierreDeCaja_Fecha" Type="DateTime" Precision="3" />
+    <Property Name="AperturaYCierreDeCaja_Fecha" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="AperturaYCierreDeCaja_IdUsuarioCreador" Type="Int32" />
-    <Property Name="AperturaYCierreDeCaja_Vigencia" Type="Boolean" />
+    <Property Name="AperturaYCierreDeCaja_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Caja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="AperturaYCierreDeCaja" ToRole="Caja" />
     <NavigationProperty Name="Usuarios" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="AperturaYCierreDeCaja" ToRole="Usuarios" />
   </EntityType>
@@ -35,10 +35,10 @@
       <PropertyRef Name="Aseguraodra_Id" />
     </Key>
     <Property Name="Aseguraodra_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Aseguradora_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Aseguradora_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Aseguradora_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Aseguradora_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Aseguradora_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Aseguradora_Vigencia" Type="Boolean" />
+    <Property Name="Aseguradora_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Autorizacion" Relationship="Self.FK_Autorizacion_Autorizacion_IdAseguradora" FromRole="Aseguradora" ToRole="Autorizacion" />
     <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Aseguradora" ToRole="Persona" />
   </EntityType>
@@ -49,9 +49,9 @@
     <Property Name="Autorizacion_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Autorizacion_IdAseguradora" Type="Int32" />
     <Property Name="Autorizacion_IdProcedimiento" Type="Int32" />
-    <Property Name="Autorizacion_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Autorizacion_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Autorizacion_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Autorizacion_Vigencia" Type="Boolean" />
+    <Property Name="Autorizacion_Vigencia" Type="Boolean" Nullable="false" />
     <Property Name="Autorizacion_Precio" Type="Decimal" Precision="18" Scale="2" />
     <Property Name="Autorizacion_Cobertura" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="Autorizacion_Diferencia" Type="Decimal" Precision="18" Scale="2" />
@@ -64,10 +64,10 @@
       <PropertyRef Name="Caja_Id" />
     </Key>
     <Property Name="Caja_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Caja_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Caja_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Caja_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Caja_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Caja_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Caja_Vigencia" Type="Boolean" />
+    <Property Name="Caja_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="Caja" ToRole="AperturaYCierreDeCaja" />
     <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja" ToRole="Caja_Usuario" />
   </EntityType>
@@ -78,9 +78,9 @@
     </Key>
     <Property Name="Caja_Usuario_IdUsuario" Type="Int32" Nullable="false" />
     <Property Name="Caja_Usuario_IdCaja" Type="Int32" Nullable="false" />
-    <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="Boolean" />
+    <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Caja" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja_Usuario" ToRole="Caja" />
     <NavigationProperty Name="Usuarios" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Caja_Usuario" ToRole="Usuarios" />
   </EntityType>
@@ -92,9 +92,9 @@
     <Property Name="Cuenta_Factura_IdFactura" Type="Int32" Nullable="false" />
     <Property Name="Cuenta_Factura_IdCuenta" Type="Int32" Nullable="false" />
     <Property Name="Cuenta_Factura_Monto" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Cuenta_Factura_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Cuenta_Factura_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Cuenta_Factura_dUsuarioCreador" Type="Int32" />
-    <Property Name="Cuenta_Factura_Vigencia" Type="Boolean" />
+    <Property Name="Cuenta_Factura_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuenta_Factura" ToRole="Cuentas" />
     <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdFactura" FromRole="Cuenta_Factura" ToRole="FacturaEncabezado" />
   </EntityType>
@@ -105,9 +105,9 @@
     <Property Name="Cuenta_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Cuenta_IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <Property Name="Cuenta_Balance" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="Cuenta_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Cuenta_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Cuenta_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Cuenta_Vigencia" Type="Boolean" />
+    <Property Name="Cuenta_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Cuenta_Factura" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuentas" ToRole="Cuenta_Factura" />
     <NavigationProperty Name="Persona" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Cuentas" ToRole="Persona" />
     <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdCuenta" FromRole="Cuentas" ToRole="Pago" />
@@ -124,9 +124,9 @@
     <Property Name="Egreso_Preparado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Egresp_Aprobado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Egreso_Recibido" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Egreso_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Egreso_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Egreso_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Egreso_Vigencia" Type="Boolean" />
+    <Property Name="Egreso_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Usuarios" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Egreso" ToRole="Usuarios" />
   </EntityType>
   <EntityType Name="FacturaDetalle">
@@ -170,6 +170,33 @@
     <NavigationProperty Name="Persona1" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente" FromRole="FacturaEncabezado" ToRole="Persona" />
     <NavigationProperty Name="ReciboIngreso" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" FromRole="FacturaEncabezado" ToRole="ReciboIngreso" />
   </EntityType>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Logged" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Logger" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Callsite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Tenant" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LogGeneral">
+    <Key>
+      <PropertyRef Name="LogGeneral_Id" />
+    </Key>
+    <Property Name="LogGeneral_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogGeneral_Pantalla" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Accion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Mensaje" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Fecha" Type="DateTime" Precision="3" />
+    <Property Name="LogGeneral_IdUsuario" Type="Int32" />
+    <Property Name="LogGeneral_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="LogGeneral" ToRole="Usuarios" />
+  </EntityType>
   <EntityType Name="NCF">
     <Key>
       <PropertyRef Name="Id" />
@@ -210,10 +237,10 @@
       <PropertyRef Name="Perfil_Id" />
     </Key>
     <Property Name="Perfil_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Perfil_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Perfil_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Perfil_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Perfil_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Perfil_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Perfil_Vigencia" Type="Boolean" />
+    <Property Name="Perfil_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Perfil" ToRole="Usuarios" />
   </EntityType>
   <EntityType Name="Persona">
@@ -229,9 +256,9 @@
     <Property Name="Persona_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Persona_Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="Persona_IdAseguradora" Type="Int32" />
-    <Property Name="Persona_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Persona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
     <Property Name="Persona_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Persona_Vigencia" Type="Boolean" />
+    <Property Name="Persona_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Aseguradora" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Persona" ToRole="Aseguradora" />
     <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Persona" ToRole="Cuentas" />
     <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCajero" FromRole="Persona" ToRole="FacturaEncabezado" />
@@ -301,10 +328,10 @@
       <PropertyRef Name="TipoDocumento_Id" />
     </Key>
     <Property Name="TipoDocumento_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TipoDocumento_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="TipoDocumento_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="TipoDocumento_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TipoDocumento_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
     <Property Name="TipoDocumento_IdUsuarioCreador" Type="Int32" />
-    <Property Name="TipoDocumento_Vigencia" Type="Boolean" />
+    <Property Name="TipoDocumento_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoDocumento" FromRole="TipoDocumento" ToRole="Persona" />
   </EntityType>
   <EntityType Name="TipoNCF">
@@ -334,10 +361,10 @@
       <PropertyRef Name="TipoPersona_Id" />
     </Key>
     <Property Name="TipoPersona_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TipoPersona_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="TipoPersona_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="TipoPersona_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TipoPersona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
     <Property Name="TipoPersona_IdUsuarioCreador" Type="Int32" />
-    <Property Name="TipoPersona_Vigencia" Type="Boolean" />
+    <Property Name="TipoPersona_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoPersona" FromRole="TipoPersona" ToRole="Persona" />
   </EntityType>
   <EntityType Name="TipoProceso">
@@ -356,16 +383,17 @@
       <PropertyRef Name="Usuario_Id" />
     </Key>
     <Property Name="Usuario_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Usuario_Nickname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Usuario_Contraseña" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Usuario_IdPerfil" Type="Int32" />
+    <Property Name="Usuario_Nickname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Usuario_Contraseña" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Usuario_IdPerfil" Type="Int32" Nullable="false" />
     <Property Name="IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-    <Property Name="Usuario_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Usuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Usuario_IdUsuarioCreador" Type="Int32" />
-    <Property Name="Usuario_Vigencia" Type="Boolean" />
+    <Property Name="Usuario_Vigencia" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="Usuarios" ToRole="AperturaYCierreDeCaja" />
     <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Usuarios" ToRole="Caja_Usuario" />
     <NavigationProperty Name="Egreso" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Usuarios" ToRole="Egreso" />
+    <NavigationProperty Name="LogGeneral" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="Usuarios" ToRole="LogGeneral" />
     <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdUsuarioCreador" FromRole="Usuarios" ToRole="Pago" />
     <NavigationProperty Name="Perfil" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Usuarios" ToRole="Perfil" />
     <NavigationProperty Name="Persona" Relationship="Self.FK_Usuarios_Usuario_IdPersona" FromRole="Usuarios" ToRole="Persona" />
@@ -620,6 +648,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_LogGeneral_LogGeneral_IdUsuario">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="LogGeneral" Type="Self.LogGeneral" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="LogGeneral">
+        <PropertyRef Name="LogGeneral_IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Pago_Pago_IdPersona">
     <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
     <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
@@ -657,7 +697,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Usuarios_Usuario_IdPerfil">
-    <End Role="Perfil" Type="Self.Perfil" Multiplicity="0..1" />
+    <End Role="Perfil" Type="Self.Perfil" Multiplicity="1" />
     <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Perfil">
@@ -787,6 +827,8 @@
     <EntitySet Name="Egreso" EntityType="Self.Egreso" />
     <EntitySet Name="FacturaDetalle" EntityType="Self.FacturaDetalle" />
     <EntitySet Name="FacturaEncabezado" EntityType="Self.FacturaEncabezado" />
+    <EntitySet Name="Log" EntityType="Self.Log" />
+    <EntitySet Name="LogGeneral" EntityType="Self.LogGeneral" />
     <EntitySet Name="NCF" EntityType="Self.NCF" />
     <EntitySet Name="Pago" EntityType="Self.Pago" />
     <EntitySet Name="Perfil" EntityType="Self.Perfil" />
@@ -870,6 +912,10 @@
     <AssociationSet Name="FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" Association="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle">
       <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
       <End Role="ReciboIngreso" EntitySet="ReciboIngreso" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LogGeneral_LogGeneral_IdUsuario" Association="Self.FK_LogGeneral_LogGeneral_IdUsuario">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="LogGeneral" EntitySet="LogGeneral" />
     </AssociationSet>
     <AssociationSet Name="FK_Pago_Pago_IdPersona" Association="Self.FK_Pago_Pago_IdPersona">
       <End Role="Persona" EntitySet="Persona" />
@@ -992,19 +1038,5 @@
       <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
       <Parameter Name="IdCaja" Mode="In" Type="Int32" />
     </FunctionImport>
-    <EntitySet Name="Log" EntityType="hospitalModel.Log" />
   </EntityContainer>
-  <EntityType Name="Log">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="MachineName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Logged" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Level" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Logger" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="Callsite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
 </Schema>

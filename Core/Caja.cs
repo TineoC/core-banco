@@ -23,9 +23,9 @@ namespace Core
     
         public int Caja_Id { get; set; }
         public string Caja_Descripcion { get; set; }
-        public Nullable<System.DateTime> Caja_FechaCreacion { get; set; }
+        public System.DateTime Caja_FechaCreacion { get; set; }
         public Nullable<int> Caja_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Caja_Vigencia { get; set; }
+        public bool Caja_Vigencia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AperturaYCierreDeCaja> AperturaYCierreDeCaja { get; set; }

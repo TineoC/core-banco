@@ -17,9 +17,9 @@ namespace Core
         public int Autorizacion_Id { get; set; }
         public Nullable<int> Autorizacion_IdAseguradora { get; set; }
         public Nullable<int> Autorizacion_IdProcedimiento { get; set; }
-        public Nullable<System.DateTime> Autorizacion_FechaCreacion { get; set; }
+        public System.DateTime Autorizacion_FechaCreacion { get; set; }
         public Nullable<int> Autorizacion_IdUsuarioCreador { get; set; }
-        public Nullable<bool> Autorizacion_Vigencia { get; set; }
+        public bool Autorizacion_Vigencia { get; set; }
         public Nullable<decimal> Autorizacion_Precio { get; set; }
         public Nullable<decimal> Autorizacion_Cobertura { get; set; }
         public Nullable<decimal> Autorizacion_Diferencia { get; set; }

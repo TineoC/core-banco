@@ -29,19 +29,19 @@
           <Property Name="AperturaYCierreDeCaja_TotalCheques" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AperturaYCierreDeCaja_TotalGeneral" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AperturaYCierreDeCaja_AperturaOCierre" Type="bit" />
-          <Property Name="AperturaYCierreDeCaja_Fecha" Type="datetime" />
+          <Property Name="AperturaYCierreDeCaja_Fecha" Type="datetime" Nullable="false" />
           <Property Name="AperturaYCierreDeCaja_IdUsuarioCreador" Type="int" />
-          <Property Name="AperturaYCierreDeCaja_Vigencia" Type="bit" />
+          <Property Name="AperturaYCierreDeCaja_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Aseguradora">
           <Key>
             <PropertyRef Name="Aseguraodra_Id" />
           </Key>
           <Property Name="Aseguraodra_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Aseguradora_Descripcion" Type="nvarchar" MaxLength="250" />
-          <Property Name="Aseguradora_FechaCreacion" Type="datetime" />
+          <Property Name="Aseguradora_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Aseguradora_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Aseguradora_IdUsuarioCreador" Type="int" />
-          <Property Name="Aseguradora_Vigencia" Type="bit" />
+          <Property Name="Aseguradora_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Autorizacion">
           <Key>
@@ -50,9 +50,9 @@
           <Property Name="Autorizacion_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Autorizacion_IdAseguradora" Type="int" />
           <Property Name="Autorizacion_IdProcedimiento" Type="int" />
-          <Property Name="Autorizacion_FechaCreacion" Type="datetime" />
+          <Property Name="Autorizacion_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Autorizacion_IdUsuarioCreador" Type="int" />
-          <Property Name="Autorizacion_Vigencia" Type="bit" />
+          <Property Name="Autorizacion_Vigencia" Type="bit" Nullable="false" />
           <Property Name="Autorizacion_Precio" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Autorizacion_Cobertura" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Autorizacion_Diferencia" Type="decimal" Precision="18" Scale="2" />
@@ -63,10 +63,10 @@
             <PropertyRef Name="Caja_Id" />
           </Key>
           <Property Name="Caja_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Caja_Descripcion" Type="nvarchar" MaxLength="250" />
-          <Property Name="Caja_FechaCreacion" Type="datetime" />
+          <Property Name="Caja_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Caja_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Caja_IdUsuarioCreador" Type="int" />
-          <Property Name="Caja_Vigencia" Type="bit" />
+          <Property Name="Caja_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Caja_Usuario">
           <Key>
@@ -75,9 +75,9 @@
           </Key>
           <Property Name="Caja_Usuario_IdUsuario" Type="int" Nullable="false" />
           <Property Name="Caja_Usuario_IdCaja" Type="int" Nullable="false" />
-          <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="datetime" />
+          <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" Type="int" />
-          <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="bit" />
+          <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Cuenta_Factura">
           <Key>
@@ -87,9 +87,9 @@
           <Property Name="Cuenta_Factura_IdFactura" Type="int" Nullable="false" />
           <Property Name="Cuenta_Factura_IdCuenta" Type="int" Nullable="false" />
           <Property Name="Cuenta_Factura_Monto" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Cuenta_Factura_FechaCreacion" Type="datetime" />
+          <Property Name="Cuenta_Factura_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Cuenta_Factura_dUsuarioCreador" Type="int" />
-          <Property Name="Cuenta_Factura_Vigencia" Type="bit" />
+          <Property Name="Cuenta_Factura_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Cuentas">
           <Key>
@@ -98,9 +98,9 @@
           <Property Name="Cuenta_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Cuenta_IdPersona" Type="nvarchar" MaxLength="20" />
           <Property Name="Cuenta_Balance" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="Cuenta_FechaCreacion" Type="datetime" />
+          <Property Name="Cuenta_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Cuenta_IdUsuarioCreador" Type="int" />
-          <Property Name="Cuenta_Vigencia" Type="bit" />
+          <Property Name="Cuenta_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Egreso">
           <Key>
@@ -114,9 +114,9 @@
           <Property Name="Egreso_Preparado" Type="nvarchar" MaxLength="50" />
           <Property Name="Egresp_Aprobado" Type="nvarchar" MaxLength="50" />
           <Property Name="Egreso_Recibido" Type="nvarchar" MaxLength="50" />
-          <Property Name="Egreso_FechaCreacion" Type="datetime" />
+          <Property Name="Egreso_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Egreso_IdUsuarioCreador" Type="int" />
-          <Property Name="Egreso_Vigencia" Type="bit" />
+          <Property Name="Egreso_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="FacturaDetalle">
           <Key>
@@ -164,6 +164,19 @@
           <Property Name="Logger" Type="nvarchar" MaxLength="250" />
           <Property Name="Callsite" Type="nvarchar(max)" />
           <Property Name="Exception" Type="nvarchar(max)" />
+          <Property Name="Tenant" Type="nvarchar" MaxLength="2000" />
+        </EntityType>
+        <EntityType Name="LogGeneral">
+          <Key>
+            <PropertyRef Name="LogGeneral_Id" />
+          </Key>
+          <Property Name="LogGeneral_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LogGeneral_Pantalla" Type="nvarchar" MaxLength="250" />
+          <Property Name="LogGeneral_Accion" Type="nvarchar" MaxLength="250" />
+          <Property Name="LogGeneral_Mensaje" Type="nvarchar" MaxLength="250" />
+          <Property Name="LogGeneral_Fecha" Type="datetime" />
+          <Property Name="LogGeneral_IdUsuario" Type="int" />
+          <Property Name="LogGeneral_Vigencia" Type="bit" />
         </EntityType>
         <EntityType Name="NCF">
           <Key>
@@ -201,10 +214,10 @@
             <PropertyRef Name="Perfil_Id" />
           </Key>
           <Property Name="Perfil_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Perfil_Descripcion" Type="nvarchar" MaxLength="250" />
-          <Property Name="Perfil_FechaCreacion" Type="datetime" />
+          <Property Name="Perfil_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Perfil_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Perfil_IdUsuarioCreador" Type="int" />
-          <Property Name="Perfil_Vigencia" Type="bit" />
+          <Property Name="Perfil_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Persona">
           <Key>
@@ -219,9 +232,9 @@
           <Property Name="Persona_Telefono" Type="nvarchar" MaxLength="50" />
           <Property Name="Persona_Direccion" Type="nvarchar" MaxLength="250" />
           <Property Name="Persona_IdAseguradora" Type="int" />
-          <Property Name="Persona_FechaCreacion" Type="datetime" />
+          <Property Name="Persona_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Persona_IdUsuarioCreador" Type="int" />
-          <Property Name="Persona_Vigencia" Type="bit" />
+          <Property Name="Persona_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PlanDeTratamiento">
           <Key>
@@ -269,10 +282,10 @@
             <PropertyRef Name="TipoDocumento_Id" />
           </Key>
           <Property Name="TipoDocumento_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TipoDocumento_Descripcion" Type="nvarchar" MaxLength="250" />
-          <Property Name="TipoDocumento_FechaCreacion" Type="datetime" />
+          <Property Name="TipoDocumento_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="TipoDocumento_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="TipoDocumento_IdUsuarioCreador" Type="int" />
-          <Property Name="TipoDocumento_Vigencia" Type="bit" />
+          <Property Name="TipoDocumento_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TipoNCF">
           <Key>
@@ -300,10 +313,10 @@
             <PropertyRef Name="TipoPersona_Id" />
           </Key>
           <Property Name="TipoPersona_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TipoPersona_Descripcion" Type="nvarchar" MaxLength="250" />
-          <Property Name="TipoPersona_FechaCreacion" Type="datetime" />
+          <Property Name="TipoPersona_Descripcion" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="TipoPersona_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="TipoPersona_IdUsuarioCreador" Type="int" />
-          <Property Name="TipoPersona_Vigencia" Type="bit" />
+          <Property Name="TipoPersona_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TipoProceso">
           <Key>
@@ -320,13 +333,13 @@
             <PropertyRef Name="Usuario_Id" />
           </Key>
           <Property Name="Usuario_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Usuario_Nickname" Type="nvarchar" MaxLength="250" />
-          <Property Name="Usuario_Contraseña" Type="nvarchar" MaxLength="250" />
-          <Property Name="Usuario_IdPerfil" Type="int" />
+          <Property Name="Usuario_Nickname" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Usuario_Contraseña" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Usuario_IdPerfil" Type="int" Nullable="false" />
           <Property Name="IdPersona" Type="nvarchar" MaxLength="20" />
-          <Property Name="Usuario_FechaCreacion" Type="datetime" />
+          <Property Name="Usuario_FechaCreacion" Type="datetime" Nullable="false" />
           <Property Name="Usuario_IdUsuarioCreador" Type="int" />
-          <Property Name="Usuario_Vigencia" Type="bit" />
+          <Property Name="Usuario_Vigencia" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'hospital.dbo.PagosPorPersona_View' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -548,6 +561,18 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LogGeneral_LogGeneral_IdUsuario">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="LogGeneral" Type="Self.LogGeneral" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario_Id" />
+            </Principal>
+            <Dependent Role="LogGeneral">
+              <PropertyRef Name="LogGeneral_IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pago_Pago_IdCuenta">
           <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="0..1" />
           <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
@@ -717,7 +742,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Usuarios_Usuario_IdPerfil">
-          <End Role="Perfil" Type="Self.Perfil" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="1" />
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Perfil">
@@ -828,6 +853,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <EntitySet Name="FacturaDetalle" EntityType="Self.FacturaDetalle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FacturaEncabezado" EntityType="Self.FacturaEncabezado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogGeneral" EntityType="Self.LogGeneral" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NCF" EntityType="Self.NCF" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pago" EntityType="Self.Pago" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
@@ -930,6 +956,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <End Role="Persona" EntitySet="Persona" />
             <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
           </AssociationSet>
+          <AssociationSet Name="FK_LogGeneral_LogGeneral_IdUsuario" Association="Self.FK_LogGeneral_LogGeneral_IdUsuario">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="LogGeneral" EntitySet="LogGeneral" />
+          </AssociationSet>
           <AssociationSet Name="FK_Pago_Pago_IdCuenta" Association="Self.FK_Pago_Pago_IdCuenta">
             <End Role="Cuentas" EntitySet="Cuentas" />
             <End Role="Pago" EntitySet="Pago" />
@@ -1023,9 +1053,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="AperturaYCierreDeCaja_TotalCheques" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AperturaYCierreDeCaja_TotalGeneral" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AperturaYCierreDeCaja_AperturaOCierre" Type="Boolean" />
-          <Property Name="AperturaYCierreDeCaja_Fecha" Type="DateTime" Precision="3" />
+          <Property Name="AperturaYCierreDeCaja_Fecha" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="AperturaYCierreDeCaja_IdUsuarioCreador" Type="Int32" />
-          <Property Name="AperturaYCierreDeCaja_Vigencia" Type="Boolean" />
+          <Property Name="AperturaYCierreDeCaja_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Caja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="AperturaYCierreDeCaja" ToRole="Caja" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="AperturaYCierreDeCaja" ToRole="Usuarios" />
         </EntityType>
@@ -1034,10 +1064,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="Aseguraodra_Id" />
           </Key>
           <Property Name="Aseguraodra_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Aseguradora_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Aseguradora_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Aseguradora_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Aseguradora_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Aseguradora_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Aseguradora_Vigencia" Type="Boolean" />
+          <Property Name="Aseguradora_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Autorizacion" Relationship="Self.FK_Autorizacion_Autorizacion_IdAseguradora" FromRole="Aseguradora" ToRole="Autorizacion" />
           <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Aseguradora" ToRole="Persona" />
         </EntityType>
@@ -1048,9 +1078,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="Autorizacion_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Autorizacion_IdAseguradora" Type="Int32" />
           <Property Name="Autorizacion_IdProcedimiento" Type="Int32" />
-          <Property Name="Autorizacion_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Autorizacion_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Autorizacion_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Autorizacion_Vigencia" Type="Boolean" />
+          <Property Name="Autorizacion_Vigencia" Type="Boolean" Nullable="false" />
           <Property Name="Autorizacion_Precio" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Autorizacion_Cobertura" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Autorizacion_Diferencia" Type="Decimal" Precision="18" Scale="2" />
@@ -1063,10 +1093,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="Caja_Id" />
           </Key>
           <Property Name="Caja_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Caja_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Caja_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Caja_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Caja_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Caja_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Caja_Vigencia" Type="Boolean" />
+          <Property Name="Caja_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="Caja" ToRole="AperturaYCierreDeCaja" />
           <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja" ToRole="Caja_Usuario" />
         </EntityType>
@@ -1077,9 +1107,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           </Key>
           <Property Name="Caja_Usuario_IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="Caja_Usuario_IdCaja" Type="Int32" Nullable="false" />
-          <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="Boolean" />
+          <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Caja" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja_Usuario" ToRole="Caja" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Caja_Usuario" ToRole="Usuarios" />
         </EntityType>
@@ -1091,9 +1121,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="Cuenta_Factura_IdFactura" Type="Int32" Nullable="false" />
           <Property Name="Cuenta_Factura_IdCuenta" Type="Int32" Nullable="false" />
           <Property Name="Cuenta_Factura_Monto" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Cuenta_Factura_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Cuenta_Factura_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Cuenta_Factura_dUsuarioCreador" Type="Int32" />
-          <Property Name="Cuenta_Factura_Vigencia" Type="Boolean" />
+          <Property Name="Cuenta_Factura_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuenta_Factura" ToRole="Cuentas" />
           <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdFactura" FromRole="Cuenta_Factura" ToRole="FacturaEncabezado" />
         </EntityType>
@@ -1104,9 +1134,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="Cuenta_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Cuenta_IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Cuenta_Balance" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="Cuenta_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Cuenta_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Cuenta_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Cuenta_Vigencia" Type="Boolean" />
+          <Property Name="Cuenta_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Cuenta_Factura" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuentas" ToRole="Cuenta_Factura" />
           <NavigationProperty Name="Persona" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Cuentas" ToRole="Persona" />
           <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdCuenta" FromRole="Cuentas" ToRole="Pago" />
@@ -1123,9 +1153,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="Egreso_Preparado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Egresp_Aprobado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Egreso_Recibido" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Egreso_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Egreso_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Egreso_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Egreso_Vigencia" Type="Boolean" />
+          <Property Name="Egreso_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Egreso" ToRole="Usuarios" />
         </EntityType>
         <EntityType Name="FacturaDetalle">
@@ -1169,6 +1199,33 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <NavigationProperty Name="Persona1" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente" FromRole="FacturaEncabezado" ToRole="Persona" />
           <NavigationProperty Name="ReciboIngreso" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" FromRole="FacturaEncabezado" ToRole="ReciboIngreso" />
         </EntityType>
+        <EntityType Name="Log">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Logged" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Logger" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Callsite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Tenant" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LogGeneral">
+          <Key>
+            <PropertyRef Name="LogGeneral_Id" />
+          </Key>
+          <Property Name="LogGeneral_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LogGeneral_Pantalla" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LogGeneral_Accion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LogGeneral_Mensaje" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="LogGeneral_Fecha" Type="DateTime" Precision="3" />
+          <Property Name="LogGeneral_IdUsuario" Type="Int32" />
+          <Property Name="LogGeneral_Vigencia" Type="Boolean" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="LogGeneral" ToRole="Usuarios" />
+        </EntityType>
         <EntityType Name="NCF">
           <Key>
             <PropertyRef Name="Id" />
@@ -1209,10 +1266,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="Perfil_Id" />
           </Key>
           <Property Name="Perfil_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Perfil_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Perfil_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Perfil_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Perfil_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Perfil_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Perfil_Vigencia" Type="Boolean" />
+          <Property Name="Perfil_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Perfil" ToRole="Usuarios" />
         </EntityType>
         <EntityType Name="Persona">
@@ -1228,9 +1285,9 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <Property Name="Persona_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Persona_Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Persona_IdAseguradora" Type="Int32" />
-          <Property Name="Persona_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Persona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="Persona_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Persona_Vigencia" Type="Boolean" />
+          <Property Name="Persona_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Aseguradora" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Persona" ToRole="Aseguradora" />
           <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Persona" ToRole="Cuentas" />
           <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCajero" FromRole="Persona" ToRole="FacturaEncabezado" />
@@ -1300,10 +1357,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="TipoDocumento_Id" />
           </Key>
           <Property Name="TipoDocumento_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TipoDocumento_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="TipoDocumento_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="TipoDocumento_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TipoDocumento_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TipoDocumento_IdUsuarioCreador" Type="Int32" />
-          <Property Name="TipoDocumento_Vigencia" Type="Boolean" />
+          <Property Name="TipoDocumento_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoDocumento" FromRole="TipoDocumento" ToRole="Persona" />
         </EntityType>
         <EntityType Name="TipoNCF">
@@ -1333,10 +1390,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="TipoPersona_Id" />
           </Key>
           <Property Name="TipoPersona_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TipoPersona_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="TipoPersona_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="TipoPersona_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TipoPersona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
           <Property Name="TipoPersona_IdUsuarioCreador" Type="Int32" />
-          <Property Name="TipoPersona_Vigencia" Type="Boolean" />
+          <Property Name="TipoPersona_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoPersona" FromRole="TipoPersona" ToRole="Persona" />
         </EntityType>
         <EntityType Name="TipoProceso">
@@ -1355,16 +1412,17 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <PropertyRef Name="Usuario_Id" />
           </Key>
           <Property Name="Usuario_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Usuario_Nickname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Usuario_Contraseña" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Usuario_IdPerfil" Type="Int32" />
+          <Property Name="Usuario_Nickname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Usuario_Contraseña" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Usuario_IdPerfil" Type="Int32" Nullable="false" />
           <Property Name="IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Usuario_FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Usuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Usuario_IdUsuarioCreador" Type="Int32" />
-          <Property Name="Usuario_Vigencia" Type="Boolean" />
+          <Property Name="Usuario_Vigencia" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="Usuarios" ToRole="AperturaYCierreDeCaja" />
           <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Usuarios" ToRole="Caja_Usuario" />
           <NavigationProperty Name="Egreso" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Usuarios" ToRole="Egreso" />
+          <NavigationProperty Name="LogGeneral" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="Usuarios" ToRole="LogGeneral" />
           <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdUsuarioCreador" FromRole="Usuarios" ToRole="Pago" />
           <NavigationProperty Name="Perfil" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Usuarios" ToRole="Perfil" />
           <NavigationProperty Name="Persona" Relationship="Self.FK_Usuarios_Usuario_IdPersona" FromRole="Usuarios" ToRole="Persona" />
@@ -1619,6 +1677,18 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LogGeneral_LogGeneral_IdUsuario">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="LogGeneral" Type="Self.LogGeneral" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Usuario_Id" />
+            </Principal>
+            <Dependent Role="LogGeneral">
+              <PropertyRef Name="LogGeneral_IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pago_Pago_IdPersona">
           <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
           <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
@@ -1656,7 +1726,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Usuarios_Usuario_IdPerfil">
-          <End Role="Perfil" Type="Self.Perfil" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="1" />
           <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Perfil">
@@ -1786,6 +1856,8 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <EntitySet Name="Egreso" EntityType="Self.Egreso" />
           <EntitySet Name="FacturaDetalle" EntityType="Self.FacturaDetalle" />
           <EntitySet Name="FacturaEncabezado" EntityType="Self.FacturaEncabezado" />
+          <EntitySet Name="Log" EntityType="Self.Log" />
+          <EntitySet Name="LogGeneral" EntityType="Self.LogGeneral" />
           <EntitySet Name="NCF" EntityType="Self.NCF" />
           <EntitySet Name="Pago" EntityType="Self.Pago" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" />
@@ -1869,6 +1941,10 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <AssociationSet Name="FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" Association="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle">
             <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
             <End Role="ReciboIngreso" EntitySet="ReciboIngreso" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LogGeneral_LogGeneral_IdUsuario" Association="Self.FK_LogGeneral_LogGeneral_IdUsuario">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="LogGeneral" EntitySet="LogGeneral" />
           </AssociationSet>
           <AssociationSet Name="FK_Pago_Pago_IdPersona" Association="Self.FK_Pago_Pago_IdPersona">
             <End Role="Persona" EntitySet="Persona" />
@@ -1991,21 +2067,7 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
             <Parameter Name="IdCaja" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Log" EntityType="hospitalModel.Log" />
         </EntityContainer>
-        <EntityType Name="Log">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MachineName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Logged" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Level" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Logger" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Callsite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2164,6 +2226,34 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
                 <ScalarProperty Name="FacturaEncabezado_FechaCreacion" ColumnName="FacturaEncabezado_FechaCreacion" />
                 <ScalarProperty Name="FacturaEncabezado_IdUsuarioCreador" ColumnName="FacturaEncabezado_IdUsuarioCreador" />
                 <ScalarProperty Name="FacturaEncabezado_Vigencia" ColumnName="FacturaEncabezado_Vigencia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Log">
+            <EntityTypeMapping TypeName="hospitalModel.Log">
+              <MappingFragment StoreEntitySet="Log">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="Logged" ColumnName="Logged" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Logger" ColumnName="Logger" />
+                <ScalarProperty Name="Callsite" ColumnName="Callsite" />
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Tenant" ColumnName="Tenant" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogGeneral">
+            <EntityTypeMapping TypeName="hospitalModel.LogGeneral">
+              <MappingFragment StoreEntitySet="LogGeneral">
+                <ScalarProperty Name="LogGeneral_Id" ColumnName="LogGeneral_Id" />
+                <ScalarProperty Name="LogGeneral_Pantalla" ColumnName="LogGeneral_Pantalla" />
+                <ScalarProperty Name="LogGeneral_Accion" ColumnName="LogGeneral_Accion" />
+                <ScalarProperty Name="LogGeneral_Mensaje" ColumnName="LogGeneral_Mensaje" />
+                <ScalarProperty Name="LogGeneral_Fecha" ColumnName="LogGeneral_Fecha" />
+                <ScalarProperty Name="LogGeneral_IdUsuario" ColumnName="LogGeneral_IdUsuario" />
+                <ScalarProperty Name="LogGeneral_Vigencia" ColumnName="LogGeneral_Vigencia" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2389,20 +2479,6 @@ warning 6002: The table/view 'hospital.sys.ipv6_database_firewall_rules' does no
           <FunctionImportMapping FunctionImportName="PPAperturaOCierreDeCaja" FunctionName="hospitalModel.Store.PPAperturaOCierreDeCaja" />
           <FunctionImportMapping FunctionImportName="PPEgreso" FunctionName="hospitalModel.Store.PPEgreso" />
           <FunctionImportMapping FunctionImportName="PPpagos" FunctionName="hospitalModel.Store.PPpagos" />
-          <EntitySetMapping Name="Log">
-            <EntityTypeMapping TypeName="hospitalModel.Log">
-              <MappingFragment StoreEntitySet="Log">
-                <ScalarProperty Name="Exception" ColumnName="Exception" />
-                <ScalarProperty Name="Callsite" ColumnName="Callsite" />
-                <ScalarProperty Name="Logger" ColumnName="Logger" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="Level" ColumnName="Level" />
-                <ScalarProperty Name="Logged" ColumnName="Logged" />
-                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

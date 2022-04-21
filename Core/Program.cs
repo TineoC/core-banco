@@ -2,6 +2,8 @@
 using Ryadel.Components.Security;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,11 @@ namespace Core
     {
         static bool logged = false;
         public static int loggerUserID;
+        static string actualNickname;
+
+
+        static string[] opciones;
+        static string[] opcionesCrud;
 
         /*
             1. Manejar los usuarios de la app
@@ -63,8 +70,6 @@ namespace Core
         static void Register()
         {
             hospitalEntities hospital = new hospitalEntities();
-
-            // Evitar claves simples
 
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -162,6 +167,7 @@ namespace Core
                 {
                     Usuario_Nickname = username,
                     Usuario_Contraseña = password,
+                    Usuario_IdPerfil = 3,
                     Usuario_FechaCreacion = DateTime.Now,
                     Usuario_Vigencia = true
                 });
@@ -185,8 +191,6 @@ namespace Core
         static void Login()
         {
             hospitalEntities hospital = new hospitalEntities();
-
-            // Evitar claves simples
 
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -212,13 +216,17 @@ namespace Core
                     if (correctCredentials)
                     {
                         Logger.Info($"Se ha iniciado sesión correctamente! Usuario: {username}");
+                        Console.WriteLine($"Se ha iniciado sesión correctamente! Usuario: {username}");
+
                         logged = true;
+                        actualNickname = username;
                         loggerUserID = hospital.Usuarios
                             .Where(
                                 user => user.Usuario_Nickname == username
                             )
                             .FirstOrDefault()
                             .Usuario_Id;
+
                         Console.Write("\nPress any key to continue...");
                         Console.ReadKey();
                         Console.Clear();
@@ -245,10 +253,6 @@ namespace Core
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
-            Console.WriteLine(".-      MENU       -.");
-
-            string[] opciones;
-
             try
             {
                 if (!logged)
@@ -262,22 +266,97 @@ namespace Core
                 }
                 else
                 {
-                    opciones = new string[13]
+                    hospitalEntities hospital = new hospitalEntities();
+
+                    int idPerfil = hospital.Usuarios.Where(
+                                user => user.Usuario_Nickname == actualNickname
+                            ).First().Usuario_IdPerfil;
+
+                    switch (idPerfil)
                     {
-                    "Manejar Personas",
-                    "Manejar Pacientes",             
-                    "Manejar Aseguradoras",
-                    "Manejar Autorizaciones",                   
-                    "Manejar Egresos",
-                    "Manejar Facturas",
-                    "Manejar Cuentas",
-                    "Manejar Cuentas de Facturas",
-                    "Manejar Detalles de Facturas",
-                    "Manejar Cajas",
-                    "Manejar Aperturas y Cierres de Caja",
-                    "Manejar Usuarios de Caja",
-                    "Exit"
-                    };
+                        case 2: // Administrador
+                            opciones = new string[24]
+                            {
+                                "Manejar Aperturas y Cierres de Caja",
+                                "Manejar Aseguradoras",
+                                "Manejar Autorizaciones",
+                                "Manejar Cajas",
+                                "Manejar Usuarios de Caja",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Egresos",
+                                "Manejar Detalles de Facturas",
+                                "Manejar Facturas",
+                                "Manejar NCF",
+                                "Manejar Pagos",
+                                "Manejar Perfiles",
+                                "Manejar Personas",
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Tipos de Documentos",
+                                "Manejar Tipos de NCF",
+                                "Manejar Tipos de Pagos",
+                                "Manejar Tipos de Personas",
+                                "Manejar Tipos de Processo",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+                            break;
+                        case 3: // Soporte Técnico
+                            opciones = new string[24]
+                            {
+                                "Manejar Aperturas y Cierres de Caja",
+                                "Manejar Aseguradoras",
+                                "Manejar Autorizaciones",
+                                "Manejar Cajas",
+                                "Manejar Usuarios de Caja",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Egresos",
+                                "Manejar Detalles de Facturas",
+                                "Manejar Facturas",
+                                "Manejar NCF",
+                                "Manejar Pagos",
+                                "Manejar Perfiles",
+                                "Manejar Personas",
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Tipos de Documentos",
+                                "Manejar Tipos de NCF",
+                                "Manejar Tipos de Pagos",
+                                "Manejar Tipos de Personas",
+                                "Manejar Tipos de Processo",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+                            break;
+                        case 4: // Paciente
+                                // ReciboIngreso. 1.Crear 2. Leer
+                                // Pagos 1. Crear 2. Leer
+                                // Cuenta Factura 1. Leer
+                                // Persona 1. Crear 2. Leer
+                                // Plan de Tratamiento 1. Leer
+                                // ProcesoMedico 1. Leer
+                                // Usuarios 1.Leer
+                            opciones = new string[9]
+                            {
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Pagos",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Personas",    
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 for (int i = 0; i < opciones.Length; i++)
@@ -319,23 +398,52 @@ namespace Core
 
             Console.WriteLine(".-      Acciones       -.");
 
-            string[] opciones;
-
             try
             {
-                opciones = new string[6]
-                    {
-                    "Crear",
-                    "Mostrar",
-                    "Mostrar Todos",
-                    "Actualizar",
-                    "Eliminar",
-                    "Exit"
-                    };
+                hospitalEntities hospital = new hospitalEntities();
 
-                for (int i = 0; i < opciones.Length; i++)
+                int idPerfil = hospital.Usuarios.Where(
+                            user => user.Usuario_Nickname == actualNickname
+                        ).First().Usuario_IdPerfil;
+
+                switch (idPerfil)
                 {
-                    Console.WriteLine($"{i + 1}. {opciones[i]}");
+                    case 2:
+                        opcionesCrud = new string[6]
+                            {
+                            "Crear",
+                            "Mostrar",
+                            "Mostrar Todos",
+                            "Actualizar",
+                            "Eliminar",
+                            "Exit"
+                            };
+                        break;
+                    case 3:
+                        opcionesCrud = new string[4]
+                            {
+                            "Crear",
+                            "Mostrar",
+                            "Mostrar Todos",
+                            "Exit"
+                            };
+                        break;
+                    case 4:
+                        opcionesCrud = new string[4]
+                            {
+                            "Crear",
+                            "Mostrar",
+                            "Mostrar Todos",
+                            "Exit"
+                            };
+                        break;
+                    default:
+                        break;
+                }
+
+                for (int i = 0; i < opcionesCrud.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {opcionesCrud[i]}");
                 }
 
                 int index = 0;
@@ -344,9 +452,9 @@ namespace Core
                 {
                     Console.Write("Opción: ");
                     index = Int32.Parse(Console.ReadLine());
-                } while (!(index > 0 && index <= opciones.Length));
+                } while (!(index > 0 && index <= opcionesCrud.Length));
 
-                string opcionElegida = opciones[index - 1];
+                string opcionElegida = opcionesCrud[index - 1];
 
                 Logger.Info($"Opción elegida: {opcionElegida}");
 
@@ -368,459 +476,15 @@ namespace Core
 
         static void Main(string[] args)
         {
-            // Main code
-
             string opcion;
 
             do
             {
+                // Instanciar clase controller en cada accion
 
                 opcion = Menu();
 
                 string accion;
-
-                Console.Clear();
-
-                switch (opcion)
-                {
-            // Instanciar clase controller en cada accion
-                    case "Login usuario":
-                        Login();
-                        break;
-
-                    case "Registrar usuario":
-                        Register();
-                        break;
-
-                    case "Manejar Personas":
-                        accion = CRUDMenu();
-
-                        switch(accion)
-                        {
-                            case "Crear":
-                                PersonasController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                PersonasController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todos":
-                                PersonasController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                PersonasController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                PersonasController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-
-                        break;
-
-                    case "Manejar Pacientes":
-                        //accion = CRUDMenu();
-
-                        //switch (accion)
-                        //{
-                        //    case "Crear":
-                        //        PacientesController.Crear();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Mostrar":
-                        //        PacientesController.Mostrar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Mostrar Todos":
-                        //        PacientesController.MostrarTodos();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Actualizar":
-                        //        PacientesController.Actualizar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Eliminar":
-                        //        PacientesController.Eliminar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Exit":
-                        //        break;
-                        //}
-                        break;
-
-                    case "Manejar Facturas":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                FacturaEncabezadoController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                FacturaEncabezadoController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                FacturaEncabezadoController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                FacturaEncabezadoController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                FacturaEncabezadoController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Aseguradoras":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                AseguradoraController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                AseguradoraController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                AseguradoraController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                AseguradoraController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                AseguradoraController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Autorizaciones":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                AutorizacionController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                AutorizacionController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                AutorizacionController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                AutorizacionController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                AutorizacionController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Egresos":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                EgresoController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                EgresoController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                EgresoController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                EgresoController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                EgresoController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Cuentas":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                CuentasController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                CuentasController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                CuentasController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                CuentasController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                CuentasController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Cuentas de Facturas":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                FacturaCuentaController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                FacturaCuentaController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                FacturaCuentaController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                FacturaCuentaController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                FacturaCuentaController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Detalles de Facturas":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                FacturaDetalleController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                FacturaDetalleController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                FacturaDetalleController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                FacturaDetalleController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                FacturaDetalleController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Cajas":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                CajaController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                CajaController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                CajaController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                CajaController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                CajaController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Aperturas y Cierres de Caja":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                AperturaYCierreDeCajaController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                AperturaYCierreDeCajaController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todas":
-                                AperturaYCierreDeCajaController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                AperturaYCierreDeCajaController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                AperturaYCierreDeCajaController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-
-                    case "Manejar Usuarios de Caja":
-                        accion = CRUDMenu();
-
-                        switch (accion)
-                        {
-                            case "Crear":
-                                UsuarioCajaController.Crear();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar":
-                                UsuarioCajaController.Mostrar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Mostrar Todos":
-                                UsuarioCajaController.MostrarTodos();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Actualizar":
-                                UsuarioCajaController.Actualizar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Eliminar":
-                                UsuarioCajaController.Eliminar();
-                                Console.Write("Press any key to continue...");
-                                Console.ReadKey();
-                                break;
-                            case "Exit":
-                                break;
-                        }
-                        break;
-                        
-                    case "Exit":
-                        Console.WriteLine("Hasta luego...");
-                        System.Threading.Thread.Sleep(1000);
-                        break;
-
-                    default:
-                        break;
-                }
 
                 Console.Clear();
 

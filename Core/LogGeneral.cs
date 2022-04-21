@@ -12,16 +12,16 @@ namespace Core
     using System;
     using System.Collections.Generic;
     
-    public partial class Log
+    public partial class LogGeneral
     {
-        public int Id { get; set; }
-        public string MachineName { get; set; }
-        public System.DateTime Logged { get; set; }
-        public string Level { get; set; }
-        public string Message { get; set; }
-        public string Logger { get; set; }
-        public string Callsite { get; set; }
-        public string Exception { get; set; }
-        public string Tenant { get; set; }
+        public int LogGeneral_Id { get; set; }
+        public string LogGeneral_Pantalla { get; set; }
+        public string LogGeneral_Accion { get; set; }
+        public string LogGeneral_Mensaje { get; set; }
+        public Nullable<System.DateTime> LogGeneral_Fecha { get; set; }
+        public Nullable<int> LogGeneral_IdUsuario { get; set; }
+        public Nullable<bool> LogGeneral_Vigencia { get; set; }
+    
+        public virtual Usuarios Usuarios { get; set; }
     }
 }

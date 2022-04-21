@@ -37,6 +37,8 @@ namespace Core
         public virtual DbSet<Egreso> Egreso { get; set; }
         public virtual DbSet<FacturaDetalle> FacturaDetalle { get; set; }
         public virtual DbSet<FacturaEncabezado> FacturaEncabezado { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<LogGeneral> LogGeneral { get; set; }
         public virtual DbSet<NCF> NCF { get; set; }
         public virtual DbSet<Pago> Pago { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
@@ -53,7 +55,6 @@ namespace Core
         public virtual DbSet<PagosPorPersona_View> PagosPorPersona_View { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
         public virtual DbSet<ipv6_database_firewall_rules> ipv6_database_firewall_rules { get; set; }
-        public virtual DbSet<Log> Log { get; set; }
     
         public virtual int IncrementarNCF(Nullable<int> tipoNCF)
         {

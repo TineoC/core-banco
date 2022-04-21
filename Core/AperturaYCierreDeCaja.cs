@@ -34,9 +34,9 @@ namespace Core
         public Nullable<decimal> AperturaYCierreDeCaja_TotalCheques { get; set; }
         public Nullable<decimal> AperturaYCierreDeCaja_TotalGeneral { get; set; }
         public Nullable<bool> AperturaYCierreDeCaja_AperturaOCierre { get; set; }
-        public Nullable<System.DateTime> AperturaYCierreDeCaja_Fecha { get; set; }
+        public System.DateTime AperturaYCierreDeCaja_Fecha { get; set; }
         public Nullable<int> AperturaYCierreDeCaja_IdUsuarioCreador { get; set; }
-        public Nullable<bool> AperturaYCierreDeCaja_Vigencia { get; set; }
+        public bool AperturaYCierreDeCaja_Vigencia { get; set; }
     
         public virtual Caja Caja { get; set; }
         public virtual Usuarios Usuarios { get; set; }
