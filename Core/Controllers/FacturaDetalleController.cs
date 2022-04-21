@@ -374,7 +374,7 @@ namespace Core.Controllers
                     FacturaDetalleMontoTotal = facturadetalle.FacturaDetalle_MontoTotal,
                     FacturaDetalleFechaCreacion = facturadetalle.FacturaDetalle_FechaCreacion,
                     FacturaDetalleIdUsuarioCreador = facturadetalle.FacturaDetalle_IdUsuarioCreador,
-                    FacturaDetalleVigencia = true,
+                    FacturaDetalleVigencia = facturadetalle.FacturaDetalle_Vigencia,
                      EntidadId = 9
                 };
 

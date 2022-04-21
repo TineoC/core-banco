@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +13,19 @@ namespace Core.Controllers
     {
         static hospitalEntities hospital = new hospitalEntities();
 
+
+        public static CuentasController Instancia = null;
+        public static CuentasController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new CuentasController();
+            }
+
+            return Instancia;
+        }
+
+
         public static void MostrarInformacion(Cuentas cuenta)
         {
             Console.WriteLine($"ID Cuenta: {cuenta.Cuenta_Id}");
@@ -20,7 +36,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {cuenta.Cuenta_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -56,20 +72,33 @@ namespace Core.Controllers
                     Console.WriteLine("Escribe el Balance de la Cuenta");
                     balance = decimal.Parse(Console.ReadLine());
                 } while (!(balance < 1));
-                
 
-                hospital.Cuentas.Add(new Cuentas()
+                Cuentas cuentas = new Cuentas()
                 {
                     Cuenta_IdPersona = documento,
                     Cuenta_Balance = balance,
                     Cuenta_FechaCreacion = DateTime.Now,
                     Cuenta_IdUsuarioCreador = Program.loggerUserID,
                     Cuenta_Vigencia = true
-                });
+                };
+                hospital.Cuentas.Add(cuentas);
+
+                CuentaEntities cuentaEntities = new CuentaEntities()
+                {
+                    CuentaIdPersona = cuentas.Cuenta_IdPersona,
+                    CuentaBalance = cuentas.Cuenta_Balance,
+                    CuentaFechaCreacion = cuentas.Cuenta_FechaCreacion,
+                    CuentaIdUsuarioCreador = cuentas.Cuenta_IdUsuarioCreador,
+                    CuentaVigencia = true,
+                    EntidadId = 6
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha creado la Cuenta correctamente");
+
+                await SendMessageQueue(cuentaEntities);
+                Logger.Info($"La cuenta para la persona {cuentaEntities.CuentaIdPersona} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -145,7 +174,7 @@ namespace Core.Controllers
                 throw;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -240,9 +269,22 @@ namespace Core.Controllers
                 nuevaCuenta.Cuenta_Balance = nuevoBalance;
                 nuevaCuenta.Cuenta_Vigencia = true;
 
+                CuentaEntities cuentaEntities = new CuentaEntities()
+                {
+                    CuentaIdPersona = nuevaCuenta.Cuenta_IdPersona,
+                    CuentaBalance = nuevaCuenta.Cuenta_Balance,
+                    CuentaFechaCreacion = nuevaCuenta.Cuenta_FechaCreacion,
+                    CuentaIdUsuarioCreador = nuevaCuenta.Cuenta_IdUsuarioCreador,
+                    CuentaVigencia = true,
+                    EntidadId = 6
+                };
+
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha actualizado la Cuenta ID:{nuevaCuenta.Cuenta_Id} a NuevoID:{nuevoIdCuenta}.");
+
+                await SendMessageQueue(cuentaEntities);
+                Logger.Info($"La cuenta para la persona {cuentaEntities.CuentaIdPersona} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -251,7 +293,7 @@ namespace Core.Controllers
             }    
 
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -282,14 +324,28 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Cuentas.Where(
+                Cuentas cuenta1 = hospital.Cuentas.Where(
                     cuent =>
                             cuent.Cuenta_Id == idCuenta
-                    ).First().Cuenta_Vigencia = false;
+                    ).First();
+                cuenta1.Cuenta_Vigencia = false;
+
+                CuentaEntities cuentaEntities = new CuentaEntities()
+                {
+                    CuentaIdPersona = cuenta1.Cuenta_IdPersona,
+                    CuentaBalance = cuenta1.Cuenta_Balance,
+                    CuentaFechaCreacion = cuenta1.Cuenta_FechaCreacion,
+                    CuentaIdUsuarioCreador = cuenta1.Cuenta_IdUsuarioCreador,
+                    CuentaVigencia = cuenta1.Cuenta_Vigencia,
+                    EntidadId = 6
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"Se ha eliminado la Cuenta con el ID: {idCuenta}.");
+                await SendMessageQueue(cuentaEntities);
+                Logger.Info($"La cuenta para la persona {cuentaEntities.CuentaIdPersona} se ha enviado correctamente");
+
             }
 
             catch (Exception e)
@@ -298,5 +354,21 @@ namespace Core.Controllers
                 throw;
             }           
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(CuentaEntities CuentaEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(CuentaEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
+
 }

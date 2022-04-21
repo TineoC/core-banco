@@ -326,7 +326,7 @@ namespace Core.Controllers
                     EgresoRecibido = egresoEliminar.Egreso_Recibido,
                     EgresoFechaCreacion = egresoEliminar.Egreso_FechaCreacion,
                     EgresoIdUsuarioCreador = egresoEliminar.Egreso_IdUsuarioCreador,
-                    EgresoVigencia = true,
+                    EgresoVigencia = egresoEliminar.Egreso_Vigencia,
                     EntidadId = 8
                 };
 

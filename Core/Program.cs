@@ -386,6 +386,9 @@ namespace Core
                 FacturaDetalleController FacturaDetalle = new FacturaDetalleController();
                 FacturaCuentaController facturaCuenta = new FacturaCuentaController();
                 EgresoController egreso = new EgresoController();
+                CuentasController cuenta = new CuentasController();
+                CajaController caja = new CajaController();
+                AutorizacionController autorizacion = new AutorizacionController();
                 switch (opcion)
                 {
             // Instanciar clase controller en cada accion
@@ -544,7 +547,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                AutorizacionController.Crear();
+                                autorizacion.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -559,12 +562,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                AutorizacionController.Actualizar();
+                                autorizacion.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                AutorizacionController.Eliminar();
+                                autorizacion.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -614,7 +617,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                CuentasController.Crear();
+                                cuenta.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -629,12 +632,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                CuentasController.Actualizar();
+                                cuenta.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                CuentasController.Eliminar();
+                                cuenta.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -719,7 +722,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                CajaController.Crear();
+                                caja.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -734,12 +737,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                CajaController.Actualizar();
+                                caja.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                CajaController.Eliminar();
+                                caja.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;

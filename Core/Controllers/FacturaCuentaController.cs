@@ -376,7 +376,7 @@ namespace Core.Controllers
                     CuentaFacturaMonto = cuenta_Factura.Cuenta_Factura_Monto,
                     CuentaFacturaFechaCreacion = cuenta_Factura.Cuenta_Factura_FechaCreacion,
                     CuentaFacturaDUsuarioCreador = cuenta_Factura.Cuenta_Factura_dUsuarioCreador,
-                    CuentaFacturaVigencia = true,
+                    CuentaFacturaVigencia = cuenta_Factura.Cuenta_Factura_Vigencia,
                     EntidadId = 7
                 };
 

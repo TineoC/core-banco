@@ -402,7 +402,7 @@ namespace Core.Controllers
                     CajaUsuarioIdCaja = cajaEliminar.Caja_Usuario_IdCaja,
                     CajaUsuarioIdUsuarioFechaCreacion = cajaEliminar.Caja_Usuario_IdUsuario_FechaCreacion,
                     CajaUsuarioIdUsuarioIdUsuarioCreador = cajaEliminar.Caja_Usuario_IdUsuario_IdUsuarioCreador,
-                    CajaUsuarioIdUsuarioVigencia = true,
+                    CajaUsuarioIdUsuarioVigencia = cajaEliminar.Caja_Usuario_IdUsuario_Vigencia,
                     EntidadId = 5
                 };
 

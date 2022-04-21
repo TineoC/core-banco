@@ -485,7 +485,7 @@ namespace Core.Controllers
                     FacturaEncabezadoTotalGeneral = FacturaEncabezado.FacturaEncabezado_TotalGeneral,
                     FacturaEncabezadoFechaCreacion = FacturaEncabezado.FacturaEncabezado_FechaCreacion,
                     FacturaEncabezadoIdUsuarioCreador = FacturaEncabezado.FacturaEncabezado_IdUsuarioCreador,
-                    FacturaEncabezadoVigencia = true,
+                    FacturaEncabezadoVigencia = FacturaEncabezado.FacturaDetalle_Vigencia,
                     EntidadId = 10
                 };
 
