@@ -221,6 +221,9 @@ namespace Core
                         Console.WriteLine($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
 
                         logged = true;
+
+                        actualNickname = username;
+
                         loggerUserID = hospital.Usuarios
                             .Where(
                                 user => user.Usuario_Nickname == username
@@ -239,6 +242,7 @@ namespace Core
                         z.StartAsync();
                         Console.Write("\nPress any key to continue...");
                         Console.ReadKey();
+                        
                         Console.Clear();
                         return;
                     }
