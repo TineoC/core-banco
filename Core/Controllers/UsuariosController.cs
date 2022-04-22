@@ -291,41 +291,106 @@ namespace Core.Controllers
 
             do
             {
-                Console.Write("Escribe el nickname (actualizado): ");
+                Console.Write("Escribe el nickname del usuario a actualizar: ");
                 nickname = Console.ReadLine();
 
                 Console.Clear();
 
-                exists = hospital.Usuarios.Any(user => user.Usuario_Nickname == nickname); //??
+                exists = hospital.Usuarios.Any(user => user.Usuario_Nickname == nickname);
 
-                if (exists)
+                if (!exists)
                 {
-                    Logger.Error($"Ya existe un usuario con el Nickname: {nickname}");
-                    Console.WriteLine("Existe un usuario con ese nickname");
+                    Logger.Error($"No existe un usuario con el Nickname: {nickname}");
+                    Console.WriteLine("No existe un usuario con el Nickname: {nickname}");
 
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                 }
-            } while (exists);
+            } while (!exists);
+
+            string nuevoNickname;
 
             do
             {
-
-                Console.WriteLine("Escribe la contraseña (actualizada): ");
-                password = Console.ReadLine();
+                Console.Write("Escribe el nuevo nickname: ");
+                nuevoNickname = Console.ReadLine();
 
                 Console.Clear();
 
-                exists = hospital.Usuarios.Any(user => user.Usuario_Contraseña == password); //??
+                exists = hospital.Usuarios.Any(user => user.Usuario_Nickname == nuevoNickname);
 
-                if (exists)
+                if (!exists)
                 {
-                    Console.WriteLine("Existe un usuario con la misma contraseña");
+                    Logger.Error($"No existe un usuario con el Nickname: {nuevoNickname}");
+                    Console.WriteLine($"No existe un usuario con el Nickname: {nuevoNickname}");
 
                     Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                 }
-            } while (exists);
+            } while (!exists);
+
+            string confirmPassword;
+            bool simplePassword, passwordMatch = false;
+
+            do
+            {
+                Console.Clear();
+
+                Console.Write("Ingrese una contraseña: ");
+                password = PasswordCheck.GetPassword();
+
+                PasswordStrength strength = PasswordCheck.GetPasswordStrength(password);
+
+                switch (strength)
+                {
+                    case PasswordStrength.Strong:
+                        simplePassword = false;
+                        break;
+                    case PasswordStrength.VeryStrong:
+                        simplePassword = false;
+                        break;
+                    default:
+                        simplePassword = true;
+                        break;
+                }
+
+                if (simplePassword)
+                {
+                    Logger.Error("La contraseña es muy simple!");
+                    Console.WriteLine("Error: La contraseña es muy simple!");
+
+                    char condicion1 = PasswordCheck.HasMinimumLength(password, 8) ? 'X' : ' ';
+                    char condicion2 = PasswordCheck.HasUpperCaseLetter(password) ? 'X' : ' '; ;
+                    char condicion3 = PasswordCheck.HasLowerCaseLetter(password) ? 'X' : ' '; ;
+                    char condicion4 = PasswordCheck.HasDigit(password) || PasswordCheck.HasSpecialChar(password) ? 'X' : ' ';
+
+                    Console.WriteLine("\nSi tienen una [X] es porque esta condición ya está cumplida, de lo contrario, estará vacía.\n");
+                    Console.WriteLine("Las contraseñas requieren:");
+                    Console.WriteLine($"\t[{condicion1}] 1.Al menos 8 caracteres de longitud:");
+                    Console.WriteLine($"\t[{condicion2}] 2.Al menos un caracter en mayúscula:");
+                    Console.WriteLine($"\t[{condicion3}] 3.Al menos un caracter en minúscula:");
+                    Console.WriteLine($"\t[{condicion4}] 4.Al menos un dígito o carácter especial:");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+                else
+                {
+                    Console.Write("\nComfirmar contraseña: ");
+                    confirmPassword = PasswordCheck.GetPassword();
+
+                    passwordMatch = Equals(password, confirmPassword);
+
+                    if (!passwordMatch)
+                    {
+                        Logger.Error("Las contraseñas no coinciden!");
+                        Console.WriteLine("\nLas contraseñas no coinciden!");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                }
+            } while (simplePassword || !passwordMatch);
 
             exists = false;
             do
@@ -347,10 +412,8 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-
             do
             {
-
                 Console.WriteLine("Escribe el ID del perfil (actualizado): ");
                 perfil = Int32.Parse(Console.ReadLine());
 
@@ -369,21 +432,15 @@ namespace Core.Controllers
 
             Console.Clear();
 
-            Usuarios usuario = hospital.Usuarios
-                            .Where(
-                                user => user.Usuario_Nickname == nickname
-                            )
-                            .FirstOrDefault();
-
-
             Usuarios nuevoUsuarios = hospital.Usuarios.Where(
                     user => user.Usuario_Nickname == nickname
                 ).First();
 
-            nuevoUsuarios.Usuario_Nickname = nickname;
+            nuevoUsuarios.Usuario_Nickname = nuevoNickname;
             nuevoUsuarios.Usuario_Contraseña = password;
             nuevoUsuarios.Usuario_IdPerfil = perfil;
             nuevoUsuarios.IdPersona = persona;
+            nuevoUsuarios.Usuario_Vigencia = true;
 
             UsuarioEntities UsuarioEntities = new UsuarioEntities()
             {
@@ -412,8 +469,7 @@ namespace Core.Controllers
 
             try
             {
-                string nickname, password, persona;
-                int perfil;
+                string nickname, password;
                 bool exists = false;
               
                 do
@@ -436,24 +492,28 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
+                bool logged;
+
                 do
                 {
 
-                    Console.WriteLine("Escribe la contraseña a eliminar: ");
+                    Console.WriteLine("Escribe la contraseña del usuario: ");
                     password = Console.ReadLine();
+
+                    logged = Program.Authentication(nickname, password);
 
                     Console.Clear();
 
-                    exists = hospital.Usuarios.Any(user => user.Usuario_Contraseña == password); //??
+                    exists = hospital.Usuarios.Any(user => user.Usuario_Contraseña == password);
 
-                    if (!exists)
+                    if (!logged)
                     {
-                        Console.Write("No existe un usuario con la misma contraseña");
+                        Console.Write("Credenciales Incorrectas");
 
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                     }
-                } while (!exists);
+                } while (!logged);
 
                 Usuarios nuevoUsuarios = hospital.Usuarios.Where(
                         pers => pers.Usuario_Nickname == nickname
