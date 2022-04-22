@@ -1,14 +1,28 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//Funciona
+
 namespace Core.Controllers
 {
     internal class UsuariosController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static UsuariosController Instancia = null;
+        public static UsuariosController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new UsuariosController();
+            }
+
+            return Instancia;
+        }
 
         public static void MostrarInformacion(Usuarios usuario)
         {
@@ -21,16 +35,14 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {usuario.Usuario_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             
             var Logger = NLog.LogManager.GetCurrentClassLogger();
-            
             Console.Clear();
 
             try
             {
-
                 string nickname, password,persona;
                 int perfil;
                 bool exists= true;
@@ -114,18 +126,38 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-
-                hospital.Usuarios.Add(new Usuarios()
+                Usuarios Usuarios = new Usuarios()
                 {
+                    Usuario_Id = 0,
                     Usuario_Nickname = nickname,
                     Usuario_Contraseña = password,
                     Usuario_IdPerfil = perfil,
                     IdPersona = persona,
-                });
+                    Usuario_FechaCreacion = DateTime.Now,
+                    Usuario_IdUsuarioCreador = Program.loggerUserID,
+                    Usuario_Vigencia = true
+                };
 
+                UsuarioEntities UsuarioEntities = new UsuarioEntities()
+                {
+                    UsuarioId = Usuarios.Usuario_Id,
+                    UsuarioNickname = Usuarios.Usuario_Nickname,
+                    UsuarioContraseña = Usuarios.Usuario_Contraseña,
+                    UsuarioIdPerfil = Convert.ToInt32(Usuarios.Perfil),
+                    IdPersona = Usuarios.IdPersona,
+                    UsuarioFechaCreacion = Usuarios.Usuario_FechaCreacion,
+                    UsuarioIdUsuarioCreador = Usuarios.Usuario_IdUsuarioCreador,
+                    UsuarioVigencia = true,
+                    EntidadId = 21
+                };
+
+
+                hospital.Usuarios.Add(Usuarios);
                 Logger.Info($"Se ha creado un usuarios correctamente con el nickname {nickname}");
-
                 hospital.SaveChanges();
+
+                await SendMessageQueue(UsuarioEntities);
+                Logger.Info($"El usuario {UsuarioEntities.UsuarioNickname} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -199,7 +231,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             string nickname, password, persona;
             int perfil;
@@ -208,8 +240,6 @@ namespace Core.Controllers
 
             do
             {
-
-
                 Console.Write("Escribe el nickname (actualizado): ");
                 nickname = Console.ReadLine();
 
@@ -303,12 +333,28 @@ namespace Core.Controllers
             nuevoUsuarios.Usuario_IdPerfil = perfil;
             nuevoUsuarios.IdPersona = persona;
 
+            UsuarioEntities UsuarioEntities = new UsuarioEntities()
+            {
+                UsuarioId = nuevoUsuarios.Usuario_Id,
+                UsuarioNickname = nuevoUsuarios.Usuario_Nickname,
+                UsuarioContraseña = nuevoUsuarios.Usuario_Contraseña,
+                UsuarioIdPerfil = Convert.ToInt32(nuevoUsuarios.Perfil),
+                IdPersona = nuevoUsuarios.IdPersona,
+                UsuarioFechaCreacion = nuevoUsuarios.Usuario_FechaCreacion,
+                UsuarioIdUsuarioCreador = nuevoUsuarios.Usuario_IdUsuarioCreador,
+                UsuarioVigencia = true,
+                EntidadId = 21
+            };
+
 
             Logger.Info($"El usuario con el nickname {nickname} ha sido actualizado.");
 
             hospital.SaveChanges();
+
+            await SendMessageQueue(UsuarioEntities);
+            Logger.Info($"El usuario {UsuarioEntities.UsuarioNickname} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -317,8 +363,7 @@ namespace Core.Controllers
                 string nickname, password, persona;
                 int perfil;
                 bool exists = false;
-               
-
+              
                 do
                 {
 
@@ -358,16 +403,34 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-      
 
-                hospital.Usuarios.Remove(hospital.Usuarios.Where(
-                        pers => pers.Usuario_Nickname == nickname 
-                    ).First()
-                );
+
+                Usuarios nuevoUsuarios = hospital.Usuarios.Where(
+                        pers => pers.Usuario_Nickname == nickname
+                    ).First();
+
+                nuevoUsuarios.Usuario_Vigencia = false;
+
+                UsuarioEntities UsuarioEntities = new UsuarioEntities()
+                {
+                    UsuarioId = nuevoUsuarios.Usuario_Id,
+                    UsuarioNickname = nuevoUsuarios.Usuario_Nickname,
+                    UsuarioContraseña = nuevoUsuarios.Usuario_Contraseña,
+                    UsuarioIdPerfil = Convert.ToInt32(nuevoUsuarios.Perfil),
+                    IdPersona = nuevoUsuarios.IdPersona,
+                    UsuarioFechaCreacion = nuevoUsuarios.Usuario_FechaCreacion,
+                    UsuarioIdUsuarioCreador = nuevoUsuarios.Usuario_IdUsuarioCreador,
+                    UsuarioVigencia = nuevoUsuarios.Usuario_Vigencia,
+                    EntidadId = 21
+                };
+
 
                 hospital.SaveChanges();
 
                 Logger.Info($"El usuario con el nickname {nickname} ha sido eliminado.");
+
+                await SendMessageQueue(UsuarioEntities);
+                Logger.Info($"El usuario {UsuarioEntities.UsuarioNickname} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -375,5 +438,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(UsuarioEntities UsuarioEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(UsuarioEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }
