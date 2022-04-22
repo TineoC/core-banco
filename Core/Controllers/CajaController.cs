@@ -24,7 +24,6 @@ namespace Core.Controllers
             return Instancia;
         }
 
-
         public static void MostrarInformacion(Caja caja)
         {
             Console.WriteLine($"ID caja: {caja.Caja_Id}");
