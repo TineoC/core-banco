@@ -3,12 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 //Cambiar
 //Funciona
 namespace Core.Controllers
 {
    internal class PlanDeTratamientoController
     {
+        public static PlanDeTratamientoController Instancia = null;
+        public static PlanDeTratamientoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new PlanDeTratamientoController();
+            }
+
+            return Instancia;
+        }
         static hospitalEntities hospital = new hospitalEntities();
         public static void MostrarInformacion(PlanDeTratamiento planDeTratamiento)
         {
@@ -25,7 +38,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {planDeTratamiento.PlanDeTratamiento_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             bool exists = false;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
@@ -34,9 +47,6 @@ namespace Core.Controllers
 
             try
             {
-                
-               
-
      
                 string paciente, medico;
                 int  prodemiento;
@@ -108,19 +118,38 @@ namespace Core.Controllers
                 Console.Write("Escribe el numero de autorizacion:  ");
                 int autorizacion = Int32.Parse(Console.ReadLine());
 
-                hospital.PlanDeTratamiento.Add(new PlanDeTratamiento()
-                {
+                PlanDeTratamiento PlanDeTratamiento = new PlanDeTratamiento() {
+                    PlanDeTratamiento_Id = 0,
                     PlanDeTratamiento_IdProcedimiento = prodemiento,
                     PlanDeTratamiento_NoAutorizacion = autorizacion,
                     PlanDeTratamiento_IdPaciente = paciente,
-                    PlanDeTratamiento_IdMedico =medico,
+                    PlanDeTratamiento_IdMedico = medico,
                     PlanDeTratamiento_Causa = causa,
                     PlanDeTratamiento_Resultado = resultado
-                });
+                };
+
+                hospital.PlanDeTratamiento.Add(PlanDeTratamiento);
+
+                PlanTratamientoVigenciaEntities planDeTratamientoEntities = new PlanTratamientoVigenciaEntities() {
+                    PlanDeTratamientoId = PlanDeTratamiento.PlanDeTratamiento_Id,
+                    PlanDeTratamientoIdProcedimiento = PlanDeTratamiento.PlanDeTratamiento_IdProcedimiento,
+                    PlanDeTratamientoNoAutorizacion = PlanDeTratamiento.PlanDeTratamiento_NoAutorizacion,
+                    PlanDeTratamientoIdPaciente = PlanDeTratamiento.PlanDeTratamiento_IdPaciente,
+                    PlanDeTratamientoIdMedico = PlanDeTratamiento.PlanDeTratamiento_IdMedico,
+                    PlanDeTratamientoCausa = PlanDeTratamiento.PlanDeTratamiento_Causa,
+                    PlanDeTratamientoResultado = PlanDeTratamiento.PlanDeTratamiento_Resultado,
+                    PlanDeTratamientoFechaCreacion = DateTime.Now,
+                    PlanDeTratamientoIdUsuarioCreador = Program.loggerUserID,
+                    PlanDeTratamientoVigencia = true,
+                    EntidadId = 14
+                };
 
                 Logger.Info($"Se ha creado el  plan de tratamiento correctamente con el paciente :{paciente}");
 
                 hospital.SaveChanges();
+                await SendMessageQueue(planDeTratamientoEntities);
+                Logger.Info($"El plan de tratamiento de numero de autorizacion {planDeTratamientoEntities.PlanDeTratamientoNoAutorizacion} se ha enviado correctamente");
+
             }
             catch (Exception e)
             {
@@ -175,7 +204,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int PlanTratamiento;
@@ -228,11 +257,29 @@ namespace Core.Controllers
             nuevoPlanDeTratamiento.PlanDeTratamiento_Causa = causa;
             nuevoPlanDeTratamiento.PlanDeTratamiento_Resultado = resultado;
 
+            PlanTratamientoVigenciaEntities planDeTratamientoEntities = new PlanTratamientoVigenciaEntities()
+            {
+                PlanDeTratamientoId = nuevoPlanDeTratamiento.PlanDeTratamiento_Id,
+                PlanDeTratamientoIdProcedimiento = nuevoPlanDeTratamiento.PlanDeTratamiento_IdProcedimiento,
+                PlanDeTratamientoNoAutorizacion = nuevoPlanDeTratamiento.PlanDeTratamiento_NoAutorizacion,
+                PlanDeTratamientoIdPaciente = nuevoPlanDeTratamiento.PlanDeTratamiento_IdPaciente,
+                PlanDeTratamientoIdMedico = nuevoPlanDeTratamiento.PlanDeTratamiento_IdMedico,
+                PlanDeTratamientoCausa = nuevoPlanDeTratamiento.PlanDeTratamiento_Causa,
+                PlanDeTratamientoResultado = nuevoPlanDeTratamiento.PlanDeTratamiento_Resultado,
+                PlanDeTratamientoFechaCreacion = nuevoPlanDeTratamiento.PlanDeTratamiento_FechaCreacion,
+                PlanDeTratamientoIdUsuarioCreador = nuevoPlanDeTratamiento.PlanDeTratamiento_IdUsuarioCreador,
+                PlanDeTratamientoVigencia = true,
+                EntidadId = 14
+            };
             Logger.Info($"El PlanDeTratamiento con el ID:  {PlanTratamiento} ha sido actualizado.");
 
             hospital.SaveChanges();
+
+            await SendMessageQueue(planDeTratamientoEntities);
+            Logger.Info($"El plan de tratamiento de numero de autorizacion {planDeTratamientoEntities.PlanDeTratamientoNoAutorizacion} se ha enviado correctamente");
+
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -259,14 +306,33 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.PlanDeTratamiento.Remove(hospital.PlanDeTratamiento.Where(
+                PlanDeTratamiento nuevoPlanDeTratamiento = hospital.PlanDeTratamiento.Where(
                         plan => plan.PlanDeTratamiento_Id == PlanTratamiento
-                    ).First()
-                );
+                    ).First();
+
+                nuevoPlanDeTratamiento.PlanDeTratamiento_Vigencia = false;
+
+                PlanTratamientoVigenciaEntities planDeTratamientoEntities = new PlanTratamientoVigenciaEntities()
+                {
+                    PlanDeTratamientoId = nuevoPlanDeTratamiento.PlanDeTratamiento_Id,
+                    PlanDeTratamientoIdProcedimiento = nuevoPlanDeTratamiento.PlanDeTratamiento_IdProcedimiento,
+                    PlanDeTratamientoNoAutorizacion = nuevoPlanDeTratamiento.PlanDeTratamiento_NoAutorizacion,
+                    PlanDeTratamientoIdPaciente = nuevoPlanDeTratamiento.PlanDeTratamiento_IdPaciente,
+                    PlanDeTratamientoIdMedico = nuevoPlanDeTratamiento.PlanDeTratamiento_IdMedico,
+                    PlanDeTratamientoCausa = nuevoPlanDeTratamiento.PlanDeTratamiento_Causa,
+                    PlanDeTratamientoResultado = nuevoPlanDeTratamiento.PlanDeTratamiento_Resultado,
+                    PlanDeTratamientoFechaCreacion = nuevoPlanDeTratamiento.PlanDeTratamiento_FechaCreacion,
+                    PlanDeTratamientoIdUsuarioCreador = nuevoPlanDeTratamiento.PlanDeTratamiento_IdUsuarioCreador,
+                    PlanDeTratamientoVigencia = nuevoPlanDeTratamiento.PlanDeTratamiento_Vigencia,
+                    EntidadId = 14
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"El plan de tratimiento con el ID:  {PlanTratamiento} ha sido eliminado.");
+
+                await SendMessageQueue(planDeTratamientoEntities);
+                Logger.Info($"El plan de tratamiento de numero de autorizacion {planDeTratamientoEntities.PlanDeTratamientoNoAutorizacion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -274,5 +340,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(PlanTratamientoVigenciaEntities planDeTratamiento)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(planDeTratamiento);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

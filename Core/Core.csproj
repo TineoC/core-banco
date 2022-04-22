@@ -290,6 +290,7 @@
     <Compile Include="DTO\ProcesoMedicoEntities.cs" />
     <Compile Include="DTO\ReciboIngresoEntities.cs" />
     <Compile Include="DTO\TipoDocumentoEntities.cs" />
+    <Compile Include="DTO\TipoNCFEEntitites.cs" />
     <Compile Include="DTO\TipoPagoEntities.cs" />
     <Compile Include="DTO\TipoPersonaEntities.cs" />
     <Compile Include="DTO\TipoProcesoEntities.cs" />

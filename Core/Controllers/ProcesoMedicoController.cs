@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
 //Cambiar
 //Funciona
 namespace Core.Controllers
@@ -11,6 +14,17 @@ namespace Core.Controllers
     {
 
         static hospitalEntities hospital = new hospitalEntities();
+        public static ProcesoMedicoController Instancia = null;
+        public static ProcesoMedicoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new ProcesoMedicoController();
+            }
+
+            return Instancia;
+        }
+
         public static void MostrarInformacion(ProcesoMedico procesoMedico)
         {
             Console.WriteLine($"Identifiacion del proceso medico: {procesoMedico.ProcesoMedico_Id}");
@@ -22,7 +36,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {procesoMedico.ProcesoMedico_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -73,25 +87,36 @@ namespace Core.Controllers
                         Console.ReadKey();
                     }
                 } while (!exists);
-                
-                Console.Write("Escribe el precio: ");
-                decimal precio = Decimal.Parse(Console.ReadLine());
 
-                hospital.ProcesoMedico.Add(new ProcesoMedico()
+                ProcesoMedico procesoMedico = new ProcesoMedico()
                 {
+                    ProcesoMedico_Id = 0,
                     ProcesoMedico_Descripcion = descripcion,
                     ProcesoMedico_Precio = precio,
-                    ProcesoMedico_IdTipoProceso = tipoproceso,
-                   ProcesoMedico_FechaCreacion = DateTime.Now,
-                   ProcesoMedico_IdUsuarioCreador = Program.loggerUserID,
-                    ProcesoMedico_Vigencia = true
-                
+                    ProcesoMedico_FechaCreacion = DateTime.Now,
+                    ProcesoMedico_IdUsuarioCreador = Program.loggerUserID,
+                    ProcesoMedico_Vigencia = true,
+                    ProcesoMedico_IdTipoProceso = tipoproceso
+                };
 
-                 });
+                hospital.ProcesoMedico.Add(procesoMedico);
 
-                Logger.Info($"Se ha creado el proceso Medico correctamente ");
+                ProcesoMedicoEntities procesoMedico1 = new ProcesoMedicoEntities()
+                {
+                    ProcesoMedicoId = procesoMedico.ProcesoMedico_Id,
+                    ProcesoMedicoDescripcion = procesoMedico.ProcesoMedico_Descripcion,
+                    ProcesoMedicoPrecio = procesoMedico.ProcesoMedico_Precio,
+                    ProcesoMedicoFechaCreacion = procesoMedico.ProcesoMedico_FechaCreacion,
+                    ProcesoMedicoIdUsuarioCreador = procesoMedico.ProcesoMedico_IdUsuarioCreador,
+                    ProcesoMedicoVigencia = true,
+                    ProcesoMedicoIdTipoProceso = procesoMedico.ProcesoMedico_IdTipoProceso
+                };
 
+                Logger.Info($"Se ha creado el proceso Medico correctamente con la descripccion {descripcion}");
                 hospital.SaveChanges();
+
+                await SendMessageQueue(procesoMedico1);
+                Logger.Info($"El proceso medico {procesoMedico1.ProcesoMedicoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -150,7 +175,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int ProcesoMedicoId, TipoProcesoId;
@@ -225,11 +250,25 @@ namespace Core.Controllers
             nuevoProcesoMedico.ProcesoMedico_Precio = precio;
             nuevoProcesoMedico.ProcesoMedico_IdTipoProceso = TipoProcesoId;
 
+            ProcesoMedicoEntities procesoMedico1 = new ProcesoMedicoEntities()
+            {
+                ProcesoMedicoId = nuevoProcesoMedico.ProcesoMedico_Id,
+                ProcesoMedicoDescripcion = nuevoProcesoMedico.ProcesoMedico_Descripcion,
+                ProcesoMedicoPrecio = nuevoProcesoMedico.ProcesoMedico_Precio,
+                ProcesoMedicoFechaCreacion = nuevoProcesoMedico.ProcesoMedico_FechaCreacion,
+                ProcesoMedicoIdUsuarioCreador = nuevoProcesoMedico.ProcesoMedico_IdUsuarioCreador,
+                ProcesoMedicoVigencia = true,
+                ProcesoMedicoIdTipoProceso = nuevoProcesoMedico.ProcesoMedico_IdTipoProceso
+            };
+
             Logger.Info($"El proceso Medico  ha sido actualizado correctamente con la identifiacion {ProcesoMedicoId}");
           
             hospital.SaveChanges();
+
+            await SendMessageQueue(procesoMedico1);
+            Logger.Info($"El proceso medico {procesoMedico1.ProcesoMedicoDescripcion} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -279,17 +318,29 @@ namespace Core.Controllers
                 } while (!exists);
 
 
+                ProcesoMedico nuevoProcesoMedico = hospital.ProcesoMedico.Where(
+                        procMed => procMed.ProcesoMedico_Id == ProcesoMedicoId
+                    ).First();
 
+                nuevoProcesoMedico.ProcesoMedico_Vigencia = false;
 
-
-
-                hospital.ProcesoMedico.Where(
-                       procMed => procMed.ProcesoMedico_Id == ProcesoMedicoId
-               ).First().ProcesoMedico_Vigencia = false;
+                ProcesoMedicoEntities procesoMedico1 = new ProcesoMedicoEntities()
+                {
+                    ProcesoMedicoId = nuevoProcesoMedico.ProcesoMedico_Id,
+                    ProcesoMedicoDescripcion = nuevoProcesoMedico.ProcesoMedico_Descripcion,
+                    ProcesoMedicoPrecio = nuevoProcesoMedico.ProcesoMedico_Precio,
+                    ProcesoMedicoFechaCreacion = nuevoProcesoMedico.ProcesoMedico_FechaCreacion,
+                    ProcesoMedicoIdUsuarioCreador = nuevoProcesoMedico.ProcesoMedico_IdUsuarioCreador,
+                    ProcesoMedicoVigencia = nuevoProcesoMedico.ProcesoMedico_Vigencia,
+                    ProcesoMedicoIdTipoProceso = nuevoProcesoMedico.ProcesoMedico_IdTipoProceso
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"El proceso Medico  ha sido eliminado correctamente con la identifiacion {ProcesoMedicoId}");
+
+                await SendMessageQueue(procesoMedico1);
+                Logger.Info($"El proceso medico {procesoMedico1.ProcesoMedicoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -297,5 +348,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(ProcesoMedicoEntities ProcesoMedicoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(ProcesoMedicoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

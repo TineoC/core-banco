@@ -1,15 +1,29 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//TipoProcesoController ??? Para Hacer Operaciones
-// Funciona puede mejorar
+
 namespace Core.Controllers
 {
     internal class TipoProcesoController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static TipoProcesoController Instancia = null;
+        public static TipoProcesoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new TipoProcesoController();
+            }
+
+            return Instancia;
+        }
+
 
         public static void MostrarInformacion(TipoProceso tipoproceso)
         {
@@ -20,7 +34,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: { tipoproceso.TipoProceso_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -37,6 +51,14 @@ namespace Core.Controllers
                     Console.Write("Escribe la descripcion de tipo de proceso: ");
                      descripcion = Console.ReadLine();
 
+                TipoProceso TipoProceso = new TipoProceso()
+                {
+                    TipoProceso_Id =0,
+                    TipoProceso_Descripcion = descripcion,
+                    TipoProceso_FechaCreacion = DateTime.Now,
+                    TipoProceso_IdUsuarioCreador = Program.loggerUserID,
+                    TipoProceso_Vigencia = true
+                };
                     Console.Clear();
 
                     exists = hospital.TipoProceso.Any(procMed => procMed.TipoProceso_Descripcion == descripcion);
@@ -54,18 +76,20 @@ namespace Core.Controllers
 
                 hospital.TipoProceso.Add(new TipoProceso()
                 {
-                    TipoProceso_Descripcion = descripcion,
-                    TipoProceso_FechaCreacion= DateTime.Now,
-                    TipoProceso_IdUsuarioCreador = Program.loggerUserID,
-                    TipoProceso_Vigencia = true
+                    TipoProcesoId = TipoProceso.TipoProceso_Id,
+                    TipoProcesoDescripcion = TipoProceso.TipoProceso_Descripcion,
+                    TipoProcesoFechaCreacion = TipoProceso.TipoProceso_FechaCreacion,
+                    TipoProcesoIdUsuarioCreador = TipoProceso.TipoProceso_IdUsuarioCreador,
+                    TipoProcesoVigencia = true,
+                    EntidadId = 20
+                };
 
-                });
-
-
+                hospital.TipoProceso.Add(TipoProceso);
                 Logger.Info($"Se ha creado el tipo de proceso correctamente: {descripcion}");
-                
-
                 hospital.SaveChanges();
+
+                await SendMessageQueue(TipoProcesoEntities);
+                Logger.Info($"El tipo de proceso {TipoProcesoEntities.TipoProcesoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -124,7 +148,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int TipoProceso;
@@ -177,12 +201,24 @@ namespace Core.Controllers
 
             nuevoTipoProceso.TipoProceso_Descripcion = descripcion;
 
-            Logger.Info($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
-            Console.WriteLine($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
+            TipoProcesoEntities TipoProcesoEntities = new TipoProcesoEntities()
+            {
+                TipoProcesoId = nuevoTipoProceso.TipoProceso_Id,
+                TipoProcesoDescripcion = nuevoTipoProceso.TipoProceso_Descripcion,
+                TipoProcesoFechaCreacion = nuevoTipoProceso.TipoProceso_FechaCreacion,
+                TipoProcesoIdUsuarioCreador = nuevoTipoProceso.TipoProceso_IdUsuarioCreador,
+                TipoProcesoVigencia = true,
+                EntidadId = 20
+            };
 
+
+            Logger.Info($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
             hospital.SaveChanges();
+
+            await SendMessageQueue(TipoProcesoEntities);
+            Logger.Info($"El tipo de proceso {TipoProcesoEntities.TipoProcesoDescripcion} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -209,16 +245,27 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.TipoProceso.Where(
+                TipoProceso TipoProcesoEliminar = hospital.TipoProceso.Where(
                         tipopro => tipopro.TipoProceso_Id == TipoProceso
-                ).First().TipoProceso_Vigencia = false;
+                    ).First();
 
+                TipoProcesoEliminar.TipoProceso_Vigencia = false;
 
+                TipoProcesoEntities TipoProcesoEntities = new TipoProcesoEntities()
+                {
+                    TipoProcesoId = TipoProcesoEliminar.TipoProceso_Id,
+                    TipoProcesoDescripcion = TipoProcesoEliminar.TipoProceso_Descripcion,
+                    TipoProcesoFechaCreacion = TipoProcesoEliminar.TipoProceso_FechaCreacion,
+                    TipoProcesoIdUsuarioCreador = TipoProcesoEliminar.TipoProceso_IdUsuarioCreador,
+                    TipoProcesoVigencia = TipoProcesoEliminar.TipoProceso_Vigencia,
+                    EntidadId = 20
+                };
 
                 hospital.SaveChanges();
-
                 Logger.Info($"El tipo de proceso con la identifiacion {TipoProceso} ha sido eliminado.");
-                Console.WriteLine($"El tipo de proceso con la identifiacion {TipoProceso} ha sido eliminado.");
+
+                await SendMessageQueue(TipoProcesoEntities);
+                Logger.Info($"El tipo de proceso {TipoProcesoEntities.TipoProcesoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -226,6 +273,21 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(TipoProcesoEntities TipoProcesoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(TipoProcesoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 
 }

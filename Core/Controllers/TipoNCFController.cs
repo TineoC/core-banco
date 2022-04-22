@@ -1,16 +1,27 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-/// <summary>
-/// /?
-/// </summary>
+
 namespace Core.Controllers
 {
    internal class TipoNCFController
     {
-        
+        public static TipoNCFController Instancia = null;
+        public static TipoNCFController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new TipoNCFController();
+            }
+
+            return Instancia;
+        }
+
         static hospitalEntities hospital = new hospitalEntities();
 
         public static void MostrarInformacion(TipoNCF tipoNCF)
@@ -20,10 +31,9 @@ namespace Core.Controllers
             Console.WriteLine($"Fecha de Creacion: { tipoNCF.TipoNCF_FechaCreado}");
             Console.WriteLine($"Estado: { tipoNCF.TipoNCF_Estado}"); 
             Console.WriteLine($"ID de la sucural: { tipoNCF.TipoNCF_IdSucursal}");
-
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -43,20 +53,32 @@ namespace Core.Controllers
                 Console.Write("Escribe el ID de la sucursal: ");
                 int sucursal = Int32.Parse(Console.ReadLine());
 
-                hospital.TipoNCF.Add(new TipoNCF()
-                {
+                TipoNCF ncf = new TipoNCF() {
+                    TipoNCF_Id =0,
                     TipoNCF_Descripcion = descripcion,
                     TipoNCF_IdUsuario = usuario,
+                    TipoNCF_FechaCreado = DateTime.Now,
                     TipoNCF_Estado = Estado,
                     TipoNCF_IdSucursal = sucursal
+                };
 
-                }); 
+                TipoNCFEEntitites TipoNCFEEntitites = new TipoNCFEEntitites()
+                {
+                    TipoNcfId = ncf.TipoNCF_Id,
+                    TipoNcfDescripcion = ncf.TipoNCF_Descripcion,
+                    TipoNcfIdUsuario = ncf.TipoNCF_IdUsuario,
+                    TipoNcfFechaCreado = ncf.TipoNCF_FechaCreado,
+                    TipoNcfEstado = ncf.TipoNCF_Estado,
+                    TipoNcfIdSucursal = ncf.TipoNCF_IdSucursal,
+                    EntidadId = 22
+                };
 
-
+                hospital.TipoNCF.Add(ncf); 
                 Logger.Info($"Se ha creado el tipo de NCF correctamente");
-
-
                 hospital.SaveChanges();
+
+                await SendMessageQueue(TipoNCFEEntitites);
+                Logger.Info($"El tipo de NCF {TipoNCFEEntitites.TipoNcfDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -115,7 +137,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
       
@@ -164,12 +186,24 @@ namespace Core.Controllers
             nuevoTipoNCF.TipoNCF_Estado = Estado;
             nuevoTipoNCF.TipoNCF_IdSucursal = sucursal;
 
+            TipoNCFEEntitites TipoNCFEEntitites = new TipoNCFEEntitites()
+            {
+                TipoNcfId = nuevoTipoNCF.TipoNCF_Id,
+                TipoNcfDescripcion = nuevoTipoNCF.TipoNCF_Descripcion,
+                TipoNcfIdUsuario = nuevoTipoNCF.TipoNCF_IdUsuario,
+                TipoNcfFechaCreado = nuevoTipoNCF.TipoNCF_FechaCreado,
+                TipoNcfEstado = nuevoTipoNCF.TipoNCF_Estado,
+                TipoNcfIdSucursal = nuevoTipoNCF.TipoNCF_IdSucursal,
+                EntidadId = 22
+            };
 
             Logger.Info($"El tipo de NCF con la identificacion {tipoNCFid} ha sido actualizado.");
-
             hospital.SaveChanges();
+
+            await SendMessageQueue(TipoNCFEEntitites);
+            Logger.Info($"El tipo de NCF {TipoNCFEEntitites.TipoNcfDescripcion} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -196,14 +230,30 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.TipoNCF.Remove(hospital.TipoNCF.Where(
+
+                TipoNCF nuevoTipoNCF = hospital.TipoNCF.Where(
                         tipopro => tipopro.TipoNCF_Id == TipoNCF
-                    ).First()
-                );
+                    ).First();
+
+                nuevoTipoNCF.TipoNCF_Estado = false;
 
                 hospital.SaveChanges();
-
                 Logger.Info($"El tipo de NCF con la identifiacion {TipoNCF} ha sido eliminado.");
+
+
+                TipoNCFEEntitites TipoNCFEEntitites = new TipoNCFEEntitites()
+                {
+                    TipoNcfId = nuevoTipoNCF.TipoNCF_Id,
+                    TipoNcfDescripcion = nuevoTipoNCF.TipoNCF_Descripcion,
+                    TipoNcfIdUsuario = nuevoTipoNCF.TipoNCF_IdUsuario,
+                    TipoNcfFechaCreado = nuevoTipoNCF.TipoNCF_FechaCreado,
+                    TipoNcfEstado = nuevoTipoNCF.TipoNCF_Estado,
+                    TipoNcfIdSucursal = nuevoTipoNCF.TipoNCF_IdSucursal,
+                    EntidadId = 22
+                };
+
+                await SendMessageQueue(TipoNCFEEntitites);
+                Logger.Info($"El tipo de NCF {TipoNCFEEntitites.TipoNcfDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -211,5 +261,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(TipoNCFEEntitites TipoNCFEEntitites)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(TipoNCFEEntitites);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }
