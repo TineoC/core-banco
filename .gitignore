@@ -4,6 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
+./pbj
+/v17
+bin/Debug
+obj/Debug
 ./Core/onj/Debug/
 *.rsuser
 *.suo
@@ -34,6 +38,9 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+.vs/Core_Hospital/v17
+.
+
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
