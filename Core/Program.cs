@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using Core.DTO;
 using System.Threading.Tasks;
+using Core.Consumers;
 
 namespace Core
 {
@@ -224,6 +225,7 @@ namespace Core
                     if (correctCredentials)
                     {
                         Logger.Info($"Se ha iniciado sesión correctamente! Usuario: {username}");
+                        Console.WriteLine($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
                         logged = true;
                         loggerUserID = hospital.Usuarios
                             .Where(
@@ -231,6 +233,15 @@ namespace Core
                             )
                             .FirstOrDefault()
                             .Usuario_Id;
+                        //Integracion con CajaTopic
+                        var e = CajaTopicConsumer.GetInstance();
+                        e.StartAsync();
+                        //Integracion con WebTopic
+                        var y = WebTopicConsumer.GetInstance();
+                        y.StartAsync();
+                        //Integracion con otro hospital
+                        var z = CoreHospitalQueueConsumer.GetInstance();
+                        z.StartAsync();
                         Console.Write("\nPress any key to continue...");
                         Console.ReadKey();
                         Console.Clear();
@@ -239,6 +250,7 @@ namespace Core
                     else
                     {
                         Logger.Warn($"Credenciales incorrectas inténtelo de nuevo. Usuario: {username} Password: {password}");
+                        Console.WriteLine($"Credenciales incorrectas inténtelo de nuevo.");
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                         Console.Clear();
@@ -415,6 +427,16 @@ namespace Core
                 AutorizacionController autorizacion = new AutorizacionController();
                 AseguradoraController aseguradora = new AseguradoraController();
                 AperturaYCierreDeCajaController aperturaYCierreDeCaja = new AperturaYCierreDeCajaController();
+                TipoProcesoController TipoProceso = new TipoProcesoController();
+                UsuariosController usuariosController = new UsuariosController();
+                PerfilController perfil1 = new PerfilController();
+                PagoController pago = new PagoController();
+                TipoPersonaController TipoPersona = new TipoPersonaController();
+                TipoPagoController tipoPagos = new TipoPagoController();
+                TipoDocumentoController TipoDocumentos = new TipoDocumentoController();
+                ProcesoMedicoController procesosMedicos = new ProcesoMedicoController();
+                ReciboIngresoController RecibosIngresos = new ReciboIngresoController();
+                PlanDeTratamientoController planTratamiento = new PlanDeTratamientoController();
                 switch (opcion)
                 {
             // Instanciar clase controller en cada accion
@@ -852,7 +874,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                TipoProcesoController.Crear();
+                                TipoProceso.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -867,12 +889,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                TipoProcesoController.Actualizar();
+                                TipoProceso.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                TipoProcesoController.Eliminar();
+                                TipoProceso.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -886,7 +908,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                UsuariosController.Crear();
+                                usuariosController.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -901,12 +923,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                UsuariosController.Actualizar();
+                                usuariosController.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                UsuariosController.Eliminar();
+                                usuariosController.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -920,7 +942,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                PerfilController.Crear();
+                                perfil1.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -935,12 +957,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                PerfilController.Actualizar();
+                                perfil1.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                PerfilController.Eliminar();
+                                perfil1.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -954,7 +976,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                PagoController.Crear();
+                                pago.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -969,12 +991,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                PagoController.Actualizar();
+                                pago.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                PagoController.Eliminar();
+                                pago.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -991,7 +1013,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                TipoPersonaController.Crear();
+                                TipoPersona.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1006,12 +1028,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                TipoPersonaController.Actualizar();
+                                TipoPersona.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                TipoPersonaController.Eliminar();
+                                TipoPersona.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1026,7 +1048,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                TipoPagoController.Crear();
+                                tipoPagos.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1041,12 +1063,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                TipoPagoController.Actualizar();
+                                tipoPagos.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                TipoPagoController.Eliminar();
+                                tipoPagos.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1061,7 +1083,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                TipoDocumentoController.Crear();
+                                TipoDocumentos.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1076,12 +1098,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                TipoDocumentoController.Actualizar();
+                                TipoDocumentos.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                TipoDocumentoController.Eliminar();
+                                TipoDocumentos.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1096,7 +1118,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                ProcesoMedicoController.Crear();
+                                procesosMedicos.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1111,12 +1133,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                ProcesoMedicoController.Actualizar();
+                                procesosMedicos.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                ProcesoMedicoController.Eliminar();
+                                procesosMedicos.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1133,7 +1155,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                ReciboIngresoController.Crear();
+                                RecibosIngresos.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1148,12 +1170,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                ReciboIngresoController.Actualizar();
+                                RecibosIngresos.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                ReciboIngresoController.Eliminar();
+                                RecibosIngresos.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1168,7 +1190,7 @@ namespace Core
                         switch (accion)
                         {
                             case "Crear":
-                                PlanDeTratamientoController.Crear();
+                                planTratamiento.Crear();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
@@ -1183,12 +1205,12 @@ namespace Core
                                 Console.ReadKey();
                                 break;
                             case "Actualizar":
-                                PlanDeTratamientoController.Actualizar();
+                                planTratamiento.Actualizar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
                             case "Eliminar":
-                                PlanDeTratamientoController.Eliminar();
+                                planTratamiento.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;

@@ -9,7 +9,7 @@ namespace Core.DTO
     public class ProcesoMedicoEntities
     {
         public int ProcesoMedicoId { get; set; }
-        public int? ProcesoMedicoDescripcion { get; set; }
+        public string ProcesoMedicoDescripcion { get; set; }
         public decimal? ProcesoMedicoPrecio { get; set; }
         public DateTime? ProcesoMedicoFechaCreacion { get; set; }
         public int? ProcesoMedicoIdUsuarioCreador { get; set; }

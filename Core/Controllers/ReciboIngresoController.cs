@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.DTO;
 // Arreglar
 namespace Core.Controllers
 {
@@ -22,7 +25,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {reciboIngreso.ReciboIngreso_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             bool exists = false;
             
@@ -106,20 +109,38 @@ namespace Core.Controllers
 
                 Console.Write("Escribe el Monto: ");
                  monto = Decimal.Parse(Console.ReadLine());
-               
 
-                hospital.ReciboIngreso.Add(new ReciboIngreso()
-                {
+                ReciboIngreso ReciboIngreso = new ReciboIngreso() {
+                    ReciboIngreso_Id = 0,
                     ReciboIngreso_IdPaciente = paciente,
                     ReciboIngreso_IdCajero = cajero,
                     ReciboIngreso_Monto = monto,
-                    ReciboIngreso_IdCuentaDetalle = detallecuenta
-                 
-                });
+                    ReciboIngreso_IdCuentaDetalle = detallecuenta,
+                    ReciboIngreso_FechaCreacion = DateTime.Now,
+                    ReciboIngreso_IdUsuarioCreador = Program.loggerUserID,
+                    ReciboIngreso_Vigencia = true
+                };
+
+                hospital.ReciboIngreso.Add(ReciboIngreso);
 
                 Logger.Info($"Se ha creado un Recibo de ingreso correctamente con el paciente {paciente}");
 
+                ReciboIngresoEntities reciboIngresoEntities = new ReciboIngresoEntities() {
+                    ReciboIngresoId = ReciboIngreso.ReciboIngreso_Id,
+                    ReciboIngresoIdPaciente = ReciboIngreso.ReciboIngreso_IdPaciente,
+                    ReciboIngresoIdCajero = ReciboIngreso.ReciboIngreso_IdCajero,
+                    ReciboIngresoMonto = ReciboIngreso.ReciboIngreso_Monto,
+                    ReciboIngresoIdCuentaDetalle = ReciboIngreso.ReciboIngreso_IdCuentaDetalle,
+                    ReciboIngresoFechaCreacion = ReciboIngreso.ReciboIngreso_FechaCreacion,
+                    ReciboIngresoIdUsuarioCreador = ReciboIngreso.ReciboIngreso_IdUsuarioCreador,
+                    ReciboIngresoVigencia = true,
+                    EntidadId = 16
+                };
+
                 hospital.SaveChanges();
+
+                await SendMessageQueue(reciboIngresoEntities);
+                Logger.Info($"El Recibo de ingreso del paciente {reciboIngresoEntities.ReciboIngresoIdPaciente} creada por el cajero {reciboIngresoEntities.ReciboIngresoIdCajero} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -176,7 +197,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             string cajero,paciente;
@@ -263,11 +284,29 @@ namespace Core.Controllers
             nuevoReciboIngreso.ReciboIngreso_Monto = monto;
             nuevoReciboIngreso.ReciboIngreso_IdCuentaDetalle = detallecuenta;
 
+
+            ReciboIngresoEntities reciboIngresoEntities = new ReciboIngresoEntities()
+            {
+                ReciboIngresoId = nuevoReciboIngreso.ReciboIngreso_Id,
+                ReciboIngresoIdPaciente = nuevoReciboIngreso.ReciboIngreso_IdPaciente,
+                ReciboIngresoIdCajero = nuevoReciboIngreso.ReciboIngreso_IdCajero,
+                ReciboIngresoMonto = nuevoReciboIngreso.ReciboIngreso_Monto,
+                ReciboIngresoIdCuentaDetalle = nuevoReciboIngreso.ReciboIngreso_IdCuentaDetalle,
+                ReciboIngresoFechaCreacion = nuevoReciboIngreso.ReciboIngreso_FechaCreacion,
+                ReciboIngresoIdUsuarioCreador = nuevoReciboIngreso.ReciboIngreso_IdUsuarioCreador,
+                ReciboIngresoVigencia = true,
+                EntidadId = 16
+            };
+
             Logger.Info($"El recibo de ingreso con la identifiacion{reciboIngresoId} ha sido actualizado.");
 
             hospital.SaveChanges();
+
+
+            await SendMessageQueue(reciboIngresoEntities);
+            Logger.Info($"El Recibo de ingreso del paciente {reciboIngresoEntities.ReciboIngresoIdPaciente} creada por el cajero {reciboIngresoEntities.ReciboIngresoIdCajero} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -295,16 +334,33 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                
 
-                hospital.ReciboIngreso.Remove(hospital.ReciboIngreso.Where(
-                        recibo => recibo.ReciboIngreso_Id == reciboIngresoId
-                    ).First()
-                );
+
+                ReciboIngreso nuevoReciboIngreso = hospital.ReciboIngreso.Where(
+                         recibo => recibo.ReciboIngreso_Id == reciboIngresoId
+                     ).First();
+
+                nuevoReciboIngreso.ReciboIngreso_Vigencia = false;
+
+                ReciboIngresoEntities reciboIngresoEntities = new ReciboIngresoEntities()
+                {
+                    ReciboIngresoId = nuevoReciboIngreso.ReciboIngreso_Id,
+                    ReciboIngresoIdPaciente = nuevoReciboIngreso.ReciboIngreso_IdPaciente,
+                    ReciboIngresoIdCajero = nuevoReciboIngreso.ReciboIngreso_IdCajero,
+                    ReciboIngresoMonto = nuevoReciboIngreso.ReciboIngreso_Monto,
+                    ReciboIngresoIdCuentaDetalle = nuevoReciboIngreso.ReciboIngreso_IdCuentaDetalle,
+                    ReciboIngresoFechaCreacion = nuevoReciboIngreso.ReciboIngreso_FechaCreacion,
+                    ReciboIngresoIdUsuarioCreador = nuevoReciboIngreso.ReciboIngreso_IdUsuarioCreador,
+                    ReciboIngresoVigencia = nuevoReciboIngreso.ReciboIngreso_Vigencia,
+                    EntidadId = 16
+                };
 
                 hospital.SaveChanges();
 
                Logger.Info($"El recibo de ingreso con la identificacion{reciboIngresoId}  ha sido eliminado");
+
+                await SendMessageQueue(reciboIngresoEntities);
+                Logger.Info($"El Recibo de ingreso del paciente {reciboIngresoEntities.ReciboIngresoIdPaciente} creada por el cajero {reciboIngresoEntities.ReciboIngresoIdCajero} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -312,5 +368,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(ReciboIngresoEntities ReciboingresoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(ReciboingresoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

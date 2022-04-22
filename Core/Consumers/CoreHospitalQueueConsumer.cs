@@ -32,16 +32,14 @@ namespace Core.Consumers
             queueClient = new QueueClient(serviceBusConnection, "corehospitalqueue");
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync()
         {
-            Console.WriteLine("############## Starting Consumer - CoreHospital ####################");
             ProcessMessageHandler();
             return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("############## Stopping Consumer - CoreHospital ####################");
             await queueClient.CloseAsync();
             await Task.CompletedTask;
         }
@@ -59,10 +57,6 @@ namespace Core.Consumers
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
-            Console.WriteLine("### Processing Message - Queue ###");
-            Console.WriteLine($"{DateTime.Now}");
-            Console.WriteLine($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
-
             PlanDeTratamiento planTratamiento = JsonConvert.DeserializeObject<PlanDeTratamiento>((message.Body).ToString());
             hospital.PlanDeTratamiento.Add(planTratamiento);
             //LOG
@@ -73,13 +67,9 @@ namespace Core.Consumers
 
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
-            Console.WriteLine($"Message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
             var context = exceptionReceivedEventArgs.ExceptionReceivedContext;
-            Console.WriteLine("Exception context for troubleshooting:");
-            Console.WriteLine($"- Endpoint: {context.Endpoint}");
-            Console.WriteLine($"- Entity Path: {context.EntityPath}");
-            Console.WriteLine($"- Executing Action: {context.Action}");
-            //LOG
+            var Logger = NLog.LogManager.GetCurrentClassLogger();
+            Logger.Info($"- Endpoint: {context.Endpoint}  - Entity Path: { context.EntityPath} Executing Action: {context.Action} Message handler encountered an exception {exceptionReceivedEventArgs.Exception}");
             return Task.CompletedTask;
         }
     }

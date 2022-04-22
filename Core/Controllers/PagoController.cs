@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +11,17 @@ namespace Core.Controllers
 { 
     internal class PagoController
     {
-        
+        public static PagoController Instancia = null;
+        public static PagoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new PagoController();
+            }
+
+            return Instancia;
+        }
+
         static hospitalEntities hospital = new hospitalEntities();
 
         public static void MostrarInformacion(Pago pago)
@@ -27,7 +40,7 @@ namespace Core.Controllers
 
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -39,9 +52,6 @@ namespace Core.Controllers
                 
                 int tipopago, IdUsuarioCreador,cuenta;
                 string persona;
-                
-
-          
 
                 do
                 {
@@ -129,22 +139,42 @@ namespace Core.Controllers
                 Console.Write("Escribe el monto: ");
                 float monto = float.Parse(Console.ReadLine());
 
-
-                hospital.Pago.Add(new Pago()
-                {
+                Pago pago = new Pago()
+                {   Pago_Id = 0,
                     Pago_IdPersona = persona,
                     Pago_IdCuenta = cuenta,
                     Pago_Referencia = referencia,
                     Pago_Monto = monto,
                     Pago_TipoPago = tipopago,
+                    Pago_FechaCreacion = DateTime.Now,
+                    Pago_Vigencia = true,
                     Pago_IdUsuarioCreador = IdUsuarioCreador,
                     Pago_IdCaja = caja
+                    
+                };
+                hospital.Pago.Add(pago);
 
-                });
+                PagoEntities pagoEntities = new PagoEntities() {
+                    PagoId = pago.Pago_Id,
+                    PagoIdPersona = pago.Pago_IdPersona,
+                    PagoIdCuenta = pago.Pago_IdCuenta,
+                    PagoReferencia = pago.Pago_Referencia,
+                    PagoMonto = Convert.ToDecimal(pago.Pago_Monto),
+                    PagoTipoPago = pago.Pago_TipoPago,
+                    PagoFechaCreacion = pago.Pago_FechaCreacion,
+                    PagoVigencia = true,
+                    PagoIdUsuarioCreador = pago.Pago_IdUsuarioCreador,
+                    CajaId = pago.Pago_IdCaja,
+                    EntidadId = 11
+                };
+
 
                 Logger.Info($"Se ha creado la Pago correctamente");
 
                 hospital.SaveChanges();
+
+                await SendMessageQueue(pagoEntities);
+                Logger.Info($"El pago {pagoEntities.PagoReferencia} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -206,7 +236,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int cuenta,tipopago, IdUsuarioCreador,idPago;
@@ -354,13 +384,29 @@ namespace Core.Controllers
             nuevoPago.Pago_IdUsuarioCreador = IdUsuarioCreador;
             nuevoPago.Pago_IdCaja = caja;
 
-
+            PagoEntities pagoEntities = new PagoEntities()
+            {
+                PagoId = nuevoPago.Pago_Id,
+                PagoIdPersona = nuevoPago.Pago_IdPersona,
+                PagoIdCuenta = nuevoPago.Pago_IdCuenta,
+                PagoReferencia = nuevoPago.Pago_Referencia,
+                PagoMonto = Convert.ToDecimal(nuevoPago.Pago_Monto),
+                PagoTipoPago = nuevoPago.Pago_TipoPago,
+                PagoFechaCreacion = nuevoPago.Pago_FechaCreacion,
+                PagoVigencia = true,
+                PagoIdUsuarioCreador = nuevoPago.Pago_IdUsuarioCreador,
+                CajaId = nuevoPago.Pago_IdCaja,
+                EntidadId = 11
+            };
 
             Logger.Info($"El Pago con el ID: {idPago} ha sido actualizado.");
 
             hospital.SaveChanges();
+
+            await SendMessageQueue(pagoEntities);
+            Logger.Info($"El pago {pagoEntities.PagoReferencia} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -374,9 +420,6 @@ namespace Core.Controllers
                 {
                     Console.Write("Escribe el ID del pago a actualizar: ");
                     idPago = Int32.Parse(Console.ReadLine());
-
-
-
 
                     Console.Clear();
 
@@ -392,16 +435,37 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                
 
-                hospital.Pago.Remove(hospital.Pago.Where(
-                       pg => pg.Pago_Id== idPago
-                   ).First()
-               );
+
+                Pago pago = hospital.Pago.Where(
+                       pg => pg.Pago_Id == idPago
+                   ).First();
+
+                pago.Pago_Vigencia = false;
+
+                PagoEntities pagoEntities = new PagoEntities()
+                {
+                    PagoId = pago.Pago_Id,
+                    PagoIdPersona = pago.Pago_IdPersona,
+                    PagoIdCuenta = pago.Pago_IdCuenta,
+                    PagoReferencia = pago.Pago_Referencia,
+                    PagoMonto = Convert.ToDecimal(pago.Pago_Monto),
+                    PagoTipoPago = pago.Pago_TipoPago,
+                    PagoFechaCreacion = pago.Pago_FechaCreacion,
+                    PagoVigencia = pago.Pago_Vigencia,
+                    PagoIdUsuarioCreador = pago.Pago_IdUsuarioCreador,
+                    CajaId = pago.Pago_IdCaja,
+                    EntidadId = 11
+                };
+
 
                 hospital.SaveChanges();
 
                 Logger.Info($"El  Pago con el ID: {idPago} ha sido eliminado.");
+
+
+                await SendMessageQueue(pagoEntities);
+                Logger.Info($"El pago {pagoEntities.PagoReferencia} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -409,5 +473,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+        #region INTEGRACION
+        private async Task SendMessageQueue(PagoEntities pagoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(pagoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
+
     }
 }

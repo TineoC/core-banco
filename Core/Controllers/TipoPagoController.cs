@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +14,17 @@ namespace Core.Controllers
     {
         static hospitalEntities hospital = new hospitalEntities();
 
+        public static TipoPagoController Instancia = null;
+        public static TipoPagoController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new TipoPagoController();
+            }
+
+            return Instancia;
+        }
+
         public static void MostrarInformacion(TipoPago tipoPago)
         {
             Console.WriteLine($"Identificacion del tipo de Persona: {tipoPago.TipoPago_Id}");
@@ -20,7 +34,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: { tipoPago.TipoPago_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -31,18 +45,33 @@ namespace Core.Controllers
                 Console.Write("Escribe la descripcion de tipo de Pago: ");
                 string descripcion = Console.ReadLine();
 
-
-
-                hospital.TipoPago.Add(new TipoPago()
+                TipoPago TipoPago = new TipoPago()
                 {
-                    TipoPago_Descripcion = descripcion
-                });
+                    TipoPago_Id = 0,
+                    TipoPago_Descripcion = descripcion,
+                    TipoPago_FechaCreacion = DateTime.Now,
+                    TipoPago_IdUsuarioCreador = Program.loggerUserID,
+                    TipoPago_Vigencia = true
+                };
+
+                TipoPagoEntities TipoPagoEntities = new TipoPagoEntities()
+                {
+                    TipoPagoId = TipoPago.TipoPago_Id,
+                    TipoPagoDescripcion = TipoPago.TipoPago_Descripcion,
+                    TipoPagoFechaCreacion = TipoPago.TipoPago_FechaCreacion,
+                    TipoPagoIdUsuarioCreador = TipoPago.TipoPago_IdUsuarioCreador,
+                    TipoPagoVigencia = true,
+                    EntidadId = 18
+                };
+
+                hospital.TipoPago.Add(TipoPago);
 
 
                 Logger.Info($"Se ha creado el tipo de Pago correctamente: {descripcion}");
-
-
                 hospital.SaveChanges();
+
+                await SendMessageQueue(TipoPagoEntities);
+                Logger.Info($"El tipo de pago {TipoPagoEntities.TipoPagoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -100,7 +129,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int TipoPago;
@@ -134,12 +163,25 @@ namespace Core.Controllers
 
             nuevoTipoPago.TipoPago_Descripcion = descripcion;
 
+            TipoPagoEntities TipoPagoEntities = new TipoPagoEntities()
+            {
+                TipoPagoId = nuevoTipoPago.TipoPago_Id,
+                TipoPagoDescripcion = nuevoTipoPago.TipoPago_Descripcion,
+                TipoPagoFechaCreacion = nuevoTipoPago.TipoPago_FechaCreacion,
+                TipoPagoIdUsuarioCreador = nuevoTipoPago.TipoPago_IdUsuarioCreador,
+                TipoPagoVigencia = true,
+                EntidadId = 18
+            };
+
 
             Logger.Info($"El tipo de Pago con la identificacion {TipoPago} ha sido actualizado.");
 
             hospital.SaveChanges();
+
+            await SendMessageQueue(TipoPagoEntities);
+            Logger.Info($"El tipo de pago {TipoPagoEntities.TipoPagoDescripcion} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -166,14 +208,29 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.TipoPago.Remove(hospital.TipoPago.Where(
+                TipoPago nuevoTipoPago = hospital.TipoPago.Where(
                         tipoPg => tipoPg.TipoPago_Id == TipoPago
-                    ).First()
-                );
+                    ).First();
+
+                nuevoTipoPago.TipoPago_Vigencia = false;
+
+                TipoPagoEntities TipoPagoEntities = new TipoPagoEntities()
+                {
+                    TipoPagoId = nuevoTipoPago.TipoPago_Id,
+                    TipoPagoDescripcion = nuevoTipoPago.TipoPago_Descripcion,
+                    TipoPagoFechaCreacion = nuevoTipoPago.TipoPago_FechaCreacion,
+                    TipoPagoIdUsuarioCreador = nuevoTipoPago.TipoPago_IdUsuarioCreador,
+                    TipoPagoVigencia = nuevoTipoPago.TipoPago_Vigencia,
+                    EntidadId = 18
+                };
 
                 hospital.SaveChanges();
 
                 Logger.Info($"El tipo de Pago con la identifiacion {TipoPago} ha sido eliminado.");
+
+
+                await SendMessageQueue(TipoPagoEntities);
+                Logger.Info($"El tipo de pago {TipoPagoEntities.TipoPagoDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -181,5 +238,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(TipoPagoEntities TipoPagoEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(TipoPagoEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }

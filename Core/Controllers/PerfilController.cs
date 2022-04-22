@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core.DTO;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +12,18 @@ namespace Core.Controllers
    internal class PerfilController
     {
         static hospitalEntities hospital = new hospitalEntities();
+
+        public static PerfilController Instancia = null;
+        public static PerfilController GetInstance()
+        {
+            if (Instancia == null)
+            {
+                Instancia = new PerfilController();
+            }
+
+            return Instancia;
+        }
+
         public static void MostrarInformacion(Perfil perfil)
         {
             Console.WriteLine($"Identificacion: {perfil.Perfil_Id}");
@@ -18,7 +33,7 @@ namespace Core.Controllers
             Console.WriteLine($"Vigencia: {perfil.Perfil_Vigencia}");
         }
 
-        public static void Crear()
+        public async Task Crear()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -29,16 +44,32 @@ namespace Core.Controllers
                 Console.Write("Escribe la descripcion del perfil: ");
                 string descripcion = Console.ReadLine();
 
+                Perfil perfil = new Perfil() {
+                  Perfil_Id = 0,
+                  Perfil_Descripcion = descripcion,
+                  Perfil_FechaCreacion = DateTime.Now,
+                  Perfil_IdUsuarioCreador= Program.loggerUserID,
+                  Perfil_Vigencia = true
+                };
 
 
-                hospital.Perfil.Add(new Perfil()
-                {
-                    Perfil_Descripcion = descripcion
-                }); ;
+                hospital.Perfil.Add(perfil);
+
+                PerfilEntities perfilEntities = new PerfilEntities()
+                { PerfilId = perfil.Perfil_Id,
+                  PerfilDescripcion = perfil.Perfil_Descripcion,
+                  PerfilFechaCreacion = perfil.Perfil_FechaCreacion,
+                  PerfilIdUsuarioCreador = perfil.Perfil_IdUsuarioCreador,
+                  PerfilVigencia = true,
+                  EntidadId = 12
+                };
 
                 Logger.Info($"Se ha creado la Perfil correctamente con lal descripcion {descripcion}");
 
                 hospital.SaveChanges();
+
+                await SendMessageQueue(perfilEntities);
+                Logger.Info($"El perfil {perfilEntities.PerfilDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -93,7 +124,7 @@ namespace Core.Controllers
                 index++;
             }
         }
-        public static void Actualizar()
+        public async Task Actualizar()
         {
             bool exists = false;
             int perfilid;
@@ -126,13 +157,24 @@ namespace Core.Controllers
                 ).First();
 
             nuevoPerfil.Perfil_Descripcion = descripcion;
-       
+
+            PerfilEntities perfilEntities = new PerfilEntities()
+            {   PerfilId = nuevoPerfil.Perfil_Id,
+                PerfilDescripcion = nuevoPerfil.Perfil_Descripcion,
+                PerfilFechaCreacion = nuevoPerfil.Perfil_FechaCreacion,
+                PerfilIdUsuarioCreador = nuevoPerfil.Perfil_IdUsuarioCreador,
+                PerfilVigencia = true,
+                EntidadId = 12
+            };
+
 
             Logger.Info($"La Perfil con el ID {perfilid} ha sido actualizado.");
-
             hospital.SaveChanges();
+
+            await SendMessageQueue(perfilEntities);
+            Logger.Info($"El perfil {perfilEntities.PerfilDescripcion} se ha enviado correctamente");
         }
-        public static void Eliminar()
+        public async Task Eliminar()
         {
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -159,14 +201,28 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.Perfil.Remove(hospital.Perfil.Where(
-                        pers => pers.Perfil_Id == perfilid
-                    ).First()
-                );
+                Perfil nuevoPerfil = hospital.Perfil.Where(
+                         pers => pers.Perfil_Id == perfilid
+                     ).First();
+
+                nuevoPerfil.Perfil_Vigencia = false;
+
+                PerfilEntities perfilEntities = new PerfilEntities()
+                {
+                    PerfilId = nuevoPerfil.Perfil_Id,
+                    PerfilDescripcion = nuevoPerfil.Perfil_Descripcion,
+                    PerfilFechaCreacion = nuevoPerfil.Perfil_FechaCreacion,
+                    PerfilIdUsuarioCreador = nuevoPerfil.Perfil_IdUsuarioCreador,
+                    PerfilVigencia = nuevoPerfil.Perfil_Vigencia,
+                    EntidadId = 12
+                };
+
 
                 hospital.SaveChanges();
-
                 Logger.Info($"El Perfil con el ID: {perfilid} ha sido eliminado.");
+
+                await SendMessageQueue(perfilEntities);
+                Logger.Info($"El perfil {perfilEntities.PerfilDescripcion} se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -174,5 +230,20 @@ namespace Core.Controllers
                 throw;
             }
         }
+
+        #region INTEGRACION
+        private async Task SendMessageQueue(PerfilEntities PerfilEntities)
+        {
+
+            string queueName = "core";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["AzureServiceBus"].ConnectionString;
+            var client = new QueueClient(connectionString, queueName, ReceiveMode.PeekLock);
+            string messageBody = JsonConvert.SerializeObject(PerfilEntities);
+            var message = new Message(Encoding.UTF8.GetBytes(messageBody));
+
+            await client.SendAsync(message);
+            await client.CloseAsync();
+        }
+        #endregion
     }
 }
