@@ -32,7 +32,6 @@ namespace Core.Controllers
             Console.WriteLine($"ID del medico: {planDeTratamiento.PlanDeTratamiento_IdMedico}");
             Console.WriteLine($"Causa del tratamineto: {planDeTratamiento.PlanDeTratamiento_Causa}");
             Console.WriteLine($"Resultado: {planDeTratamiento.PlanDeTratamiento_Resultado}");
-            Console.WriteLine($"Imagen: {planDeTratamiento.PlanDeTratamiento_Imagen}");
             Console.WriteLine($"Fecha de Creacion: {planDeTratamiento.PlanDeTratamiento_FechaCreacion}");
             Console.WriteLine($"Id Usuario Creador: {planDeTratamiento.PlanDeTratamiento_IdUsuarioCreador}");
             Console.WriteLine($"Vigencia: {planDeTratamiento.PlanDeTratamiento_Vigencia}");
@@ -59,7 +58,7 @@ namespace Core.Controllers
 
                     Console.Clear();
 
-                    exists = hospital.Persona.Any(plan => plan.Persona_Documento == medico); //??
+                    exists = hospital.Persona.Any(plan => plan.Persona_Documento == medico);
 
                     if (!exists)
                     {
@@ -119,16 +118,23 @@ namespace Core.Controllers
                 int autorizacion = Int32.Parse(Console.ReadLine());
 
                 PlanDeTratamiento PlanDeTratamiento = new PlanDeTratamiento() {
-                    PlanDeTratamiento_Id = 0,
                     PlanDeTratamiento_IdProcedimiento = prodemiento,
                     PlanDeTratamiento_NoAutorizacion = autorizacion,
                     PlanDeTratamiento_IdPaciente = paciente,
                     PlanDeTratamiento_IdMedico = medico,
                     PlanDeTratamiento_Causa = causa,
-                    PlanDeTratamiento_Resultado = resultado
+                    PlanDeTratamiento_Resultado = resultado,
+                    PlanDeTratamiento_FechaCreacion = DateTime.Now,
+                    PlanDeTratamiento_IdUsuarioCreador = Program.loggerUserID,
+                    PlanDeTratamiento_Vigencia = true
                 };
 
                 hospital.PlanDeTratamiento.Add(PlanDeTratamiento);
+
+                Logger.Info($"Se ha creado el  plan de tratamiento correctamente con el paciente :{paciente}");
+                Console.WriteLine("Se ha creado el  plan de tratamiento correctamente.");
+
+                hospital.SaveChanges();
 
                 PlanTratamientoVigenciaEntities planDeTratamientoEntities = new PlanTratamientoVigenciaEntities() {
                     PlanDeTratamientoId = PlanDeTratamiento.PlanDeTratamiento_Id,
@@ -144,12 +150,9 @@ namespace Core.Controllers
                     EntidadId = 14
                 };
 
-                Logger.Info($"Se ha creado el  plan de tratamiento correctamente con el paciente :{paciente}");
-
-                hospital.SaveChanges();
+                
                 await SendMessageQueue(planDeTratamientoEntities);
                 Logger.Info($"El plan de tratamiento de numero de autorizacion {planDeTratamientoEntities.PlanDeTratamientoNoAutorizacion} se ha enviado correctamente");
-
             }
             catch (Exception e)
             {
@@ -174,6 +177,7 @@ namespace Core.Controllers
 
                 if (!exists)
                 {
+                    Logger.Error($"No existe un  plan de tratamientos con esa Identificacion: {PlanTratamiento}.");
                     Console.WriteLine("No existe un  plan de tratamientos con esa identificacion");
 
                     Console.Write("Press any key to continue...");
