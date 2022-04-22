@@ -59,8 +59,29 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe el ID de Caja: ");
-                int idCaja = Int32.Parse(Console.ReadLine());
+                int idCaja;
+                bool exists;
+
+                do
+                {
+
+
+                    Console.Write("Escribe el ID de Caja: ");
+                    idCaja = Int32.Parse(Console.ReadLine());
+
+                    Console.Clear();
+
+                    exists = hospital.Caja.Any(caja => caja.Caja_Id == idCaja);
+
+                    if (!exists)
+                    {
+                        Logger.Error($"No existe niguna Caja con ese ID: {idCaja}");
+                        Console.WriteLine("No existe niguna Caja con ese ID");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (!exists);
 
                 Console.Write("Cantidad Dos Mil Pesos: ");
                 int dosMilPesos = Int32.Parse(Console.ReadLine());
@@ -92,8 +113,7 @@ namespace Core.Controllers
                 Console.Write("Cantidad Un Peso: ");
                 int unPeso = Int32.Parse(Console.ReadLine());
 
-                Console.Write("Total Efectivo: ");
-                int totalEfectivo = Int32.Parse(Console.ReadLine());
+                int totalEfectivo = dosMilPesos * 2000 + milPesos * 1000 + quinientosPesos * 500 + doscientosPesos * 200 + cienPesos * 100 + cincuentaPesos * 50 + venticincoPesos * 25 + diezPesos * 10 + cincoPesos * 5 + unPeso;
 
                 Console.Write("Total Crédito: ");
                 Decimal totalCredito = Decimal.Parse(Console.ReadLine());
@@ -110,8 +130,8 @@ namespace Core.Controllers
                 Console.Write("Total Cheques: ");
                 Decimal totalCheques = Decimal.Parse(Console.ReadLine());
 
-                Console.Write("Total General: ");
-                Decimal totalGeneral = Decimal.Parse(Console.ReadLine());
+                Decimal totalGeneral = totalEfectivo + totalCredito + totalTarjeta + totalDeposito + totalCheques;
+
 
                 AperturaYCierreDeCaja aperturaYCierreDeCaja = new AperturaYCierreDeCaja() {
 
@@ -170,11 +190,12 @@ namespace Core.Controllers
                 hospital.AperturaYCierreDeCaja.Add(aperturaYCierreDeCaja);
 
                 Logger.Info($"Se ha creado la Apertura o Cierre de Caja correctamente");
+                Console.WriteLine($"Se ha creado la Apertura o Cierre de Caja correctamente");
 
                 hospital.SaveChanges();
 
                 await SendMessageQueue(aperturaYCierreDeCajaEntities);
-                Logger.Info($"La apertura y cierra de caja  se ha enviado correctamente");
+                Logger.Info($"La apertura y cierra de caja se ha enviado correctamente");
             }
             catch (Exception e)
             {
@@ -227,6 +248,9 @@ namespace Core.Controllers
 
                 MostrarInformacion(aperturaYCierreDeCaja);
 
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+
                 index++;
             }
         }
@@ -248,6 +272,7 @@ namespace Core.Controllers
 
                 if (!exists)
                 {
+                    Logger.Error($"No existen Aperturas o Cierres de Caja con ese ID: {id}");
                     Console.WriteLine("No existen Aperturas o Cierres de Caja con ese id");
 
                     Console.Write("Press any key to continue...");
@@ -288,8 +313,7 @@ namespace Core.Controllers
             Console.Write("Cantidad Un Peso: (actualizado)");
             int unPeso = Int32.Parse(Console.ReadLine());
 
-            Console.Write("Total Efectivo: (actualizado)");
-            int totalEfectivo = Int32.Parse(Console.ReadLine());
+            int totalEfectivo = dosMilPesos * 2000 + milPesos * 1000 + quinientosPesos * 500 + doscientosPesos * 200 + cienPesos * 100 + cincuentaPesos * 50 + venticincoPesos * 25 + diezPesos * 10 + cincoPesos * 5 + unPeso;
 
             Console.Write("Total Crédito: (actualizado)");
             Decimal totalCredito = Decimal.Parse(Console.ReadLine());
@@ -306,8 +330,7 @@ namespace Core.Controllers
             Console.Write("Total Cheques: (actualizado)");
             Decimal totalCheques = Decimal.Parse(Console.ReadLine());
 
-            Console.Write("Total General: (actualizado)");
-            Decimal totalGeneral = Decimal.Parse(Console.ReadLine());
+            Decimal totalGeneral = totalEfectivo + totalCredito + totalTarjeta + totalDeposito + totalCheques;
 
             AperturaYCierreDeCaja aperturaYCierreDeCaja = hospital.AperturaYCierreDeCaja
                 .Where(
@@ -366,9 +389,9 @@ namespace Core.Controllers
             };
 
             Logger.Info($"Se ha actualizado la Apertura o Cierre de Caja correctamente.");
+            Console.WriteLine($"Se ha actualizado la Apertura o Cierre de Caja correctamente.");
 
             hospital.SaveChanges();
-
 
             await SendMessageQueue(aperturaYCierreDeCajaEntities);
             Logger.Info($"La apertura y cierra de caja  se ha enviado correctamente");
