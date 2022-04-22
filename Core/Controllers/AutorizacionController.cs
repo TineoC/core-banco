@@ -60,6 +60,7 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
+                        Logger.Error("No existen Aseguradoras con ese id");
                         Console.WriteLine("No existen Aseguradoras con ese id");
 
                         Console.Write("Press any key to continue...");
@@ -78,6 +79,7 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
+                        Logger.Error("No existen Procesos con ese id");
                         Console.WriteLine("No existen Procesos con ese id");
 
                         Console.Write("Press any key to continue...");
@@ -86,8 +88,22 @@ namespace Core.Controllers
 
                 } while (!exists);
 
-                Console.Write("Escribe el precio de la autorización: ");
-                Decimal precio = Decimal.Parse(Console.ReadLine());
+                Decimal precio;
+
+                do
+                {
+                    Console.Write("Escribe el precio de la autorización: ");
+                    precio = Decimal.Parse(Console.ReadLine());
+
+                    if(precio <= 0)
+                    {
+                        Console.WriteLine("El precio no puede ser menor o igual a cero");
+                        Logger.Error("El precio no puede ser menor o igual a cero");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (precio <= 0);
 
                 Decimal cobertura;
 
@@ -97,14 +113,14 @@ namespace Core.Controllers
                     cobertura = Decimal.Parse(Console.ReadLine());
                     Console.Clear();
 
-                    if (cobertura >= precio)
+                    if (cobertura > precio)
                     {
-                        Console.WriteLine("La cobertura no peude ser mayor al precio.");
+                        Console.WriteLine("La cobertura no puede ser mayor al precio.");
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                     }
 
-                } while (cobertura >= precio);
+                } while (cobertura > precio);
 
                 Decimal diferencia = precio - cobertura;
 
@@ -124,6 +140,12 @@ namespace Core.Controllers
                     Autorizacion_NoAutorizacion = numeroAutorizacion
                 };
 
+                hospital.Autorizacion.Add(autorizacion);
+                hospital.SaveChanges();
+
+                Logger.Info($"Se ha creado la Autorización correctamente");
+                Console.WriteLine($"Se ha creado la Autorización No. {numeroAutorizacion} correctamente");
+
                 AutorizacionEntities autorizacionEntities = new AutorizacionEntities()
                 {
                     AutorizacionIdAseguradora = autorizacion.Autorizacion_IdAseguradora,
@@ -137,10 +159,7 @@ namespace Core.Controllers
                     AutorizacionNoAutorizacion = autorizacion.Autorizacion_NoAutorizacion,
                     EntidadId = 3
                 };
-                hospital.Autorizacion.Add(autorizacion);
-                hospital.SaveChanges();
-
-                Logger.Info($"Se ha creado la Autorización correctamente");
+                
                 await SendMessageQueue(autorizacionEntities);
                 Logger.Info($"La autorización de numero autorización {autorizacionEntities.AutorizacionNoAutorizacion} se ha enviado correctamente");
 
@@ -284,8 +303,22 @@ namespace Core.Controllers
 
                 } while (!exists);
 
-                Console.Write("Escribe el precio de la autorización: (actualizado) ");
-                Decimal precio = Decimal.Parse(Console.ReadLine());
+                Decimal precio;
+
+                do
+                {
+                    Console.Write("Escribe el precio de la autorización (actualizado): ");
+                    precio = Decimal.Parse(Console.ReadLine());
+
+                    if (precio <= 0)
+                    {
+                        Console.WriteLine("El precio no puede ser menor o igual a cero");
+                        Logger.Error("El precio no puede ser menor o igual a cero");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (precio <= 0);
 
                 Decimal cobertura;
 
@@ -295,14 +328,14 @@ namespace Core.Controllers
                     cobertura = Decimal.Parse(Console.ReadLine());
                     Console.Clear();
 
-                    if (cobertura >= precio)
+                    if (cobertura > precio)
                     {
-                        Console.WriteLine("La cobertura no peude ser mayor al precio.");
+                        Console.WriteLine("La cobertura no puede ser mayor al precio.");
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                     }
 
-                } while (cobertura >= precio);
+                } while (cobertura > precio);
 
                 Decimal diferencia = precio - cobertura;
 
