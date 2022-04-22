@@ -19,6 +19,6 @@ namespace Core.DTO
         public DateTime? PlanDeTratamientoFechaCreacion { get; set; }
         public int? PlanDeTratamientoIdUsuarioCreador { get; set; }
         public bool? PlanDeTratamientoVigencia { get; set; }
-        public int EntidadId = 14;
+        public int EntidadId { get; set; }
     }
 }

@@ -76,14 +76,14 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
-                        Console.WriteLine("No existe ningún Usuario con ese id");
+                        Console.WriteLine("No existe ninguna Caja con ese ID");
 
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                     }
                 } while (!exists);
 
-                Caja_Usuario cajauUsuario = new Caja_Usuario()
+                Caja_Usuario cajaUsuario = new Caja_Usuario()
                 {
                     Caja_Usuario_IdUsuario = idUsuario,
                     Caja_Usuario_IdCaja = idCaja,
@@ -91,20 +91,23 @@ namespace Core.Controllers
                     Caja_Usuario_IdUsuario_IdUsuarioCreador = Program.loggerUserID,
                     Caja_Usuario_IdUsuario_Vigencia = true
                 };
-                hospital.Caja_Usuario.Add(cajauUsuario);
+
+                hospital.Caja_Usuario.Add(cajaUsuario);
+
+                hospital.SaveChanges();
+                Logger.Info($"Se ha creado el Usuario de Caja correctamente");
+                Console.WriteLine("Se ha creado el Usuario de Caja correctamente");
 
                 CajaUsuarioEntities cajauUsuarioEntities = new CajaUsuarioEntities()
                 {
-                    CajaUsuarioIdUsuario = cajauUsuario.Caja_Usuario_IdUsuario,
-                    CajaUsuarioIdCaja = cajauUsuario.Caja_Usuario_IdCaja,
-                    CajaUsuarioIdUsuarioFechaCreacion = cajauUsuario.Caja_Usuario_IdUsuario_FechaCreacion,
-                    CajaUsuarioIdUsuarioIdUsuarioCreador = cajauUsuario.Caja_Usuario_IdUsuario_IdUsuarioCreador,
+                    CajaUsuarioIdUsuario = cajaUsuario.Caja_Usuario_IdUsuario,
+                    CajaUsuarioIdCaja = cajaUsuario.Caja_Usuario_IdCaja,
+                    CajaUsuarioIdUsuarioFechaCreacion = cajaUsuario.Caja_Usuario_IdUsuario_FechaCreacion,
+                    CajaUsuarioIdUsuarioIdUsuarioCreador = cajaUsuario.Caja_Usuario_IdUsuario_IdUsuarioCreador,
                     CajaUsuarioIdUsuarioVigencia = true,
                     EntidadId = 5
                 };
 
-                hospital.SaveChanges();
-                Logger.Info($"Se ha creado el Usuario de Caja correctamente");
                 await SendMessageQueue(cajauUsuarioEntities);
                 Logger.Info($"El usuario se ha enviado correctamente");
             }
@@ -196,6 +199,9 @@ namespace Core.Controllers
                     Console.WriteLine($"Caja: #{index}");
 
                     MostrarInformacion(usuarioCaja);
+
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
 
                     Logger.Info($"Se ha mostrado el usuario de Caja #{index}");
 
@@ -320,7 +326,6 @@ namespace Core.Controllers
                     CajaUsuarioIdUsuarioVigencia = true,
                     EntidadId = 5
                 };
-
 
                 hospital.SaveChanges();
 

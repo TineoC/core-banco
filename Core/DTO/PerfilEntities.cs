@@ -13,6 +13,6 @@ namespace Core.DTO
         public DateTime? PerfilFechaCreacion { get; set; }
         public int? PerfilIdUsuarioCreador { get; set; }
         public bool? PerfilVigencia { get; set; }
-        public int EntidadId = 12;
+        public int EntidadId { get; set; }
     }
 }

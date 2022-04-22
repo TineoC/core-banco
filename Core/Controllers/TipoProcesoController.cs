@@ -27,7 +27,7 @@ namespace Core.Controllers
 
         public static void MostrarInformacion(TipoProceso tipoproceso)
         {
-            Console.WriteLine($"Identificacion del tipo de proceso: {tipoproceso.TipoProceso_Id}");
+            Console.WriteLine($"ID del tipo de proceso: {tipoproceso.TipoProceso_Id}");
             Console.WriteLine($"Descripcion del tipo de proceso: {tipoproceso.TipoProceso_Descripcion}");
             Console.WriteLine($"Fecha de creacion: { tipoproceso.TipoProceso_FechaCreacion}");
             Console.WriteLine($"Id Usuario Creador: { tipoproceso.TipoProceso_IdUsuarioCreador}");
@@ -46,8 +46,6 @@ namespace Core.Controllers
                 string descripcion;
                 do
                 {
-
-
                     Console.Write("Escribe la descripcion de tipo de proceso: ");
                     descripcion = Console.ReadLine();
 
@@ -57,6 +55,7 @@ namespace Core.Controllers
 
                     if (exists)
                     {
+                        Logger.Error($"Existe un tipo de proceso con esa Descripcion: {descripcion}");
                         Console.WriteLine("Existe un tipo de proceso con esa descripcion");
 
                         Console.WriteLine("Press any key to continue...");
@@ -104,12 +103,12 @@ namespace Core.Controllers
 
             do
             {
-                Console.Write("Escribe la identificacion del tipo de proceso: ");
+                Console.Write("Escribe el ID del tipo de proceso: ");
                 TipoProceso = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
 
-                exists = hospital.TipoProceso.Any(tipopro => tipopro.TipoProceso_Id == TipoProceso);
+                exists = hospital.TipoProceso.Any(tipo => tipo.TipoProceso_Id == TipoProceso);
 
                 if (!exists)
                 {
@@ -124,7 +123,7 @@ namespace Core.Controllers
 
             TipoProceso tipoproceso = hospital.TipoProceso
                             .Where(
-                                tipopro => tipopro.TipoProceso_Id == TipoProceso
+                                tipo => tipo.TipoProceso_Id == TipoProceso
                             )
                             .FirstOrDefault();
 
@@ -160,11 +159,12 @@ namespace Core.Controllers
 
                 Console.Clear();
 
-                exists = hospital.TipoProceso.Any(tipopro => tipopro.TipoProceso_Id == TipoProceso);
+                exists = hospital.TipoProceso.Any(tipo => tipo.TipoProceso_Id == TipoProceso);
 
                 if (!exists)
                 {
-                    Console.WriteLine("No existen tipos de procesos con esa identificacion");
+                    Logger.Error("No existen tipos de procesos con ese ID");
+                    Console.WriteLine("No existen tipos de procesos con ese ID");
 
                     Console.Write("Press any key to continue...");
                     Console.ReadKey();
@@ -179,7 +179,7 @@ namespace Core.Controllers
 
                 Console.Clear();
 
-                exists = hospital.TipoProceso.Any(tipopro => tipopro.TipoProceso_Descripcion == descripcion);
+                exists = hospital.TipoProceso.Any(tipo => tipo.TipoProceso_Descripcion == descripcion);
 
                 if (exists)
                 {
@@ -191,7 +191,7 @@ namespace Core.Controllers
             } while (exists);
 
             TipoProceso nuevoTipoProceso = hospital.TipoProceso.Where(
-                    tipopro => tipopro.TipoProceso_Id == TipoProceso
+                    tipo => tipo.TipoProceso_Id == TipoProceso
                 ).First();
 
             nuevoTipoProceso.TipoProceso_Descripcion = descripcion;
@@ -231,7 +231,7 @@ namespace Core.Controllers
 
                     Console.Clear();
 
-                    exists = hospital.TipoProceso.Any(tipopro => tipopro.TipoProceso_Id == TipoProceso);
+                    exists = hospital.TipoProceso.Any(tipo => tipo.TipoProceso_Id == TipoProceso);
 
                     if (!exists)
                     {
@@ -243,7 +243,7 @@ namespace Core.Controllers
                 } while (!exists);
 
                 TipoProceso TipoProcesoEliminar = hospital.TipoProceso.Where(
-                        tipopro => tipopro.TipoProceso_Id == TipoProceso
+                        tipo => tipo.TipoProceso_Id == TipoProceso
                     ).First();
 
                 TipoProcesoEliminar.TipoProceso_Vigencia = false;

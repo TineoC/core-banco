@@ -13,6 +13,6 @@ namespace Core.DTO
         public DateTime? TipoProcesoFechaCreacion { get; set; }
         public int? TipoProcesoIdUsuarioCreador { get; set; }
         public bool? TipoProcesoVigencia { get; set; }
-        public int EntidadId = 20;
+        public int EntidadId { get; set; }
     }
 }

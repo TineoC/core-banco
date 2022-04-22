@@ -16,6 +16,6 @@ namespace Core.DTO
         public bool? CuentaFacturaVigencia { get; set; }
         public int LastFacturaId { get; set; }
         public int LastCuentaId { get; set; }
-        public int EntidadId = 7;
+        public int EntidadId { get; set; }
     }
 }

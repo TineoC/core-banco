@@ -13,6 +13,6 @@ namespace Core.DTO
         public DateTime? AseguradoraFechaCreacion { get; set; }
         public int? AseguradoraIdUsuarioCreador { get; set; }
         public bool? AseguradoraVigencia { get; set; }
-        public int EntidadId = 2;
+        public int EntidadId { get; set; }
     }
 }

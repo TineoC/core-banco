@@ -14,6 +14,6 @@ namespace Core.DTO
         public DateTime? TipoPagoFechaCreacion { get; set; }
         public int? TipoPagoIdUsuarioCreador { get; set; }
         public bool? TipoPagoVigencia { get; set; }
-        public int EntidadId = 18;
+        public int EntidadId { get; set; }
     }
 }

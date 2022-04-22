@@ -15,6 +15,6 @@ namespace Core.DTO
         public int? ProcesoMedicoIdUsuarioCreador { get; set; }
         public bool? ProcesoMedicoVigencia { get; set; }
         public int? ProcesoMedicoIdTipoProceso { get; set; }
-        public int EntidadId = 15;
+        public int EntidadId { get; set; }
     }
 }

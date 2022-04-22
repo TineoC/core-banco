@@ -14,6 +14,6 @@ namespace Core.DTO
         public DateTime? CuentaFechaCreacion { get; set; }
         public int? CuentaIdUsuarioCreador { get; set; }
         public bool? CuentaVigencia { get; set; }
-        public int EntidadId = 6;
+        public int EntidadId { get; set; }
     }
 }

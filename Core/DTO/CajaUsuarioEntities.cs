@@ -15,6 +15,6 @@ namespace Core.DTO
         public bool? CajaUsuarioIdUsuarioVigencia { get; set; }
         public int LastCajaUsuarioIdUsuario { get; set; }
         public int LastCajaUsuarioIdCaja { get; set; }
-        public int EntidadId = 5;
+        public int EntidadId { get; set; }
     }
 }

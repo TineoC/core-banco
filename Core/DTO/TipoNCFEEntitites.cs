@@ -14,6 +14,6 @@ namespace Core.DTO
         public DateTime? TipoNcfFechaCreado { get; set; }
         public bool TipoNcfEstado { get; set; }
         public int? TipoNcfIdSucursal { get; set; }
-        public int EntidadId = 22;
+        public int EntidadId { get; set; }
     }
 }

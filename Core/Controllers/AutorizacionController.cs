@@ -108,7 +108,7 @@ namespace Core.Controllers
 
                 Decimal diferencia = precio - cobertura;
 
-                Console.WriteLine("Escribe el número de autorización: ");
+                Console.Write("Escribe el número de autorización: ");
                 int numeroAutorizacion = Int32.Parse(Console.ReadLine());
 
                 Autorizacion autorizacion = new Autorizacion()

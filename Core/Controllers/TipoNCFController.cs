@@ -103,7 +103,7 @@ namespace Core.Controllers
 
                 Console.Clear();
 
-                exists = hospital.TipoNCF.Any(tipopro => tipopro.TipoNCF_Id == tipoNCFid );
+                exists = hospital.TipoNCF.Any(tipo => tipo.TipoNCF_Id == tipoNCFid );
 
                 if (!exists)
                 {
@@ -118,7 +118,7 @@ namespace Core.Controllers
 
             TipoNCF tipoNCF = hospital.TipoNCF
                             .Where(
-                                tipopro => tipopro.TipoNCF_Id == tipoNCFid
+                                tipo => tipo.TipoNCF_Id == tipoNCFid
                             )
                             .FirstOrDefault();
 
@@ -152,7 +152,7 @@ namespace Core.Controllers
 
                 Console.Clear();
 
-                exists = hospital.TipoNCF.Any(tipopro => tipopro.TipoNCF_Id == tipoNCFid);
+                exists = hospital.TipoNCF.Any(tipo => tipo.TipoNCF_Id == tipoNCFid);
 
                 if (!exists)
                 {
@@ -178,7 +178,7 @@ namespace Core.Controllers
 
 
             TipoNCF nuevoTipoNCF = hospital.TipoNCF.Where(
-                    tipopro => tipopro.TipoNCF_Id == tipoNCFid
+                    tipo => tipo.TipoNCF_Id == tipoNCFid
                 ).First();
 
             nuevoTipoNCF.TipoNCF_Descripcion = descripcion;
@@ -219,7 +219,7 @@ namespace Core.Controllers
 
                     Console.Clear();
 
-                    exists = hospital.TipoNCF.Any(tipopro => tipopro.TipoNCF_Id == TipoNCF);
+                    exists = hospital.TipoNCF.Any(tipo => tipo.TipoNCF_Id == TipoNCF);
 
                     if (!exists)
                     {
@@ -232,7 +232,7 @@ namespace Core.Controllers
 
 
                 TipoNCF nuevoTipoNCF = hospital.TipoNCF.Where(
-                        tipopro => tipopro.TipoNCF_Id == TipoNCF
+                        tipo => tipo.TipoNCF_Id == TipoNCF
                     ).First();
 
                 nuevoTipoNCF.TipoNCF_Estado = false;

@@ -13,6 +13,6 @@ namespace Core.DTO
         public DateTime? TipoDocumentoFechaCreacion { get; set; }
         public int? TipoDocumentoIdUsuarioCreador { get; set; }
         public bool? TipoDocumentoVigencia { get; set; }
-        public int EntidadId = 17;
+        public int EntidadId { get; set; }
     }
 }
