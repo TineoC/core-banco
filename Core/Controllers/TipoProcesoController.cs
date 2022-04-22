@@ -42,12 +42,30 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion de tipo de proceso: ");
-                string descripcion = Console.ReadLine();
+                bool exists = true;
+                string descripcion;
+                do
+                {
+
+
+                    Console.Write("Escribe la descripcion de tipo de proceso: ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.TipoProceso.Any(procMed => procMed.TipoProceso_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un tipo de proceso con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
                 TipoProceso TipoProceso = new TipoProceso()
                 {
-                    TipoProceso_Id =0,
                     TipoProceso_Descripcion = descripcion,
                     TipoProceso_FechaCreacion = DateTime.Now,
                     TipoProceso_IdUsuarioCreador = Program.loggerUserID,
@@ -122,6 +140,9 @@ namespace Core.Controllers
 
                 MostrarInformacion(tipoproceso);
 
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
+
                 index++;
             }
         }
@@ -129,11 +150,12 @@ namespace Core.Controllers
         {
             bool exists = false;
             int TipoProceso;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
             {
-                Console.Write("Escribe la descripcion del tipo de proceso  a actualizar: ");
+                Console.Write("Escribe el ID del tipo de proceso a actualizar: ");
                 TipoProceso = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
@@ -149,15 +171,36 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del proceso (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del tipo de proceso (actualizado): ");
+                descripcion = Console.ReadLine();
 
-            
+                Console.Clear();
+
+                exists = hospital.TipoProceso.Any(tipopro => tipopro.TipoProceso_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen tipos de procesos con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
+
             TipoProceso nuevoTipoProceso = hospital.TipoProceso.Where(
                     tipopro => tipopro.TipoProceso_Id == TipoProceso
                 ).First();
 
             nuevoTipoProceso.TipoProceso_Descripcion = descripcion;
+
+            Logger.Info($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
+
+            Console.WriteLine($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
+
+            hospital.SaveChanges();
 
             TipoProcesoEntities TipoProcesoEntities = new TipoProcesoEntities()
             {
@@ -168,10 +211,6 @@ namespace Core.Controllers
                 TipoProcesoVigencia = true,
                 EntidadId = 20
             };
-
-
-            Logger.Info($"El tipo de proceso con la identificacion {TipoProceso} ha sido actualizado.");
-            hospital.SaveChanges();
 
             await SendMessageQueue(TipoProcesoEntities);
             Logger.Info($"El tipo de proceso {TipoProcesoEntities.TipoProcesoDescripcion} se ha enviado correctamente");
@@ -220,7 +259,10 @@ namespace Core.Controllers
                 };
 
                 hospital.SaveChanges();
+
                 Logger.Info($"El tipo de proceso con la identifiacion {TipoProceso} ha sido eliminado.");
+
+                Console.WriteLine($"El tipo de proceso con la identifiacion {TipoProceso} ha sido eliminado.");
 
                 await SendMessageQueue(TipoProcesoEntities);
                 Logger.Info($"El tipo de proceso {TipoProcesoEntities.TipoProcesoDescripcion} se ha enviado correctamente");

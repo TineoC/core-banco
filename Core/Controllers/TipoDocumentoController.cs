@@ -42,12 +42,30 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion de tipo de Documento: ");
-                string descripcion = Console.ReadLine();
+                bool exists = true;
+                string descripcion;
+                do
+                {
+
+
+                    Console.Write("Escribe la descripcion de tipo de documento: ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.TipoDocumento.Any(tipoDoc => tipoDoc.TipoDocumento_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un tipo de documento con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
                 TipoDocumento TipoDocumento = new TipoDocumento()
                 {
-                    TipoDocumento_Id = 0,
                     TipoDocumento_Descripcion = descripcion,
                     TipoDocumento_FechaCreacion = DateTime.Now,
                     TipoDocumento_IdUsuarioCreador = Program.loggerUserID,
@@ -65,7 +83,8 @@ namespace Core.Controllers
                 };
 
                 hospital.TipoDocumento.Add(TipoDocumento);
-                Logger.Info($"Se ha creado el tipo de Documento correctamente: {descripcion}");
+                Logger.Info($"Se ha creado el tipo de Documento correctamente ");
+
                 hospital.SaveChanges();
 
                 await SendMessageQueue(tipoDocumentoEntities);
@@ -122,6 +141,9 @@ namespace Core.Controllers
 
                 MostrarInformacion(tipoDocumento);
 
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
+
                 index++;
             }
         }
@@ -129,11 +151,13 @@ namespace Core.Controllers
         {
             bool exists = false;
             int TipoDocumento;
+            string descripcion;
+
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
             {
-                Console.Write("Escribe la descripcion del tipo de Documento  a actualizar: ");
+                Console.Write("Escribe la identificacion del tipo de Documento  a actualizar: ");
                 TipoDocumento = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
@@ -149,9 +173,24 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del Documento (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del tipo de documento (actualizado): ");
+                descripcion = Console.ReadLine();
 
+                Console.Clear();
+
+                exists = hospital.TipoDocumento.Any(tipoDoc => tipoDoc.TipoDocumento_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen tipos de documentos con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
 
             TipoDocumento nuevoTipoDocumento = hospital.TipoDocumento.Where(
                     tipoDoc => tipoDoc.TipoDocumento_Id == TipoDocumento

@@ -7,29 +7,21 @@ using System.Text;
 using Core.DTO;
 using System.Threading.Tasks;
 using Core.Consumers;
+using NLog;
 
 namespace Core
 {
     class Program
     {
+        static Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         static bool logged = false;
         public static int loggerUserID;
+        static string actualNickname;
 
-        /*
-            1. Manejar los usuarios de la app
-                1. Logear
-                2. Registrarse
-                3. Tener roles
-            2. Crear, Actualizar, Eliminar y Mostrar
-                1. Todas las entidades de la base de datos
-                2. Limitar a que usuarios pueden acceder a las entidades
-            3. Menu
-                1. Con las acciones que puedes hacer en base a tu rol.
-                    1. Hacer una cita
-                    2. Pagar una factura
-         */
+        static string[] opciones;
+        static string[] opcionesCrud;
 
-        static bool Authentication(string nickname, string password)
+        public static bool Authentication(string nickname, string password)
         {
             bool existsUsername, correctPassword = false;
 
@@ -56,19 +48,25 @@ namespace Core
                     );
                 }
 
+                if (existsUsername && correctPassword)
+                {
+                    Logger.Info($"Se ha autenticado el usuario Usuario: {nickname}");
+                } else
+                {
+                    Logger.Error($"Ha habido un error al autenticar el usuario Usuario: {nickname}");
+                }
+                
                 // Retornar true or false
             }
 
             return existsUsername && correctPassword;
         }
 
-        static void Register()
+        public static void Register()
         {
             hospitalEntities hospital = new hospitalEntities();
 
             // Evitar claves simples
-
-            var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             try
             {
@@ -98,11 +96,6 @@ namespace Core
                 } while (exists);
 
                 Console.Clear();
-                Console.Write("Ingrese el codigo de identificacion del perfil: ");
-                int PerfilId = Convert.ToInt32(Console.ReadLine());
-
-                Console.Write("Ingrese la identificacion de la persona: ");
-                string PersonaIdentificacion = Console.ReadLine();
 
                 bool simplePassword = true, passwordMatch = true;
 
@@ -131,6 +124,7 @@ namespace Core
                     if (simplePassword)
                     {
                         Logger.Error("La contraseña es muy simple!");
+                        Console.WriteLine("Error: La contraseña es muy simple!");
 
                         char condicion1 = PasswordCheck.HasMinimumLength(password, 8) ? 'X' : ' ';
                         char condicion2 = PasswordCheck.HasUpperCaseLetter(password) ? 'X' : ' '; ;
@@ -157,6 +151,7 @@ namespace Core
                         {
                             Logger.Error("Las contraseñas no coinciden!");
                             Console.WriteLine("\nLas contraseñas no coinciden!");
+
                             Console.Write("Press any key to continue...");
                             Console.ReadKey();
                         }
@@ -167,23 +162,26 @@ namespace Core
 
                 UserRegister RegistroUsuario = new UserRegister();
                 //Integracion
+
                 Usuarios usuarios = new Usuarios()
                 {
-
                     Usuario_Nickname = username,
                     Usuario_Contraseña = password,
-                    Usuario_IdPerfil = Convert.ToInt32(PerfilId),
-                    IdPersona = PersonaIdentificacion,
+                    Usuario_IdPerfil = 3,
                     Usuario_FechaCreacion = DateTime.Now,
                     Usuario_Vigencia = true
                 };
 
                 hospital.Usuarios.Add(usuarios);
                 hospital.SaveChanges();
+
                 //Integracion
+
                 RegistroUsuario.Crear(usuarios);
+
                 Logger.Info($"El usuario {username} ha sido registrado");
                 Console.WriteLine($"El usuario {username} ha sido registrado");
+
                 Console.Write("\nPress any key to continue...");
                 Console.ReadKey();
 
@@ -199,16 +197,11 @@ namespace Core
         {
             hospitalEntities hospital = new hospitalEntities();
 
-            // Evitar claves simples
-
-            var Logger = NLog.LogManager.GetCurrentClassLogger();
-
             try
             {
                 bool correctCredentials;
                 do
                 {
-                    
                     // Se pregunta por el usuario y la contraseña
                     Console.WriteLine(".-      LOGIN       -.");
 
@@ -224,15 +217,17 @@ namespace Core
                     
                     if (correctCredentials)
                     {
-                        Logger.Info($"Se ha iniciado sesión correctamente! Usuario: {username}");
+                        Logger.Info($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
                         Console.WriteLine($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
+
                         logged = true;
                         loggerUserID = hospital.Usuarios
                             .Where(
                                 user => user.Usuario_Nickname == username
                             )
-                            .FirstOrDefault()
+                            .First()
                             .Usuario_Id;
+
                         //Integracion con CajaTopic
                         var e = CajaTopicConsumer.GetInstance();
                         e.StartAsync();
@@ -249,10 +244,12 @@ namespace Core
                     }
                     else
                     {
-                        Logger.Warn($"Credenciales incorrectas inténtelo de nuevo. Usuario: {username} Password: {password}");
-                        Console.WriteLine($"Credenciales incorrectas inténtelo de nuevo.");
+                        Logger.Warn($"Credenciales incorrectas inténtelo de nuevo. Usuario: {username}");
+                        Console.WriteLine("\nCredenciales incorrectas inténtelo de nuevo.");
+
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
+
                         Console.Clear();
                     }
                 } while (!correctCredentials);
@@ -261,58 +258,113 @@ namespace Core
             catch (Exception e)
             {
                 Logger.Error(e, " Ha ocurrido un error inesperado.");
+                Console.WriteLine(e.Message, " Ha ocurrido un error inesperado.");
                 throw;
             }          
         }
 
         static string Menu()
         {
-            var Logger = NLog.LogManager.GetCurrentClassLogger();
-
-            Console.WriteLine(".-      MENU       -.");
-
-            string[] opciones;
-
             try
             {
                 if (!logged)
                 {
                     opciones = new string[3]
                     {
-                    "Login usuario",
-                    "Registrar usuario",
-                    "Exit"
+                        "Login usuario",
+                        "Registrar usuario",
+                        "Exit"
                     };
                 }
                 else
                 {
-                    opciones = new string[24]
+                    hospitalEntities hospital = new hospitalEntities();
+
+                    int idPerfil = 
+                        hospital.Usuarios.Where(
+                                user => user.Usuario_Nickname == actualNickname
+                            )
+                        .First()
+                        .Usuario_IdPerfil;
+
+                    switch (idPerfil)
                     {
-                    "Manejar Personas",
-                    "Manejar Pacientes",             
-                    "Manejar Aseguradoras",
-                    "Manejar Autorizaciones",                   
-                    "Manejar Egresos",
-                    "Manejar Facturas",
-                    "Manejar Cuentas",
-                    "Manejar Cuentas de Facturas",
-                    "Manejar Detalles de Facturas",
-                    "Manejar Cajas",
-                    "Manejar Aperturas y Cierres de Caja",
-                    "Manejar Usuarios de Caja",
-                    "Manejar Tipos de procesos",
-                    "Manejar Usuarios",
-                    "Manejar Perfil",
-                    "Manejar Pago",
-                    "Manejar Procesos Medicos",
-                    "Manejar Tipos de Persona",
-                    "Manejar Tipos de Pagos",
-                    "Manejar Tipos de Documento",
-                    "Manejar Procesos Medicos",
-                    "Manejar Recibo de Ingresos",
-                    "Manejar Plan de Tratamiento",
-                    "Exit"
-                    };
+                        case 2: // Administrador
+                            opciones = new string[24]
+                            {
+                                "Manejar Aperturas y Cierres de Caja",
+                                "Manejar Aseguradoras",
+                                "Manejar Autorizaciones",
+                                "Manejar Cajas",
+                                "Manejar Usuarios de Caja",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Egresos",
+                                "Manejar Detalles de Facturas",
+                                "Manejar Facturas",
+                                "Manejar NCF",
+                                "Manejar Pagos",
+                                "Manejar Perfiles",
+                                "Manejar Personas",
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Tipos de Documento",
+                                "Manejar Tipos de NCF",
+                                "Manejar Tipos de Pagos",
+                                "Manejar Tipos de Personas",
+                                "Manejar Tipos de Procesos",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+                            break;
+                        case 3: // Soporte Técnico
+                            opciones = new string[24]
+                            {
+                                "Manejar Aperturas y Cierres de Caja",
+                                "Manejar Aseguradoras",
+                                "Manejar Autorizaciones",
+                                "Manejar Cajas",
+                                "Manejar Usuarios de Caja",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Egresos",
+                                "Manejar Detalles de Facturas",
+                                "Manejar Facturas",
+                                "Manejar NCF",
+                                "Manejar Pagos",
+                                "Manejar Perfiles",
+                                "Manejar Personas",
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Tipos de Documento",
+                                "Manejar Tipos de NCF",
+                                "Manejar Tipos de Pagos",
+                                "Manejar Tipos de Personas",
+                                "Manejar Tipos de Procesos",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+                            break;
+                        case 4: // Paciente
+                            opciones = new string[9]
+                            {
+                                "Manejar Recibos de Ingreso",
+                                "Manejar Pagos",
+                                "Manejar Cuentas de Facturas",
+                                "Manejar Cuentas",
+                                "Manejar Personas",
+                                "Manejar Planes de Tratamiento",
+                                "Manejar Procesos Médicos",
+                                "Manejar Usuarios",
+                                "Exit"
+                            };
+
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 for (int i = 0; i < opciones.Length; i++)
@@ -350,27 +402,57 @@ namespace Core
 
         static string CRUDMenu()
         {
-            var Logger = NLog.LogManager.GetCurrentClassLogger();
-
             Console.WriteLine(".-      Acciones       -.");
-
-            string[] opciones;
 
             try
             {
-                opciones = new string[6]
-                    {
-                    "Crear",
-                    "Mostrar",
-                    "Mostrar Todos",
-                    "Actualizar",
-                    "Eliminar",
-                    "Exit"
-                    };
+                hospitalEntities hospital = new hospitalEntities();
 
-                for (int i = 0; i < opciones.Length; i++)
+                int idPerfil = 
+                    hospital.Usuarios.Where(
+                            user => user.Usuario_Nickname == actualNickname
+                        )
+                    .First()
+                    .Usuario_IdPerfil;
+
+                switch (idPerfil)
                 {
-                    Console.WriteLine($"{i + 1}. {opciones[i]}");
+                    case 2:
+                        opcionesCrud = new string[6]
+                            {
+                                "Crear",
+                                "Mostrar",
+                                "Mostrar Todos",
+                                "Actualizar",
+                                "Eliminar",
+                                "Exit"
+                            };
+                        break;
+                    case 3:
+                        opcionesCrud = new string[4]
+                            {
+                                "Crear",
+                                "Mostrar",
+                                "Mostrar Todos",
+                                "Exit"
+                            };
+                        break;
+                    case 4:
+                        opcionesCrud = new string[4]
+                            {
+                                "Crear",
+                                "Mostrar",
+                                "Mostrar Todos",
+                                "Exit"
+                            };
+                        break;
+                    default:
+                        break;
+                }
+
+                for (int i = 0; i < opcionesCrud.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {opcionesCrud[i]}");
                 }
 
                 int index = 0;
@@ -379,9 +461,9 @@ namespace Core
                 {
                     Console.Write("Opción: ");
                     index = Int32.Parse(Console.ReadLine());
-                } while (!(index > 0 && index <= opciones.Length));
+                } while (!(index > 0 && index <= opcionesCrud.Length));
 
-                string opcionElegida = opciones[index - 1];
+                string opcionElegida = opcionesCrud[index - 1];
 
                 Logger.Info($"Opción elegida: {opcionElegida}");
 
@@ -434,12 +516,13 @@ namespace Core
                 TipoPersonaController TipoPersona = new TipoPersonaController();
                 TipoPagoController tipoPagos = new TipoPagoController();
                 TipoDocumentoController TipoDocumentos = new TipoDocumentoController();
+                TipoNCFController tipoNCF = new TipoNCFController();
                 ProcesoMedicoController procesosMedicos = new ProcesoMedicoController();
                 ReciboIngresoController RecibosIngresos = new ReciboIngresoController();
                 PlanDeTratamientoController planTratamiento = new PlanDeTratamientoController();
+
                 switch (opcion)
                 {
-            // Instanciar clase controller en cada accion
                     case "Login usuario":
                         Login();
                         break;
@@ -484,41 +567,6 @@ namespace Core
 
                         break;
 
-                    case "Manejar Pacientes":
-                        //accion = CRUDMenu();
-
-                        //switch (accion)
-                        //{
-                        //    case "Crear":
-                        //        PacientesController.Crear();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Mostrar":
-                        //        PacientesController.Mostrar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Mostrar Todos":
-                        //        PacientesController.MostrarTodos();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Actualizar":
-                        //        PacientesController.Actualizar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Eliminar":
-                        //        PacientesController.Eliminar();
-                        //        Console.Write("Press any key to continue...");
-                        //        Console.ReadKey();
-                        //        break;
-                        //    case "Exit":
-                        //        break;
-                        //}
-                        break;
-
                     case "Manejar Facturas":
                         accion = CRUDMenu();
 
@@ -534,7 +582,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 FacturaEncabezadoController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -569,7 +617,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 AseguradoraController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -604,7 +652,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 AutorizacionController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -639,7 +687,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 EgresoController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -674,7 +722,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 CuentasController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -709,7 +757,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 FacturaCuentaController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -744,7 +792,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 FacturaDetalleController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -779,7 +827,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 CajaController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -814,7 +862,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 AperturaYCierreDeCajaController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -869,7 +917,7 @@ namespace Core
                         }
                         break;
 
-                    case "Manejar Tipos de procesos":
+                    case "Manejar Tipos de Procesos":
                         accion = CRUDMenu();
                         switch (accion)
                         {
@@ -902,6 +950,7 @@ namespace Core
                                 break;
                         }
                         break;
+
                     case "Manejar Usuarios":
                         accion = CRUDMenu();
 
@@ -936,7 +985,7 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Perfil":
+                    case "Manejar Perfiles":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -970,7 +1019,7 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Pago":
+                    case "Manejar Pagos":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1004,10 +1053,8 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Proceso Medico":
-                        break;
 
-                    case "Manejar Tipos de Persona":
+                    case "Manejar Tipos de Personas":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1147,9 +1194,7 @@ namespace Core
                         }
                         break;
 
-
-
-                    case "Manejar Recibo de Ingresos":
+                    case "Manejar Recibos de Ingreso":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1184,7 +1229,7 @@ namespace Core
 
                         }
                         break;
-                    case "Manejar Plan de Tratamiento":
+                    case "Manejar Planes de Tratamiento":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1211,6 +1256,41 @@ namespace Core
                                 break;
                             case "Eliminar":
                                 planTratamiento.Eliminar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Exit":
+                                break;
+                        }
+                        break;
+
+                    case "Manejar Tipos de NCF":
+                        accion = CRUDMenu();
+
+                        switch (accion)
+                        {
+                            case "Crear":
+                                tipoNCF.Crear();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Mostrar":
+                                TipoNCFController.Mostrar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Mostrar Todos":
+                                TipoNCFController.MostrarTodos();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Actualizar":
+                                tipoNCF.Actualizar();
+                                Console.Write("Press any key to continue...");
+                                Console.ReadKey();
+                                break;
+                            case "Eliminar":
+                                tipoNCF.Eliminar();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;

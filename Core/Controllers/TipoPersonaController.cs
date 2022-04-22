@@ -42,12 +42,30 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion de tipo de Persona: ");
-                string descripcion = Console.ReadLine();
+                bool exists = true;
+                string descripcion;
+                do
+                {
+
+
+                    Console.Write("Escribe la descripcion de tipo de persona: ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.TipoPersona.Any(tipopers => tipopers.TipoPersona_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un tipo de persona con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
                 TipoPersona TipoPersona = new TipoPersona()
                 {
-                    TipoPersona_Id = 0,
                     TipoPersona_Descripcion = descripcion,
                     TipoPersona_FechaCreacion = DateTime.Now,
                     TipoPersona_IdUsuarioCreador = Program.loggerUserID,
@@ -123,6 +141,9 @@ namespace Core.Controllers
 
                 MostrarInformacion(tipoPersona);
 
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
+
                 index++;
             }
         }
@@ -130,11 +151,12 @@ namespace Core.Controllers
         {
             bool exists = false;
             int TipoPersona;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
             {
-                Console.Write("Escribe la descripcion del tipo de Persona  a actualizar: ");
+                Console.Write("Escribe la identifiacion del tipo de Persona  a actualizar: ");
                 TipoPersona = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
@@ -150,8 +172,24 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del Persona (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del tipo de persona (actualizado): ");
+                descripcion = Console.ReadLine();
+
+                Console.Clear();
+
+                exists = hospital.TipoPersona.Any(tipopers => tipopers.TipoPersona_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen tipos de personas con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
 
 
             TipoPersona nuevoTipoPersona = hospital.TipoPersona.Where(
@@ -188,7 +226,8 @@ namespace Core.Controllers
 
                 do
                 {
-                    Console.Write("Escribe la identifiacion del tipo de Persona a eliminar: ");
+                    Console.Write("Escribe la identificacion del tipo de Persona a eliminar: ");
+
                     TipoPersona = Int32.Parse(Console.ReadLine());
 
                     Console.Clear();
@@ -209,6 +248,7 @@ namespace Core.Controllers
                     ).First();
 
                 nuevoTipoPersona.TipoPersona_Vigencia = false;
+
                 TipoPersonaEntities TipoPersonaEntities = new TipoPersonaEntities()
                 {
                     TipoPersonaId = nuevoTipoPersona.TipoPersona_Id,
