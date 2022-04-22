@@ -21,6 +21,6 @@ namespace Core.DTO
         public DateTime? FacturaEncabezadoFechaCreacion { get; set; }
         public int? FacturaEncabezadoIdUsuarioCreador { get; set; }
         public bool? FacturaEncabezadoVigencia { get; set; }
-        public int EntidadId = 10;
+        public int EntidadId { get; set; }
     }
 }

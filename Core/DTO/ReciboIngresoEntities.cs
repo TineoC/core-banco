@@ -16,6 +16,6 @@ namespace Core.DTO
         public DateTime? ReciboIngresoFechaCreacion { get; set; }
         public int? ReciboIngresoIdUsuarioCreador { get; set; }
         public bool? ReciboIngresoVigencia { get; set; }
-        public int EntidadId = 16;
+        public int EntidadId { get; set; }
     }
 }

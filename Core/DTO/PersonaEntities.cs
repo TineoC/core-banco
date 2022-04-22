@@ -33,7 +33,7 @@ namespace Core.DTO
         public int? PersonaIdUsuarioCreador { get; set; }
         [Column("Persona_Vigencia")]
         public bool? PersonaVigencia { get; set; }
-        public int EntidadId = 13;
+        public int EntidadId { get; set; }
 
         //public int? PersonaTipoDocumento { get; set; }
         //public string PersonaDocumento { get; set; }

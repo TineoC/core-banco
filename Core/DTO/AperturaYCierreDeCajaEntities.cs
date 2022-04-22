@@ -32,6 +32,6 @@ namespace Core.DTO
         public int? AperturaYcierreDeCajaIdUsuarioCreador { get; set; }
         public bool? AperturaYcierreDeCajaVigencia { get; set; }
 
-        public int EntidadId = 1;
+        public int EntidadId { get; set; }
     }
 }

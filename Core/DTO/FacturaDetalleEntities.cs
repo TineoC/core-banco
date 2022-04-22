@@ -19,6 +19,6 @@ namespace Core.DTO
         public DateTime? FacturaDetalleFechaCreacion { get; set; }
         public int? FacturaDetalleIdUsuarioCreador { get; set; }
         public bool? FacturaDetalleVigencia { get; set; }
-        public int EntidadId = 9;
+        public int EntidadId { get; set; }
     }
 }

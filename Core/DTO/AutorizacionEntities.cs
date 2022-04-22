@@ -18,6 +18,6 @@ namespace Core.DTO
         public decimal? AutorizacionCobertura { get; set; }
         public decimal? AutorizacionDiferencia { get; set; }
         public int? AutorizacionNoAutorizacion { get; set; }
-        public int EntidadId = 3;
+        public int EntidadId { get; set; }
     }
 }

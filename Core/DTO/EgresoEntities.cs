@@ -19,6 +19,6 @@ namespace Core.DTO
         public DateTime? EgresoFechaCreacion { get; set; }
         public int? EgresoIdUsuarioCreador { get; set; }
         public bool? EgresoVigencia { get; set; }
-        public int EntidadId = 8;
+        public int EntidadId { get; set; }
     }
 }

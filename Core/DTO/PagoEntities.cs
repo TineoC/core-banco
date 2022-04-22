@@ -18,6 +18,6 @@ namespace Core.DTO
         public int? PagoIdUsuarioCreador { get; set; }
         public bool? PagoVigencia { get; set; }
         public int? CajaId { get; set; }
-        public int EntidadId = 11;
+        public int EntidadId { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace Core.DTO
         public DateTime? CajaFechaCreacion { get; set; }
         public int? CajaIdUsuarioCreador { get; set; }
         public bool? CajaVigencia { get; set; }
-        public int EntidadId = 4;
+        public int EntidadId { get; set; }
     }
 }
