@@ -29,7 +29,7 @@ namespace Core.Controllers
         public static void MostrarInformacion(Cuentas cuenta)
         {
             Console.WriteLine($"ID Cuenta: {cuenta.Cuenta_Id}");
-            Console.WriteLine($"ID Persona: {cuenta.Cuenta_IdPersona}");
+            Console.WriteLine($"Documento de la Persona: {cuenta.Cuenta_IdPersona}");
             Console.WriteLine($"Balance: {cuenta.Cuenta_Balance}");
             Console.WriteLine($"Fecha Creación: {cuenta.Cuenta_FechaCreacion}");
             Console.WriteLine($"ID Usuario Creador: {cuenta.Cuenta_IdUsuarioCreador}");
@@ -49,7 +49,9 @@ namespace Core.Controllers
 
                 do
                 {
-                    Console.WriteLine("Escribe el documento de la Persona");
+                    Console.Clear();
+
+                    Console.Write("Escribe el documento de la Persona: ");
                     documento = Console.ReadLine();
 
                     exists = hospital.Persona.Any(
@@ -57,26 +59,18 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
-                        Console.WriteLine("No existe ninguna Factura con ese id");
+                        Console.WriteLine("No existe ninguna Cuenta con ese Documento");
 
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                     }
 
-                } while (true);
-
-                decimal balance;
-
-                do
-                {
-                    Console.WriteLine("Escribe el Balance de la Cuenta");
-                    balance = decimal.Parse(Console.ReadLine());
-                } while (!(balance < 1));
+                } while (!exists);
 
                 Cuentas cuentas = new Cuentas()
                 {
                     Cuenta_IdPersona = documento,
-                    Cuenta_Balance = balance,
+                    Cuenta_Balance = 0,
                     Cuenta_FechaCreacion = DateTime.Now,
                     Cuenta_IdUsuarioCreador = Program.loggerUserID,
                     Cuenta_Vigencia = true
@@ -117,11 +111,11 @@ namespace Core.Controllers
 
                 do
                 {
+                    Console.Clear();
+
                     Console.Write("Escribe el id de la Cuenta: ");
 
                     idCuenta = Int32.Parse(Console.ReadLine());
-
-                    Console.Clear();
 
                     exists = hospital.Cuentas.Any(cuent => cuent.Cuenta_Id == idCuenta);
 
@@ -204,68 +198,28 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                int nuevoIdCuenta;
-
-                do
-                {
-                    Console.Write("Escribe el id de la Cuenta (actualizado): ");
-
-                    nuevoIdCuenta = Int32.Parse(Console.ReadLine());
-
-                    Console.Clear();
-
-                    exists = hospital.Cuentas.Any(
-                        cuenta => cuenta.Cuenta_Id == nuevoIdCuenta
-                        );
-
-                    if (!exists)
-                    {
-                        Console.WriteLine("No existe ninguna Cuenta con ese id");
-
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey();
-                    }
-                } while (!exists);
-
-                string nuevoDocumentoPersona;
-
-                do
-                {
-                    Console.Write("Escribe el documento de la Cuenta (actualizado): ");
-
-                    nuevoDocumentoPersona = Console.ReadLine();
-
-                    Console.Clear();
-
-                    exists = hospital.Persona.Any(
-                        persona => persona.Persona_Documento == nuevoDocumentoPersona
-                        );
-
-                    if (!exists)
-                    {
-                        Console.WriteLine("No existe ninguna Persona con ese documento");
-
-                        Console.Write("Press any key to continue...");
-                        Console.ReadKey();
-                    }
-                } while (!exists);
-
                 decimal nuevoBalance;
 
                 do
                 {
-                    Console.WriteLine("Escribe el Balance de la Cuenta");
+                    Console.Write("Escribe el Balance de la Cuenta: ");
                     nuevoBalance = decimal.Parse(Console.ReadLine());
-                } while (!(nuevoBalance < 1));
+
+                    Logger.Error($"Intento de Nuevo Balance: {nuevoBalance}");
+
+                    if (nuevoBalance <= 0)
+                    {
+                        Logger.Error("El balance no puede ser menor o igual a cero");
+                        Console.WriteLine("El balance no puede ser menor o igual a cero");
+                    }
+                } while (nuevoBalance <= 0);
 
                 Cuentas nuevaCuenta = hospital.Cuentas
                     .Where(
                         cuenta =>
-                            cuenta.Cuenta_Id == nuevoIdCuenta
+                            cuenta.Cuenta_Id == idCuenta
                     ).First();
 
-                nuevaCuenta.Cuenta_Id = nuevoIdCuenta;
-                nuevaCuenta.Cuenta_IdPersona = nuevoDocumentoPersona;
                 nuevaCuenta.Cuenta_Balance = nuevoBalance;
                 nuevaCuenta.Cuenta_Vigencia = true;
 
@@ -281,7 +235,8 @@ namespace Core.Controllers
 
                 hospital.SaveChanges();
 
-                Logger.Info($"Se ha actualizado la Cuenta ID:{nuevaCuenta.Cuenta_Id} a NuevoID:{nuevoIdCuenta}.");
+                Logger.Info($"Se ha actualizado la Cuenta ID: {nuevaCuenta.Cuenta_Id}.");
+                Console.WriteLine($"Se ha actualizado la Cuenta ID: {nuevaCuenta.Cuenta_Id}.");
 
                 await SendMessageQueue(cuentaEntities);
                 Logger.Info($"La cuenta para la persona {cuentaEntities.CuentaIdPersona} se ha enviado correctamente");

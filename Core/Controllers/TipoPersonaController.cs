@@ -28,14 +28,34 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion de tipo de Persona: ");
-                string descripcion = Console.ReadLine();
+                bool exists = true;
+                string descripcion;
+                do
+                {
 
 
+                    Console.Write("Escribe la descripcion de tipo de persona: ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.TipoPersona.Any(tipopers => tipopers.TipoPersona_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un tipo de persona con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
                 hospital.TipoPersona.Add(new TipoPersona()
                 {
-                    TipoPersona_Descripcion = descripcion
+                    TipoPersona_Descripcion = descripcion,
+                    TipoPersona_FechaCreacion = DateTime.Now,
+                    TipoPersona_IdUsuarioCreador = Program.loggerUserID,
+                    TipoPersona_Vigencia = true
                 });
 
 
@@ -94,6 +114,8 @@ namespace Core.Controllers
                 Console.WriteLine($"TipoPersona: {index}");
 
                 MostrarInformacion(tipoPersona);
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
 
                 index++;
             }
@@ -102,11 +124,12 @@ namespace Core.Controllers
         {
             bool exists = false;
             int TipoPersona;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
             {
-                Console.Write("Escribe la descripcion del tipo de Persona  a actualizar: ");
+                Console.Write("Escribe la identifiacion del tipo de Persona  a actualizar: ");
                 TipoPersona = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
@@ -122,8 +145,24 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del Persona (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del tipo de persona (actualizado): ");
+                descripcion = Console.ReadLine();
+
+                Console.Clear();
+
+                exists = hospital.TipoPersona.Any(tipopers => tipopers.TipoPersona_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen tipos de personas con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
 
 
             TipoPersona nuevoTipoPersona = hospital.TipoPersona.Where(
@@ -148,7 +187,7 @@ namespace Core.Controllers
 
                 do
                 {
-                    Console.Write("Escribe la identifiacion del tipo de Persona a eliminar: ");
+                    Console.Write("Escribe la identificacion del tipo de Persona a eliminar: ");
                     TipoPersona = Int32.Parse(Console.ReadLine());
 
                     Console.Clear();
@@ -164,10 +203,9 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-                hospital.TipoPersona.Remove(hospital.TipoPersona.Where(
-                        tipoPers => tipoPers.TipoPersona_Id == TipoPersona
-                    ).First()
-                );
+                hospital.TipoPersona.Where(
+                        tipopers => tipopers.TipoPersona_Id == TipoPersona
+                ).First().TipoPersona_Vigencia = false;
 
                 hospital.SaveChanges();
 

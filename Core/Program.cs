@@ -225,8 +225,8 @@ namespace Core
                     
                     if (correctCredentials)
                     {
-                        Logger.Info($"Se ha iniciado sesión correctamente! Usuario: {username}");
-                        Console.WriteLine($"Se ha iniciado sesión correctamente! Usuario: {username}");
+                        Logger.Info($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
+                        Console.WriteLine($"\nSe ha iniciado sesión correctamente! Usuario: {username}");
 
                         logged = true;
                         actualNickname = username;
@@ -245,6 +245,7 @@ namespace Core
                     else
                     {
                         Logger.Warn($"Credenciales incorrectas inténtelo de nuevo. Usuario: {username} Password: {password}");
+                        Console.WriteLine("\nCredenciales incorrectas inténtelo de nuevo.");
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                         Console.Clear();
@@ -304,11 +305,11 @@ namespace Core
                                 "Manejar Planes de Tratamiento",
                                 "Manejar Procesos Médicos",
                                 "Manejar Recibos de Ingreso",
-                                "Manejar Tipos de Documentos",
+                                "Manejar Tipos de Documento",
                                 "Manejar Tipos de NCF",
                                 "Manejar Tipos de Pagos",
                                 "Manejar Tipos de Personas",
-                                "Manejar Tipos de Processo",
+                                "Manejar Tipos de Procesos",
                                 "Manejar Usuarios",
                                 "Exit"
                             };
@@ -333,11 +334,11 @@ namespace Core
                                 "Manejar Planes de Tratamiento",
                                 "Manejar Procesos Médicos",
                                 "Manejar Recibos de Ingreso",
-                                "Manejar Tipos de Documentos",
+                                "Manejar Tipos de Documento",
                                 "Manejar Tipos de NCF",
                                 "Manejar Tipos de Pagos",
                                 "Manejar Tipos de Personas",
-                                "Manejar Tipos de Processo",
+                                "Manejar Tipos de Procesos",
                                 "Manejar Usuarios",
                                 "Exit"
                             };
@@ -641,7 +642,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 AseguradoraController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -746,7 +747,7 @@ namespace Core
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
                                 break;
-                            case "Mostrar Todas":
+                            case "Mostrar Todos":
                                 CuentasController.MostrarTodos();
                                 Console.Write("Press any key to continue...");
                                 Console.ReadKey();
@@ -941,7 +942,7 @@ namespace Core
                         }
                         break;
 
-                    case "Manejar Tipos de procesos":
+                    case "Manejar Tipos de Procesos":
                         accion = CRUDMenu();
                         switch (accion)
                         {
@@ -1008,7 +1009,7 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Perfil":
+                    case "Manejar Perfiles":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1042,7 +1043,7 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Pago":
+                    case "Manejar Pagos":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1076,10 +1077,9 @@ namespace Core
                                 break;
                         }
                         break;
-                    case "Manejar Proceso Medico":
-                        break;
+               
 
-                    case "Manejar Tipos de Persona":
+                    case "Manejar Tipos de Personas":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1184,7 +1184,7 @@ namespace Core
                         }
                         break;
 
-                    case "Manejar Procesos Medicos":
+                    case "Manejar Procesos Médicos":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1221,7 +1221,7 @@ namespace Core
 
 
 
-                    case "Manejar Recibo de Ingresos":
+                    case "Manejar Recibos de Ingreso":
                         accion = CRUDMenu();
 
                         switch (accion)
@@ -1256,7 +1256,7 @@ namespace Core
 
                         }
                         break;
-                    case "Manejar Plan de Tratamiento":
+                    case "Manejar Planes de Tratamiento":
                         accion = CRUDMenu();
 
                         switch (accion)

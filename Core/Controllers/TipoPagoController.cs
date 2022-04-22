@@ -28,14 +28,38 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion de tipo de Pago: ");
-                string descripcion = Console.ReadLine();
+
+                bool exists = true;
+                string descripcion;
+                do
+                {
+
+
+                    Console.Write("Escribe la descripcion de tipo de pago: ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.TipoPago.Any(tipopg => tipopg.TipoPago_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un tipo de pago con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
 
 
                 hospital.TipoPago.Add(new TipoPago()
                 {
-                    TipoPago_Descripcion = descripcion
+                    TipoPago_Descripcion = descripcion,
+                    TipoPago_FechaCreacion = DateTime.Now,
+                    TipoPago_IdUsuarioCreador = Program.loggerUserID,
+                    TipoPago_Vigencia = true
+
                 });
 
 
@@ -96,6 +120,8 @@ namespace Core.Controllers
                 Console.WriteLine($"TipoPago: {index}");
 
                 MostrarInformacion(tipoPago);
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
 
                 index++;
             }
@@ -104,11 +130,12 @@ namespace Core.Controllers
         {
             bool exists = false;
             int TipoPago;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
             {
-                Console.Write("Escribe la descripcion del tipo de Pago  a actualizar: ");
+                Console.Write("Escribe la identificacion del tipo de Pago  a actualizar: ");
                 TipoPago = Int32.Parse(Console.ReadLine());
 
                 Console.Clear();
@@ -124,8 +151,26 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del Pago (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del Pago (actualizado): ");
+                 descripcion = Console.ReadLine();
+
+                Console.Clear();
+
+                exists = hospital.TipoPago.Any(tipoPg => tipoPg.TipoPago_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen tipos de pago con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
+
+   
 
 
             TipoPago nuevoTipoPago = hospital.TipoPago.Where(
@@ -159,17 +204,16 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
-                        Console.WriteLine("No existen tipos de Pagos con esa identifiacion");
+                        Console.WriteLine("No existen tipos de Pagos con esa identificacion");
 
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                     }
                 } while (!exists);
 
-                hospital.TipoPago.Remove(hospital.TipoPago.Where(
-                        tipoPg => tipoPg.TipoPago_Id == TipoPago
-                    ).First()
-                );
+                hospital.TipoPersona.Where(
+                      tipopers => tipopers.TipoPersona_Id == TipoPago
+              ).First().TipoPersona_Vigencia = false;
 
                 hospital.SaveChanges();
 

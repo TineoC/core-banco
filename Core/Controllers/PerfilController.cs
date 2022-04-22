@@ -26,17 +26,38 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe la descripcion del perfil: ");
-                string descripcion = Console.ReadLine();
+               bool exists = true;
+                string descripcion;
+                do
+                {
+                    
+                    Console.Write("Escribe la descripcion del perfil ");
+                    descripcion = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.Perfil.Any(perfil => perfil.Perfil_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un perfil con esa descripcion");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
 
 
                 hospital.Perfil.Add(new Perfil()
                 {
-                    Perfil_Descripcion = descripcion
+                    Perfil_Descripcion = descripcion,
+                    Perfil_FechaCreacion = DateTime.Now,
+                    Perfil_IdUsuarioCreador = Program.loggerUserID,
+                    Perfil_Vigencia = true
                 }); ;
 
-                Logger.Info($"Se ha creado la Perfil correctamente con lal descripcion {descripcion}");
+                Logger.Info($"Se ha creado la Perfil correctamente");
 
                 hospital.SaveChanges();
             }
@@ -89,6 +110,8 @@ namespace Core.Controllers
                 Console.WriteLine($"Perfil: {index}");
 
                 MostrarInformacion(perfil);
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
 
                 index++;
             }
@@ -97,6 +120,7 @@ namespace Core.Controllers
         {
             bool exists = false;
             int perfilid;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
@@ -117,10 +141,27 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion (actualizada): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del perfil (actualizada) ");
+                descripcion = Console.ReadLine();
 
-           
+                Console.Clear();
+
+                exists = hospital.Perfil.Any(perfil => perfil.Perfil_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existe un perfil con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
+
+
+
             Perfil nuevoPerfil = hospital.Perfil.Where(
                     pers => pers.Perfil_Id == perfilid
                 ).First();
@@ -152,17 +193,17 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
-                        Console.WriteLine("No existen Perfils con esa identificacion");
+                        Console.WriteLine("No existe un perfil  con esa identificacion");
 
                         Console.Write("Press any key to continue...");
                         Console.ReadKey();
                     }
                 } while (!exists);
 
-                hospital.Perfil.Remove(hospital.Perfil.Where(
-                        pers => pers.Perfil_Id == perfilid
-                    ).First()
-                );
+
+                hospital.Perfil.Where(
+                        perfil => perfil.Perfil_Id == perfilid
+                ).First().Perfil_Vigencia = false;
 
                 hospital.SaveChanges();
 

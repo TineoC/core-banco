@@ -32,14 +32,27 @@ namespace Core.Controllers
             {
                 bool exists = false;
                 int tipoproceso;
-                Console.Write("Escribe la descripcion del proceso medico: ");
-                string descripcion = Console.ReadLine();
+                string descripcion;
+                
+                do
+                {
 
-                Console.Write("Escribe el precio: ");
-                decimal precio = Decimal.Parse(Console.ReadLine());
+                    exists = true;
+                    Console.Write("Escribe la descripcion del proceso medico: ");
+                     descripcion = Console.ReadLine();
 
-                Console.Write("Escribe el ID del tipo de proceso: ");
-                tipoproceso = Int32.Parse(Console.ReadLine());
+                    Console.Clear();
+
+                    exists = hospital.ProcesoMedico.Any(proMed => proMed.ProcesoMedico_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Console.WriteLine("Existe un proceso medico con esa descripcion");
+
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (exists);
 
                 do
                 {
@@ -60,15 +73,23 @@ namespace Core.Controllers
                         Console.ReadKey();
                     }
                 } while (!exists);
+                
+                Console.Write("Escribe el precio: ");
+                decimal precio = Decimal.Parse(Console.ReadLine());
 
                 hospital.ProcesoMedico.Add(new ProcesoMedico()
                 {
                     ProcesoMedico_Descripcion = descripcion,
                     ProcesoMedico_Precio = precio,
-                    ProcesoMedico_IdTipoProceso = tipoproceso
-                });
+                    ProcesoMedico_IdTipoProceso = tipoproceso,
+                   ProcesoMedico_FechaCreacion = DateTime.Now,
+                   ProcesoMedico_IdUsuarioCreador = Program.loggerUserID,
+                    ProcesoMedico_Vigencia = true
+                
 
-                Logger.Info($"Se ha creado el proceso Medico correctamente con la descripccion {descripcion}");
+                 });
+
+                Logger.Info($"Se ha creado el proceso Medico correctamente ");
 
                 hospital.SaveChanges();
             }
@@ -123,6 +144,8 @@ namespace Core.Controllers
                 Console.WriteLine($"ProcesoMedico: {index}");
 
                 MostrarInformacion(procesoMedico);
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
 
                 index++;
             }
@@ -131,6 +154,7 @@ namespace Core.Controllers
         {
             bool exists = false;
             int ProcesoMedicoId, TipoProcesoId;
+            string descripcion;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
             do
@@ -168,8 +192,25 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe la descripcion del proceso medico (actualizado): ");
-            string descripcion = Console.ReadLine();
+            do
+            {
+                exists = true;
+                Console.Write("Escribe la descripcion del proceso medico (actualizado): ");
+                 descripcion = Console.ReadLine();
+
+                Console.Clear();
+
+                exists = hospital.ProcesoMedico.Any(procMed => procMed.ProcesoMedico_Descripcion == descripcion);
+
+                if (exists)
+                {
+                    Console.WriteLine("Existen procesos medicos con esa descripcion");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (exists);
+
 
             Console.Write("Escribe el precio (actualizado) : ");
             decimal precio = Decimal.Parse(Console.ReadLine());
@@ -196,7 +237,7 @@ namespace Core.Controllers
             {
 
                 bool exists = false;
-                int ProcesoMedicoId, TipoProcesoId;
+                int ProcesoMedicoId;
                 
 
                 do
@@ -217,12 +258,34 @@ namespace Core.Controllers
                         Console.ReadKey();
                     }
                 } while (!exists);
-               
 
-                hospital.ProcesoMedico.Remove(hospital.ProcesoMedico.Where(
-                        procMed => procMed.ProcesoMedico_Id == ProcesoMedicoId
-                    ).First()
-                );
+                do
+                {
+                    Console.Write("Escribe la identifiacion del proceso medico a eliminar: ");
+                    ProcesoMedicoId = Int32.Parse(Console.ReadLine());
+
+
+                    Console.Clear();
+
+                    exists = hospital.ProcesoMedico.Any(procMed => procMed.ProcesoMedico_Id == ProcesoMedicoId);
+
+                    if (!exists)
+                    {
+                        Console.WriteLine("No existen ProcesoMedicos con esa identificacion");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (!exists);
+
+
+
+
+
+
+                hospital.ProcesoMedico.Where(
+                       procMed => procMed.ProcesoMedico_Id == ProcesoMedicoId
+               ).First().ProcesoMedico_Vigencia = false;
 
                 hospital.SaveChanges();
 

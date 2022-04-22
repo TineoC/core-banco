@@ -112,6 +112,7 @@ namespace Core.Controllers
         }
         public static void MostrarTodos()
         {
+            
             int index = 1;
             foreach (Aseguradora aseguradora in hospital.Aseguradora.ToList())
             {
@@ -119,6 +120,9 @@ namespace Core.Controllers
                 Console.WriteLine($"Aseguradora: {index}");
 
                 MostrarInformacion(aseguradora);
+
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
 
                 index++;
             }
@@ -148,7 +152,7 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe el nombre de la aseguradora: (actualizado)");
+            Console.Write("Escribe el nombre de la aseguradora: (actualizado) ");
             string nombre = Console.ReadLine();
 
             Aseguradora aseguradora = hospital.Aseguradora
