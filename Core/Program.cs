@@ -156,9 +156,10 @@ namespace Core
                             Console.ReadKey();
                         }
                     }
-                } while (simplePassword || !passwordMatch);
 
-                Logger.Info($"Intento de registro username: {username}  password: {password}");
+                    Logger.Info($"Intento de registro username: {username}  password: {password}");
+
+                } while (simplePassword || !passwordMatch);
 
                 UserRegister RegistroUsuario = new UserRegister();
                 //Integracion

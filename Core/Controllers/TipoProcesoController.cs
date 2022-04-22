@@ -27,7 +27,7 @@ namespace Core.Controllers
 
         public static void MostrarInformacion(TipoProceso tipoproceso)
         {
-            Console.WriteLine($"Identificacion del tipo de proceso: {tipoproceso.TipoProceso_Id}");
+            Console.WriteLine($"ID del tipo de proceso: {tipoproceso.TipoProceso_Id}");
             Console.WriteLine($"Descripcion del tipo de proceso: {tipoproceso.TipoProceso_Descripcion}");
             Console.WriteLine($"Fecha de creacion: { tipoproceso.TipoProceso_FechaCreacion}");
             Console.WriteLine($"Id Usuario Creador: { tipoproceso.TipoProceso_IdUsuarioCreador}");
@@ -46,8 +46,6 @@ namespace Core.Controllers
                 string descripcion;
                 do
                 {
-
-
                     Console.Write("Escribe la descripcion de tipo de proceso: ");
                     descripcion = Console.ReadLine();
 

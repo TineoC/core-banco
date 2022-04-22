@@ -455,8 +455,6 @@ namespace Core.Controllers
                     }
                 } while (!exists);
 
-
-
                 Usuarios nuevoUsuarios = hospital.Usuarios.Where(
                         pers => pers.Usuario_Nickname == nickname
                     ).First();
