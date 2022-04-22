@@ -41,8 +41,27 @@ namespace Core.Controllers
 
             try
             {
-                Console.Write("Escribe el nombre de la aseguradora: ");
-                string nombre = Console.ReadLine();
+                string nombre;
+                bool exists;
+
+                do
+                {
+                    Console.Write("Escribe el nombre de la aseguradora: ");
+                    nombre = Console.ReadLine();
+
+                    Console.Clear();
+
+                    exists = hospital.Aseguradora.Any(aseg => aseg.Aseguradora_Descripcion == nombre);
+
+                    if (!exists)
+                    {
+                        Logger.Error($"Existen Aseguradoras con el nombre: {nombre}");
+                        Console.WriteLine("Existen Aseguradoras con ese nombre");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                } while (!exists);
 
                 Aseguradora aseguradora = new Aseguradora() {
                     Aseguradora_Descripcion = nombre,
@@ -63,6 +82,7 @@ namespace Core.Controllers
                 hospital.Aseguradora.Add(aseguradora);
 
                 Logger.Info($"Se ha creado la Aseguradora correctamente");
+                Console.WriteLine($"Se ha creado la Aseguradora correctamente");
 
                 hospital.SaveChanges();
 
@@ -93,6 +113,7 @@ namespace Core.Controllers
 
                 if (!exists)
                 {
+                    Logger.Error("No existen Aseguradoras con ese id");
                     Console.WriteLine("No existen Aseguradoras con ese id");
 
                     Console.Write("Press any key to continue...");
@@ -145,6 +166,7 @@ namespace Core.Controllers
 
                 if (!exists)
                 {
+                    Logger.Error("No existen Aseguradoras con ese id");
                     Console.WriteLine("No existen Aseguradoras con ese id");
 
                     Console.Write("Press any key to continue...");
@@ -152,18 +174,39 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            Console.Write("Escribe el nombre de la aseguradora: (actualizado) ");
+            string nombre;
 
-            string nombre = Console.ReadLine();
+            do
+            {
+                Console.Write("Escribe el nombre de la aseguradora: ");
+                nombre = Console.ReadLine();
+
+                Console.Clear();
+
+                exists = hospital.Aseguradora.Any(aseg => aseg.Aseguradora_Descripcion == nombre);
+
+                if (!exists)
+                {
+                    Logger.Error($"Existen Aseguradoras con el nombre: {nombre}");
+                    Console.WriteLine("Existen Aseguradoras con ese nombre");
+
+                    Console.Write("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            } while (!exists);
 
             Aseguradora aseguradora = hospital.Aseguradora
                 .Where(
                     aseg => aseg.Aseguraodra_Id == id
                 ).First();
 
-
             aseguradora.Aseguradora_Descripcion = nombre;
             aseguradora.Aseguradora_Vigencia = true;
+
+            hospital.SaveChanges();
+
+            Console.WriteLine($"Se ha actualizado la Aseguradora con el ID: {id}");
+            Logger.Info($"Se ha actualizado la Aseguradora con el ID: {id}");
 
             AseguradoraEntities aseguradoraEntity = new AseguradoraEntities()
             {
@@ -174,8 +217,6 @@ namespace Core.Controllers
                 EntidadId = 2
 
             };
-
-            hospital.SaveChanges();
 
             Logger.Info($"Se ha actualizado la Aseguradora correctamente.");
             await SendMessageQueue(aseguradoraEntity);
@@ -203,6 +244,7 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
+                        Logger.Error("No existen Aseguradoras con ese id");
                         Console.WriteLine("No existen Aseguradoras con ese id");
 
                         Console.Write("Press any key to continue...");
