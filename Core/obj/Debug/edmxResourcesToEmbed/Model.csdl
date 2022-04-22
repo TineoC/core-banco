@@ -1,0 +1,1042 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="hospitalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AperturaYCierreDeCaja">
+    <Key>
+      <PropertyRef Name="AperturaYCierreDeCaja_Id" />
+    </Key>
+    <Property Name="AperturaYCierreDeCaja_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AperturaYCierreDeCaja_IdCaja" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_DosMIlPesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_MIlPesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_QuinientosPeso" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_DoscientosPesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_CienPesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_CincuentaPesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_25Pesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_10Pesos" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_5Peso" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_1Peso" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_TotalEfectivo" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_TotalCredito" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_TotalTarjeta" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_Transferencia" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_Deposito" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_TotalCheques" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_TotalGeneral" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="AperturaYCierreDeCaja_AperturaOCierre" Type="Boolean" />
+    <Property Name="AperturaYCierreDeCaja_Fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="AperturaYCierreDeCaja_IdUsuarioCreador" Type="Int32" />
+    <Property Name="AperturaYCierreDeCaja_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Caja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="AperturaYCierreDeCaja" ToRole="Caja" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="AperturaYCierreDeCaja" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="Aseguradora">
+    <Key>
+      <PropertyRef Name="Aseguraodra_Id" />
+    </Key>
+    <Property Name="Aseguraodra_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Aseguradora_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Aseguradora_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Aseguradora_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Aseguradora_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Autorizacion" Relationship="Self.FK_Autorizacion_Autorizacion_IdAseguradora" FromRole="Aseguradora" ToRole="Autorizacion" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Aseguradora" ToRole="Persona" />
+  </EntityType>
+  <EntityType Name="Autorizacion">
+    <Key>
+      <PropertyRef Name="Autorizacion_Id" />
+    </Key>
+    <Property Name="Autorizacion_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Autorizacion_IdAseguradora" Type="Int32" />
+    <Property Name="Autorizacion_IdProcedimiento" Type="Int32" />
+    <Property Name="Autorizacion_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Autorizacion_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Autorizacion_Vigencia" Type="Boolean" Nullable="false" />
+    <Property Name="Autorizacion_Precio" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Autorizacion_Cobertura" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Autorizacion_Diferencia" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Autorizacion_NoAutorizacion" Type="Int32" />
+    <NavigationProperty Name="Aseguradora" Relationship="Self.FK_Autorizacion_Autorizacion_IdAseguradora" FromRole="Autorizacion" ToRole="Aseguradora" />
+    <NavigationProperty Name="ProcesoMedico" Relationship="Self.FK_Autorizacion_Autorizacion_IdProcedimiento" FromRole="Autorizacion" ToRole="ProcesoMedico" />
+  </EntityType>
+  <EntityType Name="Caja">
+    <Key>
+      <PropertyRef Name="Caja_Id" />
+    </Key>
+    <Property Name="Caja_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Caja_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Caja_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Caja_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Caja_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" FromRole="Caja" ToRole="AperturaYCierreDeCaja" />
+    <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja" ToRole="Caja_Usuario" />
+  </EntityType>
+  <EntityType Name="Caja_Usuario">
+    <Key>
+      <PropertyRef Name="Caja_Usuario_IdUsuario" />
+      <PropertyRef Name="Caja_Usuario_IdCaja" />
+    </Key>
+    <Property Name="Caja_Usuario_IdUsuario" Type="Int32" Nullable="false" />
+    <Property Name="Caja_Usuario_IdCaja" Type="Int32" Nullable="false" />
+    <Property Name="Caja_Usuario_IdUsuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Caja_Usuario_IdUsuario_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Caja_Usuario_IdUsuario_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Caja" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja" FromRole="Caja_Usuario" ToRole="Caja" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Caja_Usuario" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="Cuenta_Factura">
+    <Key>
+      <PropertyRef Name="Cuenta_Factura_IdFactura" />
+      <PropertyRef Name="Cuenta_Factura_IdCuenta" />
+    </Key>
+    <Property Name="Cuenta_Factura_IdFactura" Type="Int32" Nullable="false" />
+    <Property Name="Cuenta_Factura_IdCuenta" Type="Int32" Nullable="false" />
+    <Property Name="Cuenta_Factura_Monto" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Cuenta_Factura_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Cuenta_Factura_dUsuarioCreador" Type="Int32" />
+    <Property Name="Cuenta_Factura_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuenta_Factura" ToRole="Cuentas" />
+    <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdFactura" FromRole="Cuenta_Factura" ToRole="FacturaEncabezado" />
+  </EntityType>
+  <EntityType Name="Cuentas">
+    <Key>
+      <PropertyRef Name="Cuenta_Id" />
+    </Key>
+    <Property Name="Cuenta_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cuenta_IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Cuenta_Balance" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="Cuenta_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Cuenta_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Cuenta_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Cuenta_Factura" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" FromRole="Cuentas" ToRole="Cuenta_Factura" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Cuentas" ToRole="Persona" />
+    <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdCuenta" FromRole="Cuentas" ToRole="Pago" />
+  </EntityType>
+  <EntityType Name="Egreso">
+    <Key>
+      <PropertyRef Name="Egreso_Id" />
+    </Key>
+    <Property Name="Egreso_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Egreso_PagadoA" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egreso_Cedula" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egreso_Monto" Type="Double" />
+    <Property Name="Egreso_Concepto" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egreso_Preparado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egresp_Aprobado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egreso_Recibido" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Egreso_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Egreso_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Egreso_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Egreso" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="FacturaDetalle">
+    <Key>
+      <PropertyRef Name="FacturaDetalle_Id" />
+    </Key>
+    <Property Name="FacturaDetalle_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FacturaDetalle_IdFactura" Type="Int32" />
+    <Property Name="FacturaDetalle_PlanDeTratamiento" Type="Int32" />
+    <Property Name="FacturaDetalle_MontoBruto" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaDetalle_MontoCobertura" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaDetalle_MontoItbis" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="FacturaDetalle_MontoDescuento" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaDetalle_MontoTotal" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaDetalle_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FacturaDetalle_IdUsuarioCreador" Type="Int32" />
+    <Property Name="FacturaDetalle_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_FacturaDetalle_FacturaDetalle_IdFactura" FromRole="FacturaDetalle" ToRole="FacturaEncabezado" />
+    <NavigationProperty Name="PlanDeTratamiento" Relationship="Self.FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento" FromRole="FacturaDetalle" ToRole="PlanDeTratamiento" />
+  </EntityType>
+  <EntityType Name="FacturaEncabezado">
+    <Key>
+      <PropertyRef Name="FacturaEncabezado_Id" />
+    </Key>
+    <Property Name="FacturaEncabezado_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FacturaEncabezado_IdNCF" Type="Int32" />
+    <Property Name="FacturaEncabezado_NCF" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FacturaEncabezado_IdCliente" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="FacturaEncabezado_IdCajero" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="FacturaEncabezado_TotalBruto" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaEncabezado_TotalCobertura" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaEncabezado_TotalItbis" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaEncabezado_TotalDescuento" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaEncabezado_TotalGeneral" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FacturaEncabezado_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FacturaEncabezado_IdUsuarioCreador" Type="Int32" />
+    <Property Name="FacturaEncabezado_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="Cuenta_Factura" Relationship="Self.FK_Cuenta_Factura_Cuenta_Factura_IdFactura" FromRole="FacturaEncabezado" ToRole="Cuenta_Factura" />
+    <NavigationProperty Name="FacturaDetalle" Relationship="Self.FK_FacturaDetalle_FacturaDetalle_IdFactura" FromRole="FacturaEncabezado" ToRole="FacturaDetalle" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCajero" FromRole="FacturaEncabezado" ToRole="Persona" />
+    <NavigationProperty Name="Persona1" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente" FromRole="FacturaEncabezado" ToRole="Persona" />
+    <NavigationProperty Name="ReciboIngreso" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" FromRole="FacturaEncabezado" ToRole="ReciboIngreso" />
+  </EntityType>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MachineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Logged" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Level" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Logger" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Callsite" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Exception" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Tenant" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="LogGeneral">
+    <Key>
+      <PropertyRef Name="LogGeneral_Id" />
+    </Key>
+    <Property Name="LogGeneral_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LogGeneral_Pantalla" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Accion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Mensaje" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="LogGeneral_Fecha" Type="DateTime" Precision="3" />
+    <Property Name="LogGeneral_IdUsuario" Type="Int32" />
+    <Property Name="LogGeneral_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="LogGeneral" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="NCF">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdTipoNCF" Type="Int32" />
+    <Property Name="UltimaSecuenciaNIF" Type="Int32" />
+    <Property Name="Prefijo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SecuenciaActual" Type="Int32" />
+    <Property Name="Limite" Type="Int32" />
+    <Property Name="FechaVencimiento" Type="DateTime" Precision="0" />
+    <Property Name="IdUsuario" Type="Int32" />
+    <Property Name="FechaCreado" Type="DateTime" Precision="0" />
+    <Property Name="Estado" Type="Boolean" />
+    <Property Name="IdSucursal" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Pago">
+    <Key>
+      <PropertyRef Name="Pago_Id" />
+    </Key>
+    <Property Name="Pago_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Pago_IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Pago_IdCuenta" Type="Int32" />
+    <Property Name="Pago_Referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Pago_Monto" Type="Double" />
+    <Property Name="Pago_TipoPago" Type="Int32" />
+    <Property Name="Pago_FechaCreacion" Type="DateTime" Precision="0" />
+    <Property Name="Pago_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Pago_Vigencia" Type="Boolean" />
+    <Property Name="Pago_IdCaja" Type="Int32" />
+    <NavigationProperty Name="Cuentas" Relationship="Self.FK_Pago_Pago_IdCuenta" FromRole="Pago" ToRole="Cuentas" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Pago_Pago_IdPersona" FromRole="Pago" ToRole="Persona" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_Pago_Pago_IdUsuarioCreador" FromRole="Pago" ToRole="Usuarios" />
+    <NavigationProperty Name="TipoPago" Relationship="Self.FK_Pago_Pago_TipoPago" FromRole="Pago" ToRole="TipoPago" />
+  </EntityType>
+  <EntityType Name="Perfil">
+    <Key>
+      <PropertyRef Name="Perfil_Id" />
+    </Key>
+    <Property Name="Perfil_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Perfil_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Perfil_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Perfil_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Perfil_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Perfil" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="Persona">
+    <Key>
+      <PropertyRef Name="Persona_Documento" />
+    </Key>
+    <Property Name="Persona_TipoDocumento" Type="Int32" />
+    <Property Name="Persona_Documento" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Persona_Nombre" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Persona_Apellido" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Persona_TipoPersona" Type="Int32" />
+    <Property Name="Persona_CorreoElectronico" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Persona_Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Persona_Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Persona_IdAseguradora" Type="Int32" />
+    <Property Name="Persona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
+    <Property Name="Persona_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Persona_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Aseguradora" Relationship="Self.FK_Persona_Persona_IdAseguradora" FromRole="Persona" ToRole="Aseguradora" />
+    <NavigationProperty Name="Cuentas" Relationship="Self.FK_Cuentas_Cuenta_IdPersona" FromRole="Persona" ToRole="Cuentas" />
+    <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCajero" FromRole="Persona" ToRole="FacturaEncabezado" />
+    <NavigationProperty Name="FacturaEncabezado1" Relationship="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente" FromRole="Persona" ToRole="FacturaEncabezado" />
+    <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdPersona" FromRole="Persona" ToRole="Pago" />
+    <NavigationProperty Name="TipoDocumento" Relationship="Self.FK_Persona_Persona_TipoDocumento" FromRole="Persona" ToRole="TipoDocumento" />
+    <NavigationProperty Name="TipoPersona" Relationship="Self.FK_Persona_Persona_TipoPersona" FromRole="Persona" ToRole="TipoPersona" />
+    <NavigationProperty Name="PlanDeTratamiento" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico" FromRole="Persona" ToRole="PlanDeTratamiento" />
+    <NavigationProperty Name="PlanDeTratamiento1" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente" FromRole="Persona" ToRole="PlanDeTratamiento" />
+    <NavigationProperty Name="ReciboIngreso" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IdCajero" FromRole="Persona" ToRole="ReciboIngreso" />
+    <NavigationProperty Name="ReciboIngreso1" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IdPaciente" FromRole="Persona" ToRole="ReciboIngreso" />
+    <NavigationProperty Name="Usuarios" Relationship="Self.FK_Usuarios_Usuario_IdPersona" FromRole="Persona" ToRole="Usuarios" />
+  </EntityType>
+  <EntityType Name="PlanDeTratamiento">
+    <Key>
+      <PropertyRef Name="PlanDeTratamiento_Id" />
+    </Key>
+    <Property Name="PlanDeTratamiento_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PlanDeTratamiento_IdProcedimiento" Type="Int32" />
+    <Property Name="PlanDeTratamiento_NoAutorizacion" Type="Int32" />
+    <Property Name="PlanDeTratamiento_IdPaciente" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PlanDeTratamiento_IdMedico" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PlanDeTratamiento_Causa" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PlanDeTratamiento_Resultado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PlanDeTratamiento_Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="PlanDeTratamiento_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="PlanDeTratamiento_IdUsuarioCreador" Type="Int32" />
+    <Property Name="PlanDeTratamiento_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="FacturaDetalle" Relationship="Self.FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento" FromRole="PlanDeTratamiento" ToRole="FacturaDetalle" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico" FromRole="PlanDeTratamiento" ToRole="Persona" />
+    <NavigationProperty Name="Persona1" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente" FromRole="PlanDeTratamiento" ToRole="Persona" />
+    <NavigationProperty Name="ProcesoMedico" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento" FromRole="PlanDeTratamiento" ToRole="ProcesoMedico" />
+  </EntityType>
+  <EntityType Name="ProcesoMedico">
+    <Key>
+      <PropertyRef Name="ProcesoMedico_Id" />
+    </Key>
+    <Property Name="ProcesoMedico_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProcesoMedico_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProcesoMedico_Precio" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ProcesoMedico_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="ProcesoMedico_IdUsuarioCreador" Type="Int32" />
+    <Property Name="ProcesoMedico_Vigencia" Type="Boolean" />
+    <Property Name="ProcesoMedico_IdTipoProceso" Type="Int32" />
+    <NavigationProperty Name="Autorizacion" Relationship="Self.FK_Autorizacion_Autorizacion_IdProcedimiento" FromRole="ProcesoMedico" ToRole="Autorizacion" />
+    <NavigationProperty Name="PlanDeTratamiento" Relationship="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento" FromRole="ProcesoMedico" ToRole="PlanDeTratamiento" />
+    <NavigationProperty Name="TipoProceso" Relationship="Self.FK_ProcesoMedico_ProcesoMedico_IdTipoProceso" FromRole="ProcesoMedico" ToRole="TipoProceso" />
+  </EntityType>
+  <EntityType Name="ReciboIngreso">
+    <Key>
+      <PropertyRef Name="ReciboIngreso_Id" />
+    </Key>
+    <Property Name="ReciboIngreso_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReciboIngreso_IdPaciente" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ReciboIngreso_IdCajero" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ReciboIngreso_Monto" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ReciboIngreso_IdCuentaDetalle" Type="Int32" />
+    <Property Name="ReciboIngreso_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="ReciboIngreso_IdUsuarioCreador" Type="Int32" />
+    <Property Name="ReciboIngreso_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="FacturaEncabezado" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" FromRole="ReciboIngreso" ToRole="FacturaEncabezado" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IdCajero" FromRole="ReciboIngreso" ToRole="Persona" />
+    <NavigationProperty Name="Persona1" Relationship="Self.FK_ReciboIngreso_ReciboIngreso_IdPaciente" FromRole="ReciboIngreso" ToRole="Persona" />
+  </EntityType>
+  <EntityType Name="TipoDocumento">
+    <Key>
+      <PropertyRef Name="TipoDocumento_Id" />
+    </Key>
+    <Property Name="TipoDocumento_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoDocumento_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TipoDocumento_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
+    <Property Name="TipoDocumento_IdUsuarioCreador" Type="Int32" />
+    <Property Name="TipoDocumento_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoDocumento" FromRole="TipoDocumento" ToRole="Persona" />
+  </EntityType>
+  <EntityType Name="TipoNCF">
+    <Key>
+      <PropertyRef Name="TipoNCF_Id" />
+    </Key>
+    <Property Name="TipoNCF_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoNCF_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TipoNCF_IdUsuario" Type="Int32" />
+    <Property Name="TipoNCF_FechaCreado" Type="DateTime" Precision="0" />
+    <Property Name="TipoNCF_Estado" Type="Boolean" Nullable="false" />
+    <Property Name="TipoNCF_IdSucursal" Type="Int32" />
+  </EntityType>
+  <EntityType Name="TipoPago">
+    <Key>
+      <PropertyRef Name="TipoPago_Id" />
+    </Key>
+    <Property Name="TipoPago_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoPago_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="TipoPago_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="TipoPago_IdUsuarioCreador" Type="Int32" />
+    <Property Name="TipoPago_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_TipoPago" FromRole="TipoPago" ToRole="Pago" />
+  </EntityType>
+  <EntityType Name="TipoPersona">
+    <Key>
+      <PropertyRef Name="TipoPersona_Id" />
+    </Key>
+    <Property Name="TipoPersona_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoPersona_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TipoPersona_FechaCreacion" Type="DateTime" Precision="3" Nullable="false" />
+    <Property Name="TipoPersona_IdUsuarioCreador" Type="Int32" />
+    <Property Name="TipoPersona_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Persona_TipoPersona" FromRole="TipoPersona" ToRole="Persona" />
+  </EntityType>
+  <EntityType Name="TipoProceso">
+    <Key>
+      <PropertyRef Name="TipoProceso_Id" />
+    </Key>
+    <Property Name="TipoProceso_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoProceso_Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="TipoProceso_FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="TipoProceso_IdUsuarioCreador" Type="Int32" />
+    <Property Name="TipoProceso_Vigencia" Type="Boolean" />
+    <NavigationProperty Name="ProcesoMedico" Relationship="Self.FK_ProcesoMedico_ProcesoMedico_IdTipoProceso" FromRole="TipoProceso" ToRole="ProcesoMedico" />
+  </EntityType>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="Usuario_Id" />
+    </Key>
+    <Property Name="Usuario_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Usuario_Nickname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Usuario_Contraseña" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Usuario_IdPerfil" Type="Int32" Nullable="false" />
+    <Property Name="IdPersona" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Usuario_FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Usuario_IdUsuarioCreador" Type="Int32" />
+    <Property Name="Usuario_Vigencia" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AperturaYCierreDeCaja" Relationship="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" FromRole="Usuarios" ToRole="AperturaYCierreDeCaja" />
+    <NavigationProperty Name="Caja_Usuario" Relationship="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario" FromRole="Usuarios" ToRole="Caja_Usuario" />
+    <NavigationProperty Name="Egreso" Relationship="Self.FK_Egreso_Egreso_IdUsuarioCreador" FromRole="Usuarios" ToRole="Egreso" />
+    <NavigationProperty Name="LogGeneral" Relationship="Self.FK_LogGeneral_LogGeneral_IdUsuario" FromRole="Usuarios" ToRole="LogGeneral" />
+    <NavigationProperty Name="Pago" Relationship="Self.FK_Pago_Pago_IdUsuarioCreador" FromRole="Usuarios" ToRole="Pago" />
+    <NavigationProperty Name="Perfil" Relationship="Self.FK_Usuarios_Usuario_IdPerfil" FromRole="Usuarios" ToRole="Perfil" />
+    <NavigationProperty Name="Persona" Relationship="Self.FK_Usuarios_Usuario_IdPersona" FromRole="Usuarios" ToRole="Persona" />
+  </EntityType>
+  <EntityType Name="PagosPorPersona_View">
+    <Key>
+      <PropertyRef Name="Pago_Id" />
+    </Key>
+    <Property Name="Pago_Id" Type="Int32" Nullable="false" />
+    <Property Name="Cliente" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Cuenta" Type="Int32" />
+    <Property Name="Referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Monto" Type="Double" />
+    <Property Name="FormaPago" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Fecha" Type="DateTime" Precision="0" />
+    <Property Name="Usuario" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Caja" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="database_firewall_rules">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="name" />
+      <PropertyRef Name="start_ip_address" />
+      <PropertyRef Name="end_ip_address" />
+      <PropertyRef Name="create_date" />
+      <PropertyRef Name="modify_date" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="start_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="end_ip_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="ipv6_database_firewall_rules">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="name" />
+      <PropertyRef Name="start_ipv6_address" />
+      <PropertyRef Name="end_ipv6_address" />
+      <PropertyRef Name="create_date" />
+      <PropertyRef Name="modify_date" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="start_ipv6_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="end_ipv6_address" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="create_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="modify_date" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <Association Name="FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja">
+    <End Role="Caja" Type="Self.Caja" Multiplicity="0..1" />
+    <End Role="AperturaYCierreDeCaja" Type="Self.AperturaYCierreDeCaja" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Caja">
+        <PropertyRef Name="Caja_Id" />
+      </Principal>
+      <Dependent Role="AperturaYCierreDeCaja">
+        <PropertyRef Name="AperturaYCierreDeCaja_IdCaja" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="AperturaYCierreDeCaja" Type="Self.AperturaYCierreDeCaja" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="AperturaYCierreDeCaja">
+        <PropertyRef Name="AperturaYCierreDeCaja_IdUsuarioCreador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Autorizacion_Autorizacion_IdAseguradora">
+    <End Role="Aseguradora" Type="Self.Aseguradora" Multiplicity="0..1" />
+    <End Role="Autorizacion" Type="Self.Autorizacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Aseguradora">
+        <PropertyRef Name="Aseguraodra_Id" />
+      </Principal>
+      <Dependent Role="Autorizacion">
+        <PropertyRef Name="Autorizacion_IdAseguradora" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Persona_Persona_IdAseguradora">
+    <End Role="Aseguradora" Type="Self.Aseguradora" Multiplicity="0..1" />
+    <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Aseguradora">
+        <PropertyRef Name="Aseguraodra_Id" />
+      </Principal>
+      <Dependent Role="Persona">
+        <PropertyRef Name="Persona_IdAseguradora" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Autorizacion_Autorizacion_IdProcedimiento">
+    <End Role="ProcesoMedico" Type="Self.ProcesoMedico" Multiplicity="0..1" />
+    <End Role="Autorizacion" Type="Self.Autorizacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcesoMedico">
+        <PropertyRef Name="ProcesoMedico_Id" />
+      </Principal>
+      <Dependent Role="Autorizacion">
+        <PropertyRef Name="Autorizacion_IdProcedimiento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Caja_Usuario_Caja_Usuario_IdCaja">
+    <End Role="Caja" Type="Self.Caja" Multiplicity="1" />
+    <End Role="Caja_Usuario" Type="Self.Caja_Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Caja">
+        <PropertyRef Name="Caja_Id" />
+      </Principal>
+      <Dependent Role="Caja_Usuario">
+        <PropertyRef Name="Caja_Usuario_IdCaja" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Caja_Usuario_Caja_Usuario_IdUsuario">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+    <End Role="Caja_Usuario" Type="Self.Caja_Usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="Caja_Usuario">
+        <PropertyRef Name="Caja_Usuario_IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cuenta_Factura_Cuenta_Factura_IdCuenta">
+    <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="1" />
+    <End Role="Cuenta_Factura" Type="Self.Cuenta_Factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cuentas">
+        <PropertyRef Name="Cuenta_Id" />
+      </Principal>
+      <Dependent Role="Cuenta_Factura">
+        <PropertyRef Name="Cuenta_Factura_IdCuenta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cuenta_Factura_Cuenta_Factura_IdFactura">
+    <End Role="FacturaEncabezado" Type="Self.FacturaEncabezado" Multiplicity="1" />
+    <End Role="Cuenta_Factura" Type="Self.Cuenta_Factura" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FacturaEncabezado">
+        <PropertyRef Name="FacturaEncabezado_Id" />
+      </Principal>
+      <Dependent Role="Cuenta_Factura">
+        <PropertyRef Name="Cuenta_Factura_IdFactura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cuentas_Cuenta_IdPersona">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="Cuentas">
+        <PropertyRef Name="Cuenta_IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pago_Pago_IdCuenta">
+    <End Role="Cuentas" Type="Self.Cuentas" Multiplicity="0..1" />
+    <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cuentas">
+        <PropertyRef Name="Cuenta_Id" />
+      </Principal>
+      <Dependent Role="Pago">
+        <PropertyRef Name="Pago_IdCuenta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Egreso_Egreso_IdUsuarioCreador">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="Egreso" Type="Self.Egreso" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="Egreso">
+        <PropertyRef Name="Egreso_IdUsuarioCreador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FacturaDetalle_FacturaDetalle_IdFactura">
+    <End Role="FacturaEncabezado" Type="Self.FacturaEncabezado" Multiplicity="0..1" />
+    <End Role="FacturaDetalle" Type="Self.FacturaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FacturaEncabezado">
+        <PropertyRef Name="FacturaEncabezado_Id" />
+      </Principal>
+      <Dependent Role="FacturaDetalle">
+        <PropertyRef Name="FacturaDetalle_IdFactura" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento">
+    <End Role="PlanDeTratamiento" Type="Self.PlanDeTratamiento" Multiplicity="0..1" />
+    <End Role="FacturaDetalle" Type="Self.FacturaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PlanDeTratamiento">
+        <PropertyRef Name="PlanDeTratamiento_Id" />
+      </Principal>
+      <Dependent Role="FacturaDetalle">
+        <PropertyRef Name="FacturaDetalle_PlanDeTratamiento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FacturaEncabezado_FacturaEncabezado_IdCajero">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="FacturaEncabezado" Type="Self.FacturaEncabezado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="FacturaEncabezado">
+        <PropertyRef Name="FacturaEncabezado_IdCajero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FacturaEncabezado_FacturaEncabezado_IdCliente">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="FacturaEncabezado" Type="Self.FacturaEncabezado" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="FacturaEncabezado">
+        <PropertyRef Name="FacturaEncabezado_IdCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle">
+    <End Role="FacturaEncabezado" Type="Self.FacturaEncabezado" Multiplicity="0..1" />
+    <End Role="ReciboIngreso" Type="Self.ReciboIngreso" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FacturaEncabezado">
+        <PropertyRef Name="FacturaEncabezado_Id" />
+      </Principal>
+      <Dependent Role="ReciboIngreso">
+        <PropertyRef Name="ReciboIngreso_IdCuentaDetalle" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_LogGeneral_LogGeneral_IdUsuario">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="LogGeneral" Type="Self.LogGeneral" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="LogGeneral">
+        <PropertyRef Name="LogGeneral_IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pago_Pago_IdPersona">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="Pago">
+        <PropertyRef Name="Pago_IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pago_Pago_IdUsuarioCreador">
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+    <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuarios">
+        <PropertyRef Name="Usuario_Id" />
+      </Principal>
+      <Dependent Role="Pago">
+        <PropertyRef Name="Pago_IdUsuarioCreador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pago_Pago_TipoPago">
+    <End Role="TipoPago" Type="Self.TipoPago" Multiplicity="0..1" />
+    <End Role="Pago" Type="Self.Pago" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoPago">
+        <PropertyRef Name="TipoPago_Id" />
+      </Principal>
+      <Dependent Role="Pago">
+        <PropertyRef Name="Pago_TipoPago" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usuarios_Usuario_IdPerfil">
+    <End Role="Perfil" Type="Self.Perfil" Multiplicity="1" />
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Perfil">
+        <PropertyRef Name="Perfil_Id" />
+      </Principal>
+      <Dependent Role="Usuarios">
+        <PropertyRef Name="Usuario_IdPerfil" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Persona_Persona_TipoDocumento">
+    <End Role="TipoDocumento" Type="Self.TipoDocumento" Multiplicity="0..1" />
+    <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoDocumento">
+        <PropertyRef Name="TipoDocumento_Id" />
+      </Principal>
+      <Dependent Role="Persona">
+        <PropertyRef Name="Persona_TipoDocumento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Persona_Persona_TipoPersona">
+    <End Role="TipoPersona" Type="Self.TipoPersona" Multiplicity="0..1" />
+    <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoPersona">
+        <PropertyRef Name="TipoPersona_Id" />
+      </Principal>
+      <Dependent Role="Persona">
+        <PropertyRef Name="Persona_TipoPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="PlanDeTratamiento" Type="Self.PlanDeTratamiento" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="PlanDeTratamiento">
+        <PropertyRef Name="PlanDeTratamiento_IdMedico" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="PlanDeTratamiento" Type="Self.PlanDeTratamiento" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="PlanDeTratamiento">
+        <PropertyRef Name="PlanDeTratamiento_IdPaciente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReciboIngreso_ReciboIngreso_IdCajero">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="ReciboIngreso" Type="Self.ReciboIngreso" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="ReciboIngreso">
+        <PropertyRef Name="ReciboIngreso_IdCajero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ReciboIngreso_ReciboIngreso_IdPaciente">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="ReciboIngreso" Type="Self.ReciboIngreso" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="ReciboIngreso">
+        <PropertyRef Name="ReciboIngreso_IdPaciente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usuarios_Usuario_IdPersona">
+    <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+    <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="Persona_Documento" />
+      </Principal>
+      <Dependent Role="Usuarios">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento">
+    <End Role="ProcesoMedico" Type="Self.ProcesoMedico" Multiplicity="0..1" />
+    <End Role="PlanDeTratamiento" Type="Self.PlanDeTratamiento" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProcesoMedico">
+        <PropertyRef Name="ProcesoMedico_Id" />
+      </Principal>
+      <Dependent Role="PlanDeTratamiento">
+        <PropertyRef Name="PlanDeTratamiento_IdProcedimiento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProcesoMedico_ProcesoMedico_IdTipoProceso">
+    <End Role="TipoProceso" Type="Self.TipoProceso" Multiplicity="0..1" />
+    <End Role="ProcesoMedico" Type="Self.ProcesoMedico" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoProceso">
+        <PropertyRef Name="TipoProceso_Id" />
+      </Principal>
+      <Dependent Role="ProcesoMedico">
+        <PropertyRef Name="ProcesoMedico_IdTipoProceso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="hospitalEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AperturaYCierreDeCaja" EntityType="Self.AperturaYCierreDeCaja" />
+    <EntitySet Name="Aseguradora" EntityType="Self.Aseguradora" />
+    <EntitySet Name="Autorizacion" EntityType="Self.Autorizacion" />
+    <EntitySet Name="Caja" EntityType="Self.Caja" />
+    <EntitySet Name="Caja_Usuario" EntityType="Self.Caja_Usuario" />
+    <EntitySet Name="Cuenta_Factura" EntityType="Self.Cuenta_Factura" />
+    <EntitySet Name="Cuentas" EntityType="Self.Cuentas" />
+    <EntitySet Name="Egreso" EntityType="Self.Egreso" />
+    <EntitySet Name="FacturaDetalle" EntityType="Self.FacturaDetalle" />
+    <EntitySet Name="FacturaEncabezado" EntityType="Self.FacturaEncabezado" />
+    <EntitySet Name="Log" EntityType="Self.Log" />
+    <EntitySet Name="LogGeneral" EntityType="Self.LogGeneral" />
+    <EntitySet Name="NCF" EntityType="Self.NCF" />
+    <EntitySet Name="Pago" EntityType="Self.Pago" />
+    <EntitySet Name="Perfil" EntityType="Self.Perfil" />
+    <EntitySet Name="Persona" EntityType="Self.Persona" />
+    <EntitySet Name="PlanDeTratamiento" EntityType="Self.PlanDeTratamiento" />
+    <EntitySet Name="ProcesoMedico" EntityType="Self.ProcesoMedico" />
+    <EntitySet Name="ReciboIngreso" EntityType="Self.ReciboIngreso" />
+    <EntitySet Name="TipoDocumento" EntityType="Self.TipoDocumento" />
+    <EntitySet Name="TipoNCF" EntityType="Self.TipoNCF" />
+    <EntitySet Name="TipoPago" EntityType="Self.TipoPago" />
+    <EntitySet Name="TipoPersona" EntityType="Self.TipoPersona" />
+    <EntitySet Name="TipoProceso" EntityType="Self.TipoProceso" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+    <EntitySet Name="PagosPorPersona_View" EntityType="Self.PagosPorPersona_View" />
+    <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" />
+    <EntitySet Name="ipv6_database_firewall_rules" EntityType="Self.ipv6_database_firewall_rules" />
+    <AssociationSet Name="FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" Association="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja">
+      <End Role="Caja" EntitySet="Caja" />
+      <End Role="AperturaYCierreDeCaja" EntitySet="AperturaYCierreDeCaja" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" Association="Self.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="AperturaYCierreDeCaja" EntitySet="AperturaYCierreDeCaja" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Autorizacion_Autorizacion_IdAseguradora" Association="Self.FK_Autorizacion_Autorizacion_IdAseguradora">
+      <End Role="Aseguradora" EntitySet="Aseguradora" />
+      <End Role="Autorizacion" EntitySet="Autorizacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Persona_Persona_IdAseguradora" Association="Self.FK_Persona_Persona_IdAseguradora">
+      <End Role="Aseguradora" EntitySet="Aseguradora" />
+      <End Role="Persona" EntitySet="Persona" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Autorizacion_Autorizacion_IdProcedimiento" Association="Self.FK_Autorizacion_Autorizacion_IdProcedimiento">
+      <End Role="ProcesoMedico" EntitySet="ProcesoMedico" />
+      <End Role="Autorizacion" EntitySet="Autorizacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Caja_Usuario_Caja_Usuario_IdCaja" Association="Self.FK_Caja_Usuario_Caja_Usuario_IdCaja">
+      <End Role="Caja" EntitySet="Caja" />
+      <End Role="Caja_Usuario" EntitySet="Caja_Usuario" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Caja_Usuario_Caja_Usuario_IdUsuario" Association="Self.FK_Caja_Usuario_Caja_Usuario_IdUsuario">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="Caja_Usuario" EntitySet="Caja_Usuario" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" Association="Self.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta">
+      <End Role="Cuentas" EntitySet="Cuentas" />
+      <End Role="Cuenta_Factura" EntitySet="Cuenta_Factura" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cuenta_Factura_Cuenta_Factura_IdFactura" Association="Self.FK_Cuenta_Factura_Cuenta_Factura_IdFactura">
+      <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+      <End Role="Cuenta_Factura" EntitySet="Cuenta_Factura" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cuentas_Cuenta_IdPersona" Association="Self.FK_Cuentas_Cuenta_IdPersona">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="Cuentas" EntitySet="Cuentas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pago_Pago_IdCuenta" Association="Self.FK_Pago_Pago_IdCuenta">
+      <End Role="Cuentas" EntitySet="Cuentas" />
+      <End Role="Pago" EntitySet="Pago" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Egreso_Egreso_IdUsuarioCreador" Association="Self.FK_Egreso_Egreso_IdUsuarioCreador">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="Egreso" EntitySet="Egreso" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FacturaDetalle_FacturaDetalle_IdFactura" Association="Self.FK_FacturaDetalle_FacturaDetalle_IdFactura">
+      <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+      <End Role="FacturaDetalle" EntitySet="FacturaDetalle" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento" Association="Self.FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento">
+      <End Role="PlanDeTratamiento" EntitySet="PlanDeTratamiento" />
+      <End Role="FacturaDetalle" EntitySet="FacturaDetalle" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FacturaEncabezado_FacturaEncabezado_IdCajero" Association="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCajero">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FacturaEncabezado_FacturaEncabezado_IdCliente" Association="Self.FK_FacturaEncabezado_FacturaEncabezado_IdCliente">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" Association="Self.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle">
+      <End Role="FacturaEncabezado" EntitySet="FacturaEncabezado" />
+      <End Role="ReciboIngreso" EntitySet="ReciboIngreso" />
+    </AssociationSet>
+    <AssociationSet Name="FK_LogGeneral_LogGeneral_IdUsuario" Association="Self.FK_LogGeneral_LogGeneral_IdUsuario">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="LogGeneral" EntitySet="LogGeneral" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pago_Pago_IdPersona" Association="Self.FK_Pago_Pago_IdPersona">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="Pago" EntitySet="Pago" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pago_Pago_IdUsuarioCreador" Association="Self.FK_Pago_Pago_IdUsuarioCreador">
+      <End Role="Usuarios" EntitySet="Usuarios" />
+      <End Role="Pago" EntitySet="Pago" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pago_Pago_TipoPago" Association="Self.FK_Pago_Pago_TipoPago">
+      <End Role="TipoPago" EntitySet="TipoPago" />
+      <End Role="Pago" EntitySet="Pago" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usuarios_Usuario_IdPerfil" Association="Self.FK_Usuarios_Usuario_IdPerfil">
+      <End Role="Perfil" EntitySet="Perfil" />
+      <End Role="Usuarios" EntitySet="Usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Persona_Persona_TipoDocumento" Association="Self.FK_Persona_Persona_TipoDocumento">
+      <End Role="TipoDocumento" EntitySet="TipoDocumento" />
+      <End Role="Persona" EntitySet="Persona" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Persona_Persona_TipoPersona" Association="Self.FK_Persona_Persona_TipoPersona">
+      <End Role="TipoPersona" EntitySet="TipoPersona" />
+      <End Role="Persona" EntitySet="Persona" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico" Association="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="PlanDeTratamiento" EntitySet="PlanDeTratamiento" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente" Association="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="PlanDeTratamiento" EntitySet="PlanDeTratamiento" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReciboIngreso_ReciboIngreso_IdCajero" Association="Self.FK_ReciboIngreso_ReciboIngreso_IdCajero">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="ReciboIngreso" EntitySet="ReciboIngreso" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ReciboIngreso_ReciboIngreso_IdPaciente" Association="Self.FK_ReciboIngreso_ReciboIngreso_IdPaciente">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="ReciboIngreso" EntitySet="ReciboIngreso" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usuarios_Usuario_IdPersona" Association="Self.FK_Usuarios_Usuario_IdPersona">
+      <End Role="Persona" EntitySet="Persona" />
+      <End Role="Usuarios" EntitySet="Usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento" Association="Self.FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento">
+      <End Role="ProcesoMedico" EntitySet="ProcesoMedico" />
+      <End Role="PlanDeTratamiento" EntitySet="PlanDeTratamiento" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProcesoMedico_ProcesoMedico_IdTipoProceso" Association="Self.FK_ProcesoMedico_ProcesoMedico_IdTipoProceso">
+      <End Role="TipoProceso" EntitySet="TipoProceso" />
+      <End Role="ProcesoMedico" EntitySet="ProcesoMedico" />
+    </AssociationSet>
+    <FunctionImport Name="IncrementarNCF">
+      <Parameter Name="TipoNCF" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PP_GrabarDetalle">
+      <Parameter Name="IdPlanDeTratamiento" Mode="In" Type="Int32" />
+      <Parameter Name="MontoBruto" Mode="In" Type="Decimal" />
+      <Parameter Name="MontoCobertura" Mode="In" Type="Decimal" />
+      <Parameter Name="MontoItbis" Mode="In" Type="Decimal" />
+      <Parameter Name="MontoDescuento" Mode="In" Type="Decimal" />
+      <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PP_GrabarVenta">
+      <Parameter Name="IdNCF" Mode="In" Type="Int32" />
+      <Parameter Name="IdCliente" Mode="In" Type="String" />
+      <Parameter Name="IdCajero" Mode="In" Type="String" />
+      <Parameter Name="TotalBruto" Mode="In" Type="Decimal" />
+      <Parameter Name="TotalCobertura" Mode="In" Type="Decimal" />
+      <Parameter Name="TotalItbis" Mode="In" Type="Decimal" />
+      <Parameter Name="TotalDescuento" Mode="In" Type="Decimal" />
+      <Parameter Name="TotalGeneral" Mode="In" Type="Decimal" />
+      <Parameter Name="IdUsuarioCreador" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PP_ReciboIngreso">
+      <Parameter Name="IdPaciente" Mode="In" Type="String" />
+      <Parameter Name="IdCajero" Mode="In" Type="String" />
+      <Parameter Name="Monto" Mode="In" Type="Decimal" />
+      <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PPAperturaOCierreDeCaja">
+      <Parameter Name="IdCaja" Mode="In" Type="Int32" />
+      <Parameter Name="DosMilPesos" Mode="In" Type="Int32" />
+      <Parameter Name="MilPesos" Mode="In" Type="Int32" />
+      <Parameter Name="QuinientosPesos" Mode="In" Type="Int32" />
+      <Parameter Name="DoscientosPesos" Mode="In" Type="Int32" />
+      <Parameter Name="CienPesos" Mode="In" Type="Int32" />
+      <Parameter Name="CincuentaPesos" Mode="In" Type="Int32" />
+      <Parameter Name="VeinteCincoPesos" Mode="In" Type="Int32" />
+      <Parameter Name="DiezPesos" Mode="In" Type="Int32" />
+      <Parameter Name="CincoPesos" Mode="In" Type="Int32" />
+      <Parameter Name="UnPeso" Mode="In" Type="Int32" />
+      <Parameter Name="TotalCredito" Mode="In" Type="Double" />
+      <Parameter Name="TotalTarjeta" Mode="In" Type="Double" />
+      <Parameter Name="Transferencia" Mode="In" Type="Double" />
+      <Parameter Name="Deposito" Mode="In" Type="Double" />
+      <Parameter Name="Cheques" Mode="In" Type="Double" />
+      <Parameter Name="AperturaOCierre" Mode="In" Type="Boolean" />
+      <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PPEgreso">
+      <Parameter Name="PagadoA" Mode="In" Type="String" />
+      <Parameter Name="Cedula" Mode="In" Type="String" />
+      <Parameter Name="Monto" Mode="In" Type="Double" />
+      <Parameter Name="Concepto" Mode="In" Type="String" />
+      <Parameter Name="Preparado" Mode="In" Type="String" />
+      <Parameter Name="Aprobado" Mode="In" Type="String" />
+      <Parameter Name="Recibido" Mode="In" Type="String" />
+      <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+      <Parameter Name="Caja" Mode="In" Type="Int32" />
+      <Parameter Name="Operacion" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="PPpagos">
+      <Parameter Name="IdPersona" Mode="In" Type="String" />
+      <Parameter Name="Referencia" Mode="In" Type="String" />
+      <Parameter Name="Monto" Mode="In" Type="Double" />
+      <Parameter Name="TipoPago" Mode="In" Type="Int32" />
+      <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="IdCaja" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+</Schema>

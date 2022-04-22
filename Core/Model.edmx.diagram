@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9947cf0593ab4856944802e14a871559" Name="Diagram1">
+        <EntityTypeShape EntityType="hospitalModel.AperturaYCierreDeCaja" Width="1.5" PointX="16.5" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Aseguradora" Width="1.5" PointX="0.75" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Autorizacion" Width="1.5" PointX="3" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Caja" Width="1.5" PointX="14.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Caja_Usuario" Width="1.5" PointX="19.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Cuenta_Factura" Width="1.5" PointX="10.5" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Cuentas" Width="1.5" PointX="8.25" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Egreso" Width="1.5" PointX="16.5" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.FacturaDetalle" Width="1.5" PointX="10.5" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.FacturaEncabezado" Width="1.5" PointX="8.25" PointY="22.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Log" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.LogGeneral" Width="1.5" PointX="16.5" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.NCF" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Pago" Width="1.5" PointX="13.5" PointY="20.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Perfil" Width="1.5" PointX="12" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Persona" Width="1.5" PointX="6" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.PlanDeTratamiento" Width="1.5" PointX="11.25" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.ProcesoMedico" Width="1.5" PointX="0.75" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.ReciboIngreso" Width="1.5" PointX="13.5" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.TipoDocumento" Width="1.5" PointX="3.75" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.TipoNCF" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.TipoPago" Width="1.5" PointX="11.25" PointY="30.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.TipoPersona" Width="1.5" PointX="3.75" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.TipoProceso" Width="1.5" PointX="1.5" PointY="14.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.Usuarios" Width="1.5" PointX="14.25" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.PagosPorPersona_View" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.database_firewall_rules" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="hospitalModel.ipv6_database_firewall_rules" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="hospitalModel.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdCaja" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_AperturaYCierreDeCaja_AperturaYCierreDeCaja_IdUsuarioCreador" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Autorizacion_Autorizacion_IdAseguradora" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Persona_Persona_IdAseguradora" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Autorizacion_Autorizacion_IdProcedimiento" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Caja_Usuario_Caja_Usuario_IdCaja" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Caja_Usuario_Caja_Usuario_IdUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Cuenta_Factura_Cuenta_Factura_IdCuenta" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Cuenta_Factura_Cuenta_Factura_IdFactura" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Cuentas_Cuenta_IdPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Pago_Pago_IdCuenta" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Egreso_Egreso_IdUsuarioCreador" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_FacturaDetalle_FacturaDetalle_IdFactura" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_FacturaDetalle_FacturaDetalle_PlanDeTratamiento" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_FacturaEncabezado_FacturaEncabezado_IdCajero" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_FacturaEncabezado_FacturaEncabezado_IdCliente" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_ReciboIngreso_ReciboIngreso_IsCuentaDetalle" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_LogGeneral_LogGeneral_IdUsuario" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Pago_Pago_IdPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Pago_Pago_IdUsuarioCreador" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Pago_Pago_TipoPago" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Usuarios_Usuario_IdPerfil" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Persona_Persona_TipoDocumento" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Persona_Persona_TipoPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_PlanDeTratamiento_PlanDeTratamiento_IdMedico" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_PlanDeTratamiento_PlanDeTratamiento_IdPaciente" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_ReciboIngreso_ReciboIngreso_IdCajero" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_ReciboIngreso_ReciboIngreso_IdPaciente" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_Usuarios_Usuario_IdPersona" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_PlanDeTratamiento_PlanDeTratamiento_IdProcedimiento" ManuallyRouted="false" />
+        <AssociationConnector Association="hospitalModel.FK_ProcesoMedico_ProcesoMedico_IdTipoProceso" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
