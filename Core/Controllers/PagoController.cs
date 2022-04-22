@@ -36,8 +36,6 @@ namespace Core.Controllers
             Console.WriteLine($"Fecha Creación: {pago.Pago_FechaCreacion}");
             Console.WriteLine($"Id Usuario Creador: {pago.Pago_IdUsuarioCreador}");
             Console.WriteLine($"Vigencia: {pago.Pago_Vigencia}"); 
-
-
         }
 
         public async Task Crear()
@@ -50,13 +48,13 @@ namespace Core.Controllers
             {
                 bool exists = false;
                 
-                int tipopago, IdUsuarioCreador,cuenta;
+                int tipopago,cuenta;
                 string persona;
 
                 do
                 {
 
-                    Console.Write("Escribe el ID de la persona: ");
+                    Console.Write("Escribe el Documento de la persona: ");
                      persona = Console.ReadLine();
                   
 
@@ -75,8 +73,6 @@ namespace Core.Controllers
 
                 do
                 {
-
-
                     Console.Write("Escribe el ID de la cuenta: ");
                     cuenta = Int32.Parse(Console.ReadLine());
 
@@ -87,25 +83,6 @@ namespace Core.Controllers
                     if (!exists)
                     {
                         Console.WriteLine("No existe una cuenta con esa identificacion");
-
-                        Console.WriteLine("Press any key to continue...");
-                        Console.ReadKey();
-                    }
-                } while (!exists);
-                do
-                {
-
-
-                    Console.Write("Escribe el ID del Usuario Creador: ");
-                    IdUsuarioCreador = Int32.Parse(Console.ReadLine());
-
-                    Console.Clear();
-
-                    exists = hospital.Usuarios.Any(pg => pg.Usuario_Id == IdUsuarioCreador);
-
-                    if (!exists)
-                    {
-                        Console.WriteLine("No existe un usuario con esa identificacion");
 
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
@@ -140,7 +117,7 @@ namespace Core.Controllers
                 float monto = float.Parse(Console.ReadLine());
 
                 Pago pago = new Pago()
-                {   Pago_Id = 0,
+                {
                     Pago_IdPersona = persona,
                     Pago_IdCuenta = cuenta,
                     Pago_Referencia = referencia,
@@ -148,7 +125,7 @@ namespace Core.Controllers
                     Pago_TipoPago = tipopago,
                     Pago_FechaCreacion = DateTime.Now,
                     Pago_Vigencia = true,
-                    Pago_IdUsuarioCreador = IdUsuarioCreador,
+                    Pago_IdUsuarioCreador = Program.loggerUserID,
                     Pago_IdCaja = caja
                     
                 };
@@ -239,7 +216,7 @@ namespace Core.Controllers
         public async Task Actualizar()
         {
             bool exists = false;
-            int cuenta,tipopago, IdUsuarioCreador,idPago;
+            int cuenta,tipopago,idPago;
             string persona;
             var Logger = NLog.LogManager.GetCurrentClassLogger();
 
@@ -337,28 +314,6 @@ namespace Core.Controllers
                 }
             } while (!exists);
 
-            do
-            {
-
-
-                Console.Write("Escribe el usuario (actualizado) : ");
-                IdUsuarioCreador = Int32.Parse(Console.ReadLine());
-
-
-                Console.Clear();
-
-                exists = hospital.Usuarios.Any(pg => pg.Usuario_Id == IdUsuarioCreador);
-
-
-                if (!exists)
-                {
-                    Console.WriteLine("No existen Pagos con a ese usuario");
-
-                    Console.Write("Press any key to continue...");
-                    Console.ReadKey();
-                }
-            } while (!exists);
-
             Console.Write("Escribe la ID de la caja (actualizada: ");
             int caja = Int32.Parse(Console.ReadLine());
 
@@ -381,7 +336,7 @@ namespace Core.Controllers
             nuevoPago.Pago_Referencia = referencia;
             nuevoPago.Pago_Monto = monto;
             nuevoPago.Pago_TipoPago = tipopago;
-            nuevoPago.Pago_IdUsuarioCreador = IdUsuarioCreador;
+            nuevoPago.Pago_IdUsuarioCreador = Program.loggerUserID;
             nuevoPago.Pago_IdCaja = caja;
 
             PagoEntities pagoEntities = new PagoEntities()
@@ -413,7 +368,7 @@ namespace Core.Controllers
             try
             {
                 bool exists = false;
-                int cuenta, tipopago, IdUsuarioCreador, idPago;
+                int cuenta, tipopago, idPago;
                 string persona;
 
                 do

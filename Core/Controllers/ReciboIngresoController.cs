@@ -40,19 +40,14 @@ namespace Core.Controllers
                 int detallecuenta;
                 do
                 {
-
-
-                    Console.Write("Escribe el ID del paceinte: ");
+                    Console.Write("Escribe el ID del Paciente: ");
                     paciente = Console.ReadLine();
 
                     Console.Clear();
 
-                    exists = hospital.Persona.Any(recibo => recibo.Persona_Documento == paciente); 
-                   var find1 = hospital.Persona.Where(recibo => recibo.Persona_TipoPersona == 1 && recibo.Persona_Documento == paciente).FirstOrDefault();
-                   var find2= hospital.Persona.Where(recibo => recibo.Persona_TipoPersona == 1);
-                    
+                    exists = hospital.Persona.Any(recibo => recibo.Persona_Documento == paciente);               
 
-                    if (!exists && find1 == null)
+                    if (!exists)
                     {
                         Console.WriteLine("No existe un paciente con esa identificacion");
 
@@ -64,8 +59,6 @@ namespace Core.Controllers
 
                 do
                 {
-
-
                     Console.Write("Escribe el ID del cajero: ");
                     cajero = Console.ReadLine();
 
@@ -73,8 +66,6 @@ namespace Core.Controllers
 
                     exists = hospital.Persona.Any(recibo => recibo.Persona_Documento == cajero);
                     hospital.Persona.Where(recibo => recibo.Persona_TipoPersona == 2 && recibo.Persona_Documento ==cajero);
-
-
 
                     if (!exists)
                     {
@@ -87,8 +78,6 @@ namespace Core.Controllers
 
                 do
                 {
-
-
                     Console.Write("Escribe el ID de los detalles de la cuenta: ");
                     detallecuenta = Int32.Parse(Console.ReadLine());
 
@@ -98,20 +87,17 @@ namespace Core.Controllers
 
                     if (!exists)
                     {
-                        Console.WriteLine("No existe un detalle de la cuenta  con esa identificacion");
+                        Console.WriteLine("No existe un detalle de la cuenta con esa identificacion");
 
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                     }
                 } while (!exists);
 
-
-
                 Console.Write("Escribe el Monto: ");
                  monto = Decimal.Parse(Console.ReadLine());
 
                 ReciboIngreso ReciboIngreso = new ReciboIngreso() {
-                    ReciboIngreso_Id = 0,
                     ReciboIngreso_IdPaciente = paciente,
                     ReciboIngreso_IdCajero = cajero,
                     ReciboIngreso_Monto = monto,
@@ -124,6 +110,7 @@ namespace Core.Controllers
                 hospital.ReciboIngreso.Add(ReciboIngreso);
 
                 Logger.Info($"Se ha creado un Recibo de ingreso correctamente con el paciente {paciente}");
+                Console.WriteLine($"Se ha creado un Recibo de ingreso correctamente");
 
                 ReciboIngresoEntities reciboIngresoEntities = new ReciboIngresoEntities() {
                     ReciboIngresoId = ReciboIngreso.ReciboIngreso_Id,

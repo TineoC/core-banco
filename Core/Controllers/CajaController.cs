@@ -24,7 +24,6 @@ namespace Core.Controllers
             return Instancia;
         }
 
-
         public static void MostrarInformacion(Caja caja)
         {
             Console.WriteLine($"ID caja: {caja.Caja_Id}");
@@ -42,9 +41,27 @@ namespace Core.Controllers
 
             try
             {
-                Console.WriteLine("Descripción de Caja: ");
-                string descripcion = Console.ReadLine();
+                bool exists;
+                string descripcion;
 
+                do
+                {
+                    Console.WriteLine("Descripción de Caja: ");
+                    descripcion = Console.ReadLine();
+
+                    exists = hospital.Caja.Any(plan => plan.Caja_Descripcion == descripcion);
+
+                    if (exists)
+                    {
+                        Logger.Error($"Ya existe una caja con ese nombre: {descripcion}.");
+                        Console.WriteLine("Ya existe una caja con ese nombre.");
+
+                        Console.Write("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+
+                } while (exists);
+                
                 Caja caja = new Caja() {
                     Caja_Descripcion = descripcion,
                     Caja_FechaCreacion = DateTime.Now,
