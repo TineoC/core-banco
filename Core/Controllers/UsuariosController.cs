@@ -300,6 +300,7 @@ namespace Core.Controllers
 
                 if (exists)
                 {
+                    Logger.Error($"Ya existe un usuario con el Nickname: {nickname}");
                     Console.WriteLine("Existe un usuario con ese nickname");
 
                     Console.WriteLine("Press any key to continue...");
